@@ -35,7 +35,7 @@ On oblige les programmeurs à commenter leur code source pour une bonne raison. 
 que le programmeur soit capable de comprendre le programme.
 
 Une partie de la science informatique a pour unique but de rendre la conception de programmes
-plus sûre. L'idée sous-jascente pour mener à bien cet objectif est de rapprocher 
+plus sûre. L'idée sous-jacente pour mener à bien cet objectif est de rapprocher 
 la spécification opérationnelle d'une spécification dénotationnelle,
 pour simplifier le plus possible la phase de conception que doit effectuer le programmeur.
 C'est en partie le but recherché par les langages de programmation.
@@ -50,7 +50,7 @@ pour exprimer le programme à réaliser: par exemple un programme de tri est un 
 qui, à partir d'une liste, fournit une permutation de cette liste où les éléments sont
 ordonnés. Cela reviendrait à ne donner que des définitions extensionnelles des programmes~\cite{DOWEK-LANG}.
 Cependant, du point de vue du programmeur celles-ci ne sont pas assez expressives. 
-Par exemple, alors qu'ils produisent le même résultat le tri a bulles et le tri rapide ne sont pas équivalent
+Par exemple, alors qu'ils produisent le même résultat le tri à bulles et le tri rapide ne sont pas équivalents
 d'un point de vue opérationnel.
 % mais pas assez expressif: il est impensable pour tout bon programmeur de considérer comme équivalent le tri-rapide
 % et le tri-à-bulles alors qu'ils produisent le même résultat une liste d'éléments triés.
@@ -68,11 +68,11 @@ des propriétés plus fortes, on a souvent besoin d'un langage de spécification
 plus évolué qui prend place à côté du code source en commentaire (ex: JML pour Java) ou 
 dans un fichier séparé.
 
-Il est aussi possible de se passer d'une partie des  annotations dans certains langages modernes
-celles-ci pouvant être inférées automatiquement pour certaine vérification.
+Il est aussi possible de se passer d'une partie des  annotations dans certains langages modernes,
+celles-ci pouvant être inférées automatiquement pour certaines vérifications.
 Dans ce cas, une analyse automatique et statique (sans exécution) du programme
 déduit automatiquement une spécification particulière, à partir de laquelle s'effectue la 
-vérification. Certains types de propriétés peuvent être vérifiées de manière
+vérification. Certains types de propriétés peuvent être vérifiés de manière
 complètement automatique.  Parmi les domaines qui fournissent des outils à l'analyse statique,
 on peut citer les analyses utilisant la génération de contraintes sur les variables du programme, 
 la théorie de l'interprétation abstraite~\cite{CousotC-POPL77} ou le model-checking~\cite{MC-Book}.
@@ -187,9 +187,9 @@ automates d'arbres sont une approche tout à fait indiquée pour
 résoudre ce problème sur les termes.  Cependant, tout ensemble de
 termes n'est pas représentable par un automate d'arbres.  Et c'est
 souvent le cas de l'ensemble des états accessibles d'un programme, et
-des termes atteignables d'un systèmes de réécriture qui le
-modélise. On peut en déduire qu'il n'existe pas toujours d'automates
-d'arbres capables de représenter l'ensemble des termes
+des termes atteignables d'un système de réécriture qui le
+modélise. On peut en déduire qu'il n'existe pas toujours d'automate
+d'arbres capable de représenter l'ensemble des termes
 atteignables. En fait, de manière plus générale, il n'est pas possible
 de calculer (et de représenter) l'ensemble des termes atteignables
 pour un système de réécriture donné.  Par contre, il est possible d'en
@@ -280,7 +280,7 @@ Enfin la troisième contribution est de certifier les analyses effectuées.
 L'objectif du chapitre~3 de cette thèse est de montrer comment étendre la complétion
 aux techniques de raffinement automatique de l'abstraction. Fournir une abstraction permettant à la complétion
 de terminer est faisable même pour les programmes Java. Le problème est de fournir une abstraction qui soit assez
-fine pour vérifier la propriété attendue, tout en assurant la terminaison. Sous ces contraintes, quelque soit
+fine pour vérifier la propriété attendue, tout en assurant la terminaison. Sous ces contraintes, quel que soit
 le niveau d'expertise, il est à peu près impossible de définir à la main la bonne abstraction. Le raffinement automatique
 de l'abstraction permet de simplifier cette tâche: on peut alors définir une abstraction peu précise mais qui assure
 la terminaison du calcul, l'abstraction étant affaiblie automatiquement lorsque c'est nécessaire.
@@ -300,10 +300,10 @@ Ce chapitre est actuellement en cours de soumission.% à la conférence~TACAS~20
 % La seconde contribution de cette thèse s'intéresse à étendre le type de propriétés prouvables par la complétion.
 \subsection*{La vérification comportementale}
 Le chapitre~4 montre comment la complétion d'automates d'arbres peut être utilisée afin de vérifier 
-des propriétés temporelles sur le graphe d'appels des méthodes d'un programme Java. Il difficile 
+des propriétés temporelles sur le graphe d'appels des méthodes d'un programme Java. Il est difficile 
 de montrer des propriétés avec une composante temporelle en se basant uniquement sur la vérification du
 problème d'atteignabilité. Une propriété comme 
-{\em si l'utilisateur clique sur le bouton Non, alors la requête ne sera pas émise sur le réseau} est un exemple
+"{\em si l'utilisateur clique sur le bouton Non, alors la requête ne sera pas émise sur le réseau}" est un exemple
 des propriétés que l'on souhaiterait prouver sur des programmes Java. Dans ce chapitre, on montre comment tirer partie
 de l'information contenue dans l'automate. %La complétion construit des automates qui contiennent naturellement une abstraction de la relation de réécriture. 
 Cette abstraction de la réécriture correspond à une abstraction 
@@ -319,7 +319,7 @@ Le chapitre~5 décrit les travaux réalisés dans l'assistant de preuves \coq\ p
 complétion d'automates d'arbres. L'outil \timbuk\ a été notablement optimisé, et par ailleurs, différentes implémentations 
 ont vu le jour. Certaines de ces implémentations n'utilisent plus les automates d'arbres au niveau algorithmique mais uniquement
 comme format d'entrée du problème et comme format de sortie pour le résultat. %n'utilisent plus les automates d'arbres que pour produire le résultat final.
-Par conséquence, ces outils sont de plus en plus éloignés de la spécification originale
+Par conséquent, ces outils sont de plus en plus éloignés de la spécification originale
 de l'algorithme. Les optimisations sont une source de bugs supplémentaires, généralement difficiles à repérer.
 % Les bugs loin d'être absents sont souvent durs à identifier:
 % les optimisations sont une source de bugs car elles peuvent introduire des cas particuliers qui peuvent être 
@@ -334,7 +334,7 @@ en \coq, ce qui définit le vérificateur. Ensuite, il est possible d'extraire p
 conforme à la spécification \coq. Celui-ci permet de vérifier la validité de chaque résultat obtenu par un des outils
 qui implémentent la complétion.
 
-Le chapitre~5 a fait aussi l'objet d'une publication lors de la conférence IJCAR'08~\cite{BoyerGJ-IJCAR08}.
+Le chapitre~5 a aussi fait l'objet d'une publication lors de la conférence IJCAR'08~\cite{BoyerGJ-IJCAR08}.
 
 %En vérification 
 %%% Local Variables: 

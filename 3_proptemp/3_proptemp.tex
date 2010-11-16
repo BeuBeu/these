@@ -102,7 +102,7 @@ propre à la sémantique opérationnelle de Java et modélise les
 différentes instructions du langage.
 % et d'autre part un ensemble de règle modélisant le programme.
 Cette seconde catégorie de règles constitue une base fixe et commune à tous
-les programmes modélisés sous forme par les systèmes de réécriture générés.
+les programmes modélisés sous forme de systèmes de réécriture générés.
 La figure~\ref{fig:semantique-java} donnent deux exemples de règles
 sémantiques pour des instructions du ByteCode Java.
 
@@ -119,9 +119,9 @@ machine virtuelle. Ainsi, la majorité des instructions ($\kw{store_i}$,
 $\kw{aload\_0}$, $\kw{goto}$, $\kw{if\_icmpe}$, \dots) du ByteCode,
 ne portent que sur le contexte de la méthode courante et/ou sur le tas
 ($\kw{get\_field}$, $\kw{put\_field}$. Cependant, les instructions
-dédiées aux appels et retour de méthodes ($\kw{invokeVirtual}$, $\kw{return}$, \dots)
+dédiées aux appels et retours de méthodes ($\kw{invokeVirtual}$, $\kw{return}$, \dots)
 modifient la pile d'appel en plus du contexte de la méthode courante et
-concerne une plus grande partie de l'état de la machine virtuelle.
+concernent une plus grande partie de l'état de la machine virtuelle.
 
 Le système de réécriture généré par \emph{Copster} pour un programme
 donné assure un certain nombre de bonnes propriétés issues de la
@@ -136,7 +136,7 @@ $\kw{C.m1()}$. La règle (2) est la simple traduction de la règle sémantique d
 alors que les règles (1) et (3) sont dédiées à la méthode $\kw{C.m1}()$, et donc propres au 
 programme. La règle (1) permet de lier au point de programme $pc_1$ de $\kw{C.m1}()$ l'instruction
 correspondante : $\kw{pop}$. On voit que la règle (1) convertit le contexte en un contexte intermédiaire $xframe(\dots)$
-sur lequel est défini la sémantique des instructions. Une fois l'exécution terminée, un nouveau 
+sur lequel est définie la sémantique des instructions. Une fois l'exécution terminée, un nouveau 
 contexte $frame(\dots)$ est produit. La règle (3) incrémente simplement l'index de l'instruction à exécuter.
 
 \begin{figure}[ht!]
@@ -240,7 +240,7 @@ Si l'on considère $s$ un état conforme à la figure~\ref{fig:etat-terme} aux p
   consultation, la création ou la modification des objets ou tableaux
   stockés en mémoire.
 
-\item Le sous-terme $s|_\epsilon$ soit $s$ lui-même, est réécrit par les
+\item Le sous-terme $s|_\epsilon$, soit $s$ lui-même, est réécrit par les
   règles qui correspondent aux appels et retours de méthodes.
 \item \dots
 \end{itemize}
@@ -248,13 +248,13 @@ Si l'on considère $s$ un état conforme à la figure~\ref{fig:etat-terme} aux p
 On considère maintenant un état de la machine virtuelle correspondant
 au début de l'exécution d'une méthode $m$ donnée par le contexte $f_0 =
 \la m, pc_0, \epsilon, lv_0, h_0\ra$, une certaine pile d'appels $fs$
-et des entrées et sorties de la forme $I/O(\dots)$.  Cet état est la
-forme $s_0 = state(f_0, fs, I/O(\dots))$. Si on déroule l'exécution de
+et des entrées et sorties de la forme $I/O(\dots)$.  Cet état est de la
+forme $s_0 = state(f_0, fs, I/O(\dots))$. Si l'on déroule l'exécution de
 la méthode \emph{pas à pas} de l'instruction $\kw{instr}_i$ au point de
-programme $pc_i$ on obtient un nouveau contexte $f_{i+1}$ par
+programme $pc_i$, on obtient un nouveau contexte $f_{i+1}$ par
 réécriture. L'exécution de l'instruction débute par la réécriture de
 l'état $s_i$ à la position $1$, ce qui construit un état intermédiaire, sur
-lequel a lieu toutes les étapes de réécriture nécessaires pour
+lequel ont lieu toutes les étapes de réécriture nécessaires pour
 réaliser les différentes manipulations (sur les variables, la pile, le
 tas) induites par l'exécution de l'instruction $\kw{instr}_i$. Comme
 indiqué ci-dessus, ces étapes de réécriture ont lieu uniquement sur
@@ -262,10 +262,10 @@ les sous-termes de $f_i$: %situés aux positions $1[1..9]^*$:
 
 \[ state(\underline{f_i}, fs, I/O(\dots)) \lrw_\R^* state(\mathbf{f_{i+1}}, fs, I/O(\dots)) \]
 
-Si le point de programme $p_n$ correspond à un appel de la méthode
-$m'$ qui va produire un nouvel état de la forme $state(f'_0, fs',
-I/O(\dots))$ où le contexte est de la forme $f'_0 = \la m', pc_0,
-\epsilon, lv'_0, h_n \ra$ et la pile $fs' = fstack((m, pc_n, st_n,
+Le point de programme $p_n$ correspond à un appel de la méthode
+$m'$ et va produire un nouvel état de la forme $state(f'_0, fs',
+I/O(\dots))$ où le contexte sera de la forme $f'_0 = \la m', pc_0,
+\epsilon, lv'_0, h_n \ra$ et la pile d'appels sera de la forme $fs' = fstack((m, pc_n, st_n,
 lv_n), fs)$. Au final, on obtient la séquence de réécriture suivante:
 \begin{multline*}
   state(\underline{f_0}, fs, I/O(\dots)) \lrw_\R^* \underline{state(\mathbf{f_n}, fs, I/O(\dots))} \\
@@ -277,8 +277,8 @@ lv_n), fs)$. Au final, on obtient la séquence de réécriture suivante:
 Puisque $f_0$ et $f'_0$ représentent respectivement les états au point d'entrée des méthodes $m$ et $m'$, la relation ci-dessus
 dénote bien à l'appel de la méthode $m'$ par $m$. Ainsi, les traces d'exécutions abstraites par la relation $\arw_\R$
 permettent de construire le graphe d'appels d'un programme Java.
-Ce graphe inter-procédural peut-être obtenu par la complétion d'un automate d'arbres.
-En fait l'automate étant souvent obtenu par une sur-approximation paramétrée par $E$ un ensemble d'équations, il caractérise 
+Ce graphe inter-procédural peut être obtenu par la complétion d'un automate d'arbres.
+En fait, l'automate étant souvent obtenu par une sur-approximation paramétrée par $E$ un ensemble d'équations, il caractérise 
 un sous-ensemble de la relation plus générale $\arw_{\R_p/E}$. 
 
 \section{Completion d'automates d'arbres et $\arw_{\R_p/E}$}
@@ -355,13 +355,13 @@ Ce qui nous donne la propriété suivante~:
   $l\sigma$ en $q$, est une transition normalisée de $\Delta$, donc de
   la forme $f(q_1,\dots, q_n) \rw q$.  Il est suffisant de considérer
   ce cas pour que la paire critique soit aussi résolue pour tous les
-  états dans lesquels $q$ peut-être réécrit: avoir $r\sigma \rw_\A^*
+  états dans lesquels $q$ peut être réécrit: avoir $r\sigma \rw_\A^*
   q$ est suffisant pour obtenir la transition $r\sigma \rw_{\A}^* q''$
   pour toute paire critique $\la l\sigma, q'' \ra$ avec $q \rw_{\A}^*
   q''$ à partir d'une transition de la forme $l\sigma \rw^*_{\A} q
   \rw^*_\A q''$.
   
-  On peut donc en déduire que tout terme $l\sigma'$ est un terme de la forme $f(t_1, \dots, t_n)$ tels que 
+  On peut donc en déduire que tout terme $l\sigma'$ est un terme de la forme $f(t_1, \dots, t_n)$ tel que 
   pour chaque sous-terme on ait $t_i \rw_\A^* q_i$. D'après le premier point de la $\RE$-cohérence,
   on peut construire un terme $s_i$ représentant de $q_i$ tel que $s_i \rw_\RE^* t_i$. 
   Par composition, $f(s_1, \dots, s_n)$ est un représentant de l'état $q$:
@@ -458,7 +458,7 @@ On définit alors la fonction de \textit{labelling} $L$ simplement par une fonct
 
 \begin{definition}
   On définit la fonction de labelling $L : q \mapsto \la \F, \Q, \{q\}, \Delta\ra$ comme la fonction
-  qui associe à un état $q$, l'automate $L(q)$ issu de l'automate $\aaexeq^*$ privé des $\varepsilon$-transitions
+  qui associe à un état $q$ l'automate $L(q)$ issu de l'automate $\aaexeq^*$ privé des $\varepsilon$-transitions
   et pour lequel $q$ est l'unique état final.
   Par construction, on peut montrer que les termes reconnus par l'automate $L(p)$ sont exactement les représentants
   de l'état $q$ dans l'automate complet $\aaexeq^*$.
@@ -610,7 +610,7 @@ La structure de Kripke obtenue modélise la relation de réécriture $\arw_\RE^*
 
 A partir du moment où l'on obtenu un modèle de Kripke $\K = (S, S_0,
 R, L)$, on a accès à l'ensemble des techniques exploitant ce type de
-modèle~\cite{MC-Book}. la logique temporelle CTL$^*$ est une logique permettant
+modèle~\cite{MC-Book}. La logique temporelle CTL$^*$ est une logique permettant
 de raisonner sur les structures de Kripke, elle constitue donc la base des techniques
 du model-checking. Cette logique est basée sur le dépliage des traces
 d'exécution possibles à partir d'un état initial du modèle. Une trace
@@ -629,7 +629,7 @@ Une des particularité de cette approche est l'étiquetage des états du modèle
 Initialement, la logique temporelle est définie sur les différents opérateurs logiques et temporels
 ($\land$, $\lor$, $\neg$, $\nxt$, $\fut$, $\gbl$, $\unt$, $\rel$) à partir de prédicats qui constituent 
 les formules atomiques. Si la sémantique des différents opérateurs est préservée, on modifie celles des
-formules atomiques représentées les prédicats étant alors représenté par des automates d'arbres.
+formules atomiques, en utilisant des automates d'arbres pour représenter les prédicats.
 On propose de définir la Regular Linear Temporal Logic (R-LTL). La R-LTL est la logique LTL où les prédicats sont définis par des
 automates d'arbres. Le langage d'un tel automate d'arbres caractérise l'ensemble des termes qui sont admissibles pour le prédicat.
 
@@ -675,7 +675,7 @@ opérateurs, ainsi que les règles de construction des formules en LTL.
 
 
 Les transitions de la structure $K$ dénotent les étapes de réécriture abstraite $\arw_{\RE}$
-plutôt que sur la relation de réécriture $\rw_\RE$. Comme la sémantique des opérateurs est définie
+plutôt que les étapes de la relation de $\rw_\RE$. Comme la sémantique des opérateurs est définie
 sur la relation de transitions de $K$, les propriétés que l'on peut exprimer et vérifier portent bien
 sur la relation $\arw_\RE$.
 % Note that temporal properties do not range over the 
@@ -777,7 +777,7 @@ Ce mot $\pi'$ dénote l'ensemble de séquence de réécriture de la forme
 $t_0 \arw_\RE t_1 \arw_\RE t_2 \arw_\RE \dots$ tels que $t_i \in \Lang(L(s_i))$.
 
 \begin{example}
-  La figure~\ref{fig5} définit l'automate de Büchi qui pour la figure de Kripke $\K_\epsilon$:
+  La figure~\ref{fig5} définit l'automate de Büchi pour la figure de Kripke $\K_\epsilon$:
   \begin{figure}[ht!]
     \begin{minipage}{0.5\linewidth}
       \begin{center}
@@ -921,7 +921,7 @@ ne contient pas d'états acceptants.
   entre $\B_\K$ et $\overline{\B_P}$. Seul les états atteignables
   et les transitions valides (étiquetées par une intersection
   non vide d'automates d'arbres) sont montrées.  Comme aucun état
-  atteignable de $\B_\cap$ n'est final, sont langage est vide. Cela
+  atteignable de $\B_\cap$ n'est final, son langage est vide. Cela
   signifie que toutes les traces d'exécution de $\K_\epsilon$
   satisfont $P$: en effet, le seul successeur de $f(a)$ pour
   $\arw_{\R_\epsilon}$ est $g(a)$.
@@ -966,8 +966,8 @@ ne contient pas d'états acceptants.
 Dans ce chapitre, on a montré comment
 % améliorer la complétion d'automates d'arbres pour
 exploiter le mécanisme de relation d'ordre et préserver la relation d'ordre
-entre les termes accessibles, grâce aux transitions $\varepsilon$-transitions.
-On a également montré comment utiliser de la relation induite par ces transitions pour prouver des 
+entre les termes accessibles, grâce aux $\varepsilon$-transitions.
+On a également montré comment utiliser la relation induite par ces transitions pour prouver des 
 formules en logique temporelle linéaire sur le système de réécriture. Le chapitre traite de l'analyse 
 dans le cas où le calcul des termes atteignables est réalisé sans approximation.
 On peut montrer qu'il est possible d'extraire un modèle de Kripke pour la relation $\arw_{\RE}$ 
@@ -984,7 +984,7 @@ vraie.
 
 \paragraph{Des pistes pour la vivacité}
 Par contre si l'on souhaite montrer des propriétés de vivacité, il y a deux problèmes majeurs, pour lesquels
-il est proposé des pistes à explorer pour apporter une solution.
+sont proposées des pistes à explorer pour apporter une solution.
 
 \begin{itemize}
 \item Le premier est directement lié à la phase d'approximation $\widen$,
@@ -995,14 +995,14 @@ il est proposé des pistes à explorer pour apporter une solution.
   Dans l'automate $\A$, on suppose que les termes $u\tau$ et $v\tau$ sont des représentants respectivement de $q_u$ et $q_v$,
   et que $v\tau \arw_\R t$ est dénotée par la transition $q_t \rw q_v$. Comme on a $u\tau = v\tau$, 
   on peut fusionner les états $q_u = q_v$, et on obtient l'automate $\widen(\A)$ dans lequel les termes
-  $u\tau$ et te $v\tau$ sont les représentants du même état $q_v$,
+  $u\tau$ et $v\tau$ sont les représentants du même état $q_v$,
   avec la transition $q_t \rw q_v$. Si l'on regarde cette transition à posteriori, on peut alors en déduire
   que pour tout terme $s \in \Rep(q_v)$, et $s' \in \Rep(q_t)$ alors on a $s \arw_\R s'$, et
   en particulier $u \arw_\R t$. On peut donc montrer que le terme $t$ est un successeur du terme
   $u$, ce qui est contradictoire avec le cas exact $u \not\rw_\R$.
 
-  La manière simple de contourner le problème consiste à n'autoriser la fusion d'état que lorsqu'on est
-  sûr que les deux termes peuvent être réécrits par $\R$. Ce qui nécessite de modifier la procédure d'accélération
+  La manière simple de contourner le problème consiste à n'autoriser la fusion d'états que lorsqu'on est
+  sûr que les deux termes peuvent être réécrits par $\R$, ce qui nécessite de modifier la procédure d'accélération
   $\widen$. Si on considère les états $q$ et $q'$ qu'il est possible
   de fusionner par l'équation $u = v$:
   il existe une $\Q$-substitution $\sigma : \X \f\Q$ telle que:
@@ -1010,7 +1010,7 @@ il est proposé des pistes à explorer pour apporter une solution.
      u\sigma \ar@{=}[r]_{E}\ar[d]_{\aaex^i}^{\not\varepsilon} & v\sigma \ar[d]_{\not\varepsilon}^{\aaex^i}\\
      q_u & q_v
    } \]
-   Pour une approximation destinée à la vérification de propriété de vivacité, on n'autorise la fusion
+   Pour une approximation destinée à la vérification de propriété de vivacité, on autorise la fusion
    des états $q_u$ et $q_v$ seulement si on peut décomposer
    $u\sigma \rwne_\A q$ et $v\sigma' \rwne_\A q'$ aux positions $p$ et $q$ telles que:
    \[\begin{array}{l}
@@ -1025,7 +1025,7 @@ il est proposé des pistes à explorer pour apporter une solution.
    exact, on sait que le système de réécriture engendré pour les programmes Java est déterministe.
    C'est une propriété suffisante pour s'assurer que lorsque l'on considère une transition $q' \rw q$
    alors la relation $\arw_{\R}$ dénotée est aussi déterministe.
-   Ainsi si considère la transition $q' \rw q$ dans un automate complet pour $\RE$, on sait
+   Ainsi si on considère la transition $q' \rw q$ dans un automate complet pour $\RE$, on sait
    qu'on a $u \arw_{\RE} v$ où $u$ et $v$ sont des représentants de $q$ et $q'$ respectivement.
    D'après la définition~\ref{def:arw} on sait qu'il existe une substitution $\sigma$ et une règle
    de réécriture telle que $u \rw_{\RE}^* l\sigma \rw_\R r\sigma =_E t$. On peut déjà montrer
@@ -1038,7 +1038,7 @@ il est proposé des pistes à explorer pour apporter une solution.
    Mais comme l'approximation ne peut introduire des paires critiques par réécriture à des positions 
    différentes, si il n'existe pas de chaîne de $\varepsilon$-transitions contenant un motif de la
    forme $q_2 \rw q_1$ et $q_3 \rw q_1$, alors il n'y a pas de paire critique par réécriture à la même position.
-   Donc en proposant une analyse de l'automate d'arbres basés sur ce dernier critère, on espère
+   Donc en proposant une analyse de l'automate d'arbres basée sur ce dernier critère, on espère
    étiqueter avec certitude les transitions $q' \rw q$ qui dénotent une relation où $\RE$ est localement déterministe.
  \end{itemize}
 

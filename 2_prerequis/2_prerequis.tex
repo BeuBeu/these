@@ -2,8 +2,8 @@
 \label{chap:preliminaires}
 
 Ce chapitre a pour ambition de rappeler les bases nécessaires pour la théorie de la réécriture,
-des automates d'arbres, et présentera le cadre de la vérification de modèles symoblique auquel
-nous nous intéresserons dans cette thèse. Pour plus détails, le lecteur pourra trouver plus d'informations
+des automates d'arbres, et présente le cadre de la vérification de modèles symboliques auquel
+nous nous intéressons dans cette thèse. Pour plus détails, le lecteur pourra trouver plus d'informations
 sur la réécriture dans~\cite{BaaderN-book98} et dans~\cite{TATA} pour les automates d'arbres.
 
 
@@ -75,7 +75,7 @@ La représentation d'un terme sous forme d'arbre permet de voir
 facilement que le terme $f(g(x,h(y)), g(x, g(y, z)), h(x))$ est constitué des \textbf{sous-termes}
 représentés par les sous-arbres dans la figure~\ref{fig:terme-arbre}.
 Ainsi $g(x, g(y, z))$ est un sous-terme de $f(g(x,h(y)), g(x, g(y, z)), h(x))$.
-Un sous-terme sont caractérisé par sa position à partir de la racine du terme
+Un sous-terme est caractérisé par sa position à partir de la racine du terme
 qui le contient. Une \textbf{position} $p$ est définie comme un \textbf{mot de $\NN$} qui correspond
 à un chemin dans l'arbre. Le mot vide $\epsilon$ correspond à la racine du terme.
 
@@ -115,7 +115,7 @@ On remarque pour tout terme $t \in \TFX$, $\vars(t) = \emptyset$ alors $t$ est u
   L'ensemble des ces variables est noté $\dom(\sigma)$.
   On étend les substitutions à des endomorphismes de $\TFX$. 
   On note alors $t\sigma$ (ou $t.\sigma$) l'application de la substitution $\sigma$ au terme $t$ 
-  qui remplace toute occurence des variables par leur image respective via $\sigma$:
+  qui remplace toute occurrence des variables par leur image respective via $\sigma$:
   \begin{itemize}
   \item $t\sigma = \sigma(t)$ lorsque $t \in \X$
   \item $f(t_1, \dots, t_n)\sigma = f(t_1\sigma, \dots, t_n\sigma)$
@@ -135,8 +135,8 @@ $\R$ est un ensemble de règles de réécriture.
   Une \textbf{règle de réécriture} est une paire, notée $l \rw r$, composée de deux termes $l, r \in \TFX$,
   telle que $l \not \in \X$, et $\var(l) \supseteq \var(r)$. 
   On appelle $l$ et $r$ respectivement le membre gauche et le membre droit de la règle.
-  Une règle de réévriture est \textbf{linéaire à gauche} (ou à droite) si chaque variable de $\X$, 
-  n'apparait pas plus d'une fois dans son membre gauche (droit {\textit resp.}).
+  Une règle de réécriture est \textbf{linéaire à gauche} (ou à droite) si chaque variable de $\X$ 
+  n'apparaît pas plus d'une fois dans son membre gauche (droit {\textit resp.}).
   %Une règle est \textbf{linéaire} si elle est à la fois linéaire à gauche et à droite.
 \end{definition}
 
@@ -180,7 +180,7 @@ de $A$ comme $\desc(A) = \{t \in \TF \sep \exists s \in A \st s \rw^*_{\R} t \}$
   $\rw_\RE$ définie comme:
   \[\forall\ s, t \in \TFX,\quad s \rw_\RE t \equ \exists u, v \in \TFX,\quad s =_E u \rw_\R v =_E t\]
 \end{definition}
-De la même manière que pour $\R$, note $\rw_\RE^*$ la clôture transitive et réflexive de $\rw_\RE$, et 
+De la même manière que pour $\R$, on note $\rw_\RE^*$ la clôture transitive et réflexive de $\rw_\RE$, et 
 on définit l'ensemble des $\RE$-descendants pour un ensemble $A$ de termes clos par
 $\descE(A) = \{t \in \TF \sep \exists s \in A \st s \rw^*_{\RE} t \}$.
 
@@ -218,7 +218,7 @@ On définit $\TFQ$ l'algèbre engendrée par $\F$ et $\Q$, que l'on appelle l'en
 \end{definition}
 
 Un automate d'arbres $\A$ reconnaît des termes clos de $\TF$. L'exécution d'un automate d'arbres
-débute en réécrivant les feuilles du terme au moyen des transitions, remplacant progressivement
+débute en réécrivant les feuilles du terme au moyen des transitions, remplaçant progressivement
 chaque sous-terme par des états jusqu'à la racine du terme. La sémantique d'une exécution 
 repose sur le principe qu'un terme $t$ (et donc un sous-terme) est reconnu par un certain état $q$ de l'automate lorsqu'on a
 réduit $t$ en $q$ par réécriture, ce que l'on note $t \rw_\Delta^* q$ ou plus généralement $t \rw_\A^* q$. De plus, si l'état $q$
@@ -228,8 +228,8 @@ est final (\textit i.e. $q \in \Q_f$), alors $t$ est reconnu ou accepté par l'a
   L'ensemble des termes reconnus par l'automate $\A$ en l'état $q$ est défini par $\Lang(\A, q) = \{ t \in \TF \sep t \rw_\A^* q\}$.
   Le langage reconnu par $\A$ est $\Lang(\A) = \bigcup_{q_f\in \Q_f} \Lang(\A, q_f)$. 
 \end{definition}
-Sans perte de généralité, on considèrera dans la suite que \textbf{tout automate $\A$ est toujours nettoyé}
-c'est à dire que $\A$ ne posssède pas d'état dont le langage est vide: $\forall q \in \Q, \Lang(\A, q) \not= \emptyset$.
+Sans perte de généralité, on considérera dans la suite que \textbf{tout automate $\A$ est toujours nettoyé}
+c'est à dire que $\A$ ne possède pas d'état dont le langage est vide: $\forall q \in \Q, \Lang(\A, q) \not= \emptyset$.
 
 \begin{example}
   Soit l'automate d'arbres $\A = \langle \F, \Q, \Q_F, \Delta \rangle$ avec
@@ -239,7 +239,7 @@ c'est à dire que $\A$ ne posssède pas d'état dont le langage est vide: $\fora
   \item $\Q_F=\{q\}$
   \item $\Delta= \{v \rw q, et(q, q) \rw q \}$
   \end{itemize}
-  Cet automate ne reconnait que les conjonctions s'évaluant à vrai (V).\\
+  Cet automate ne reconnaît que les conjonctions s'évaluant à vrai (V).\\
   \begin{center}
   \begin{tikzpicture}[level distance=10mm, scale=.8]
     \tikzstyle{level 1}=[sibling distance=10mm]
@@ -354,7 +354,7 @@ ce qui peut entraîner une complexité exponentielle.
 Dans cette thèse, on s'intéresse à la vérification de propriétés de systèmes,
 et en particulier aux systèmes pour lesquels l'ensemble des états accessibles
 est infini mais peut-être modélisé de manière finie~\cite{WB98}. 
-Il est à noté que l'approche envisagée fonctionne aussi 
+Il est à noter que l'approche envisagée fonctionne aussi 
 dans le cas de systèmes à ensemble fini d'états.
 
 Le premier problème est de fournir une représentation symbolique 
@@ -363,7 +363,7 @@ d'états. C'est une question récurrente en vérification qui est malheureusemen
 indécidable, et pour laquelle il n'existe que des solutions partielles.
 Ici, l'angle d'attaque retenu est celui de la vérification de modèles
 à base de langage régulier de termes plus communément appelée {\em Tree Regular Model Checking
-  (TRMC)}\,\cite{ALRd05}. Cette approche est une extension de l'approche qui fut initiallement introduite
+  (TRMC)}\,\cite{ALRd05}. Cette approche est une extension de l'approche qui fut initialement introduite
 pour calculer l'ensemble des états atteignables en utilisant les langages réguliers de mots~\cite{BJNT00,BLW03}.
 
 
@@ -386,11 +386,11 @@ du système;
 \end{itemize}
 
 \noindent
-Dans ce contexte, un programme sera alors representé par un triplet $(\F,\A,\R)$.
+Dans ce contexte, un programme sera alors représenté par un triplet $(\F,\A,\R)$.
 Ce type de modélisation est très expressif, d'une part parce que les systèmes de réécriture
-linéaires à gauche sont Turing-complet~\cite{HUET-78}, et d'autre part il est facile de 
-modéliser les protocoles cryptographiques~\cite{GenetK-CADE00}, ainsi que pour exprimer
-un sous-ensemble important du ByteCode Java~\cite{BoichutGJL-RTA07}.
+linéaires à gauche sont Turing-complet~\cite{HUET-78}, et d'autre part parce qu'il est facile de 
+modéliser les protocoles cryptographiques~\cite{GenetK-CADE00}, ainsi qu'un
+important sous-ensemble du ByteCode Java~\cite{BoichutGJL-RTA07}.
 On considère le problème d'atteignabilité pour ce modèle.
 
 \begin{definition}[Problème d'atteignabilité]
@@ -405,13 +405,13 @@ Le problème d'atteignabilité permet de vérifier des propriétés de sûreté
 pour le système considéré. L'ensemble $Bad$ décrit des configurations invalides 
 qui ne doivent pas être atteignables pour le système.
 
-Dans le cas d'un protocole cryptographique $Bad$ peut décrire des
-configurations résultant d'une attaque du protocole ex: le message
+Dans le cas d'un protocole cryptographique, $Bad$ peut décrire des
+configurations résultant d'une attaque du protocole. Ex: le message
 chiffré est révélé en clair à un protagoniste externe à la
 transaction\dots.
 
-Pour les programmes Java, $Bad$ peut décrire par des états où l'on
-s'apprête à accéder à une zone mémoire non définie ex: pointeur null,\dots
+Pour les programmes Java, $Bad$ peut décrire des états où l'on
+s'apprête à accéder à une zone mémoire non définie. Ex: pointeur null,\dots
 
 \section{La complétion d'automates d'arbres}
 \label{sec:completion}
@@ -440,10 +440,10 @@ pour le problème considéré.
 
 \subsection{Principe général}
 
-Ainsi, en utilisant l'algorithme de complétion on peut construire un
+En utilisant l'algorithme de complétion on peut construire un
 automate d'arbres $\B$ dont le langage $\Lang(\B) \supseteq
 \desc(\Lang(\A))$ contient au moins tous les termes atteignables.  Il
-est alors suffisant de vérifier que l'automate $\B$ ne reconnait pas
+est alors suffisant de vérifier que l'automate $\B$ ne reconnaît pas
 de termes de $Bad$ -- \textit{i.e.} $\Lang(\B)\cap Bad = \emptyset$ --
 pour montrer que le système n'atteint jamais aucune des configurations
 de $Bad$ soit $\desc(\Lang(\A))\cap Bad=\emptyset$.
@@ -507,11 +507,11 @@ l'ensemble des règles de réécriture sur $\aaex^i$ pour produire $\aaex^{i+1}$
 Le calcul peut s'arrêter lorsque l'on obtient un automate $\R$-clos 
 $\aaex^k$ \textit{i.e.} tel que $\Lang(\aaex^{k+1}) \supseteq \Lang(\aaex^k)$.
 
-\subsection{Etape de complétion : calcul exact des $\R$-descendants}
+\subsection{Étape de complétion : calcul exact des $\R$-descendants}
 
 
-Chaque application du TRS $\R$ est appelée \textbf{étape de completion} et 
-consiste à rechercher parmi les termes reconnus par l'automate qui peuvent être réécrits
+Chaque application du TRS $\R$ est appelée \textbf{étape de complétion} et 
+consiste à rechercher parmi les termes reconnus par l'automate, ceux qui peuvent être réécrits
 dont les descendants ne sont pas encore reconnus par l'automate.
 Cela revient à rechercher les \textbf{paires critiques} $\langle q, t \rangle$ 
 pour lesquelles le diagramme de la figure~\ref{fig:R-cloture} n'est pas clos, \textit{i.e.}
@@ -553,7 +553,7 @@ on a atteint un point fixe, et $\aaex^*$ est $\R$-clos.
 
 Comme le langage reconnu par l'automate $\aaex^i$ peut-être infini, l'ensemble
 des paires critiques $\la q, r\tau\ra$ pour la règle $l\rw r\in \R$ peut lui aussi être infini : 
-l'ensemble des termes $l\tau$ reconnu dans l'état $q$ peut-être infini. Chacun des termes $l\tau$
+l'ensemble des termes $l\tau$ reconnus dans l'état $q$ peut-être infini. Chacun des termes $l\tau$
 pouvant se réécrire en $r\tau$, on a bien une infinité de paires critiques, qu'il n'est pas envisageable
 d'énumérer.
 La solution retenue dans~\cite{Genet-RTA98} pour contourner ce problème consiste à construire des ensembles de
@@ -562,10 +562,10 @@ un état de l'automate. L'ensemble de substitutions à considérer est fini. En 
 variables apparaissant dans les règles de réécriture, qui est un ensemble fini. De même, l'ensemble $\Q$ des états de l'automate est fini.
 Cependant, un état peut reconnaître un ensemble infini de termes, et donc l'instance $l\sigma$ peut représenter une infinité de termes.
 On peut construire l'ensemble des termes dénotés par $l\sigma$ par un ensemble de substitutions $\eta: \Q \f \TF$ qui associe à chaque état $q$ 
-terme $\eta(q)$ reconnu par l'automate $\A$ en l'état $q$. % (on sait que $\Lang(\A, q) \not= \emptyset$).
+un terme $\eta(q)$ reconnu par l'automate $\A$ en l'état $q$. % (on sait que $\Lang(\A, q) \not= \emptyset$).
 Ce qui donne 
 \[\forall \eta \in \{ \eta : \Q \rw \TF \sep \eta(q) \rw_\A^* q\},\quad l\sigma.\eta \rw^*_\A  l\sigma\]
-Ainsi, réécrire $l\sigma$ en $r\sigma$, revient donc à réécrire tous les termes $l\sigma.\eta$ en $r\sigma.\eta$ du point de vue de l'automate.
+Ainsi, réécrire $l\sigma$ en $r\sigma$ revient donc à réécrire tous les termes $l\sigma.\eta$ en $r\sigma.\eta$ du point de vue de l'automate.
 
 \paragraph{Recherche des paires critiques}
 \label{sec:recherche-des-paires}
@@ -580,7 +580,7 @@ Ainsi, réécrire $l\sigma$ en $r\sigma$, revient donc à réécrire tous les te
 
 La complétion utilise un \textbf{algorithme de filtrage}~\cite{FeuilladeGVTT-JAR04}
 pour résoudre chaque problème $l \match q$ dans l'automate $\aaex^i$. 
-Cet algorithme produit un ensemble de $\Q$-subsitutions $\sigma: \X \mapsto \Q$
+Cet algorithme produit un ensemble de $\Q$-substitutions $\sigma: \X \mapsto \Q$
 formant des paires critiques $\la q, r\sigma\ra$ telles que $l\sigma \rw_{\aaex^i}^* q$.
 Le problème de filtrage doit être résolu pour toutes les règles $l\rw r$ de $\R$ avec
 chaque état $q$ de l'automate $\aaex^i$.
@@ -604,7 +604,7 @@ Il y a deux variantes pour ajouter cette transition. L'ajout immédiat de la tra
 ou l'ajout des transitions $r\sigma \rw q'$ et $q' \rw q$. La deuxième version plus récente, permet de 
 gagner en information: la transition $q' \rw q$ permet de distinguer les termes reconnus en $q'$, comme 
 un sous-ensemble des termes $q$, conséquence de l'étape de complétion. Sans l'utilisation de la $\varepsilon$-transition,
-il n'est pas possible à postériori de distinguer les successeurs $r\sigma$. 
+il n'est pas possible à posteriori de distinguer les successeurs $r\sigma$. 
 Dans la suite, on ne considère plus que la variante $r\sigma \rw q'$ et $q' \rw q$ pour résoudre les paires critiques,
 sauf au chapitre~\ref{chap:certif} où l'on considère un automate  sans $\varepsilon$-transitions
 qu'il est toujours possible d'obtenir par nettoyage des $\varepsilon$-transitions.
@@ -616,7 +616,7 @@ et doivent être normalisées avant d'être ajoutées à l'automate.
 %\comments{definition de la normalisation}
 \begin{definition}
   La \textbf{normalisation} d'une transition $r\sigma \rw q'$ transforme cette
-  tansition en un ensemble $\Pi$ de transitions normalisées~\ref{def:transitions}
+  transition en un ensemble $\Pi$ de transitions normalisées~\ref{def:transitions}
   telles que $r\sigma \rw_\Pi^* q'$. Les transitions sont ensuite ajoutées aux transitions de $\aaex^i$.
 \end{definition}
 On notera que la définition normalisation~\cite{Genet-RTA98} nécessite 
@@ -675,7 +675,7 @@ La complétion d'un automate d'arbres par $\R$ assure alors la propriété suiva
 
 Cependant, excepté pour des classes particulières de TRS~\cite{FeuilladeGVTT-JAR04,Genet-Habil},
 l'automate représentant l'ensemble des termes atteignables ne peut pas être obtenu
-à partir de $\A$ en applicant un nombre fini de fois l'étape de complétion\dots
+à partir de $\A$ en appliquant un nombre fini de fois l'étape de complétion\dots
 
 
 \begin{example}
@@ -702,10 +702,10 @@ l'automate représentant l'ensemble des termes atteignables ne peut pas être ob
   \end{center}
 
   On peut voir que le calcul diverge, car le nouvel état introduit
-  à chaqe étape de complétion, fournit une nouvelle paire critique avec la règle $S(x) \rw S(S(x))$.
+  à chaque étape de complétion, fournit une nouvelle paire critique avec la règle $S(x) \rw S(S(x))$.
 
   On peut aussi remarquer qu'une fois que la paire critique est résolue en l'état $q_i$,
-  il est aussi résolue pour tous les états $q'$ qui sont accessibles par des $\varepsilon$-transitions.
+  elle est aussi résolue pour tous les états $q'$ qui sont accessibles par des $\varepsilon$-transitions.
   Lorsque l'on a $l\sigma \rw^*_{\A_i} q_i$ et $r\sigma \rw^*_{\A_i} q_i$ alors pour tout état $q$ tel
   que $q_i \rw^*_{\A_i} q$,la paire critique $\la q, r\sigma\ra$ est aussi résolue. On utilise cette
   propriété pour optimiser la recherche des paires critiques.
@@ -721,7 +721,7 @@ Le principe de l'approximation repose sur la relation $=_E$ induite par les équ
 à la notion des représentants (\textit{c.f.} définition~\ref{def:representants}). 
 L'accélération consiste à définir un nouvel automate $\aaexeq^i$ à partir de l'automate $\aaex^i$:
 
-Elle repose sur la \textbf{fusion d'états} dirigées par les équations de $E$.
+Elle repose sur la \textbf{fusion d'états} dirigée par les équations de $E$.
 \begin{definition}
   Deux états distincts $q,\ q'$ de l'automate $\aaex^i$ sont \textbf{fusionnés} si pour une équation $u=v \in E$,
   il existe une $\Q$-substitution $\sigma : \X \rw \Q$ telle qu'on ait le diagramme de la figure~\ref{fig:fusion}.
@@ -755,8 +755,8 @@ Elle repose sur la \textbf{fusion d'états} dirigées par les équations de $E$.
 
 
 \begin{example}
-  En reprenant l'exemple précédent qui diverge, et en appliquant l'équation $x = S(S(x))$ sur
-  l'automate $\A_2$ par exemple (en fait on ne peut pas l'appliquer plus tôt).
+  On reprend l'exemple précédent qui diverge, et on tente d'appliquer l'équation $x = S(S(x))$ sur
+  l'automate $\A_2$ (il n'est en fait pas possible de l'appliquer plus tôt).
   L'automate $\A_2$ est composé des transitions $\{ 0 \rw q_0,\ S(q_0) \rw q_1,\ S(q_1) \rw q_2\}$
   et $\{ q_2 \rw q_1,\ q_1 \rw q_0\}$.
   On trouve alors la substitution $x \mapsto q_0$, ce qui donne $q_0 = S(S(q_0))$ et $S(S(q_0)) \rw^*_{\A_2} q_2$.
@@ -765,7 +765,7 @@ Elle repose sur la \textbf{fusion d'états} dirigées par les équations de $E$.
   et $\{ q_0 \rw q_1,\ q_1 \rw q_0\}$.
   
   On cherche les nouvelles paires critiques en $q_0$ et $q_1$ pour les règles de $\R = \{0 \rw S(0),\ S(x) \rw S(S(x))\}$.
-  on trouve $\la q_0, S(0)\ra$ qui est déjà résolue, puis les paires $\la q_0,S(S(q_0))\ra$ et $\la q_1,S(S(q_1))\ra$
+  On trouve $\la q_0, S(0)\ra$ qui est déjà résolue, puis les paires $\la q_0,S(S(q_0))\ra$ et $\la q_1,S(S(q_1))\ra$
   qui sont aussi résolues: l'automate $\A_2'$ est clos par $\R$, on a atteint un point fixe.
 \end{example}
 
@@ -787,7 +787,7 @@ par réécriture de $\R$ modulo $E$.
   \end{itemize}
 \end{definition}
 
-Cette technique d'approximation et cette méthodologie est comparable à celle employée 
+Cette technique d'approximation et cette méthodologie sont comparables à celle employée 
 par les abstractions équationnelles définies dans~\cite{MeseguerPM-TCS08}.
 
 % If the intersection between $\aapprox$ and $Bad$ is not empty, then it
