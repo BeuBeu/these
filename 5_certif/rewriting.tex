@@ -39,7 +39,7 @@ les variables des symboles de fonction.
 \paragraph{Remarques:}
 Une faiblesse de \coq\ est la génération automatique du principe
 d'induction \lstinline!term_rect!. Le théorème généré ne tient pas
-compte dans le cas $Fun$ que le terme est constitué d'une
+compte que, dans le cas du constructeur $Fun$, le terme est constitué d'une
 \lstinline!list term! pour former les sous-termes et ce qui
 nécessite souvent d'utiliser l'hypothèse d'induction:
 \lstinline!term_rect! est trop faible pour prouver quoi que ce soit.
@@ -68,7 +68,7 @@ Lemma term_rec_In :
          (forall p l, (forall x, In x l -> P x) -> P (Fun p l)) ->
             forall t, P t.
 \end{lstlisting}
-En fait, pour construire ce principe d'induction, on a besoin au préalable de montrer la décidabilité de l'égalité
+Pour construire ce principe d'induction, on a besoin au préalable de montrer la décidabilité de l'égalité
 sur les termes. Cette propriété ne peut-être montré qu'avec une instance particulière du principe~\lstinline!term_rect'!
 où le prédicat~\lstinline!P0! exprime la décidabilité de l'égalité sur les listes de termes.
 De plus, le résultat sur la décision de l'égalité est la propriété indispensable que l'on utilise couramment 
@@ -89,8 +89,8 @@ Inductive rule: Set :=
 | Rule(l r: term) (Hsub: subseteq (Fv r)(Fv l))
                   (Hl: TFX l) (Hr: TFX r)       : rule.
 \end{lstlisting}
-D'autre part, la complétion manipule des ensembles de règles linéaires à gauches. On a introduit donc une deuxième définition
-possède une hypothèse supplémentaire assurant la linéarité du membre gauche. Cette dernière  est assurée par le prédicat
+D'autre part, la complétion manipule des ensembles de règles linéaires à gauche. On a donc introduit une deuxième définition
+qui possède une hypothèse supplémentaire assurant la linéarité du membre gauche. Cette dernière  est assurée par le prédicat
 \lstinline!linear: term -> Prop! qui fixe le nombre d'occurrences de chaque variable à $1$ au maximum.
 \begin{lstlisting}
 Inductive l_rule: Set :=
@@ -100,7 +100,7 @@ Inductive l_rule: Set :=
 \end{lstlisting}
 
 Dans la suite, le type \lstinline!list rule! représente un système de règles de réécriture et donc
-\lstinline!list lrule! un systèmes de règles de réécriture linéaires à gauche.
+\lstinline!list lrule! un système de règles de réécriture linéaires à gauche.
 On utilise la notation \lstinline!(t @ sigma)! pour dénoter le terme résultant de 
 l'application d'une substitution \lstinline!sigma! à chaque variable qui apparaît dans le terme~\lstinline!t!. 
 

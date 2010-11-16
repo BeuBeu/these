@@ -1,7 +1,7 @@
 \section{Formalisation des automates d'arbres}
 \label{sec:automata}
 
-Le fait que le checker, qui doit être exécuté, est directement extrait de la formalisation \coq\
+Le fait que le $\kw{checker}$, qui doit être exécuté, est directement extrait de la formalisation \coq\
 contraint la formalisation des automates d'arbres. Comme les structures de données
 utilisées dans la formalisation sont celles qui sont réellement utilisées
 lors de lors de l'exécution, elles doivent être {\em efficaces} d'un point de vue algorithmique.
@@ -107,9 +107,9 @@ descendants~\cite{RivalGL-TPHOL01}, la preuve qu'elle soit équivalente à la fo
 est un argument irréfutable pour se convaincre de la correction de l'approche.
 Enfin, il existe aussi une librairie récente d'automates d'arbres pour Isabelle\cite{TA-isabelle2010}
 basée sur une implémentation similaire à celle-ci. La principale différence est l'utilisation des 
-arbres "rouges et noirs" pour construire les tables d'associations plutôt que des arbres d'association.
+arbres "rouges et noirs" pour construire les tables d'associations plutôt que des arbres simples.
 Cela permet de maintenir des structures avec une bonne complexité pour tout accès notamment pour
-contruire les unions et intersections d'automates. Pour le checker, le seul algorithme nécessaire
+contruire les unions et intersections d'automates. Pour le $\kw{checker}$, le seul algorithme nécessaire
 est la décision du vide de l'intersection entre deux automates, pour vérifier les propriétés. Or il n'est pas
 nécessaire de construire explicitement l'intersection, on peut simplement rechercher si il existe une exécution commune 
 entre les deux automates d'arbres considérés.
