@@ -1,0 +1,21 @@
+\usetikzlibrary{shapes}
+\usepgflibrary{arrows}
+
+\tikz{
+%  \tikzstyle{etat}[circle, draw]
+%  \tylzstyle{init}[etat]
+%  \tykzstyle{final}[etat, double]
+  \node [init]  (a) at (0, 0) {$f(a)$};
+  \node [etat] (b) at (0, 1) {$g(a)$};
+  \node [etat] (c) at (0, 2) {$h(a)$};
+%  \draw[->]
+%  (a) edge (b)
+%  (b) edge (c)
+%  (c) edge (a);
+}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: ../main
+%%% End: 

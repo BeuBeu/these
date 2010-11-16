@@ -1,0 +1,64 @@
+\begin{example}
+  \label{ex:semantics}
+  Let $\A$ be the $\RE$-automaton recognizing the program
+  where $I = f(a)$, $\R = \{f(c) \rw g(c),\ a \rw b\}$ and $E = \{ b = c\}$.
+
+  \centering
+  \medskip
+  \begin{tabular}{lc}
+  \hspace{-.3cm}
+  \begin{minipage}{.75\linewidth}
+      In $A$, the equality $b = c$ is denoted by two transitions $q_c
+      \rw q_b$ and $q_b \rw q_c$ of $\Deq$, assuming that $b$, $c$ are
+      recognized into $q_b$, $q_c$, respectively. For the state $q_c$,
+      the transition $q_b \rw q_c$ indicates that the term $b$ is
+      obtained from the term $c$ by equality.
+      % The term $g(b)$ is recognized into $q_g$, thanks to $q_b \rw q_c$ too.
+      % Conversely, we have that $c$ is the approximation of $d$ from state $q_d$.
+      Transitions $q_g \rw q_f$ and $q_b \rw q_a$ denote rewriting steps.
+      Those transitions allow us to deduce $f(a) \rw^*_\RE g(c)$ and, $a \rw^*_\RE b$.
+      To have $f(a) \rw_\R f(b) =_E f(c) \rw_\R g(c)$, which is indeed
+      $f(a) \rw^*_\RE g(c)$ unfolded,
+      we use the equality $b = c$ to obtain $c$ from $b$, relation denoted by the 
+      by the transition $q_c \rw q_b$. Thus, we label the transition  $q_g \rw q_f$
+      with the formula $Eq(q_c, q_b)$ to save this information, whereas 
+      the transition $q_b \rw q_a$ is labeled with $\top$ which means $a \rw^*_\R b$.
+    \end{minipage}&%\quad
+    \begin{minipage}{0.25\linewidth}
+      \tikz[thick, scale=.8]{
+        \node (qf) at (0, 0)   {$\mathbf{q_f}$};
+        \node (qg) at (4, 0)   {$q_g$};
+        \node (f)  at (0,-1.5) {$f(\;q_a\;)$};
+        \node (g)  at (4,-1.5) {$g(\;q_c\;)$};
+        \node (qa) at (0,-2.8) {$q_a$};
+        \node (qb) at (2,-2.8) {$q_b$};
+        \node (qc) at (4,-2.8) {$q_c$};
+        \node (a)  at (0,-4.3) {$a$};
+        \node (b)  at (2,-4.3) {$b$};
+        \node (c)  at (4,-4.3) {$c$};
+        % \Delta
+        \draw [->] (f) edge (qf);
+        \draw [->] (g) edge (qg);
+        \draw [->] (a) edge (qa);
+        \draw [->] (b) edge (qb);
+        \draw [->] (c) edge (qc);
+        % liens de descendance
+        \draw [dashed] (f) edge (qa);
+        \draw [dashed] (g) edge (qc);
+        % \Drw
+        \draw [->, bend right=15] (qg) to node[auto, swap] {\footnotesize$Eq(q_c, q_b)$} (qf);
+        \draw [->, bend right=15] (qb) to node[auto, swap] {\footnotesize$\top$} (qa);
+        % \Deq
+        \draw [->, bend right=15] (qb) to node[auto, swap] {\footnotesize$=$} (qc);
+        \draw [->, bend right=15] (qc) to node[auto, swap] {\footnotesize$=$} (qb);
+      }
+    \end{minipage}
+  \end{tabular}
+%  \caption{Example of $\RE$-automaton}
+\end{example}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% TeX-PDF-mode: t
+%%% End:

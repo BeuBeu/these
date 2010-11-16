@@ -1,0 +1,194 @@
+\section{Formalisation de la réécriture}
+\label{sec:rewriting}
+
+Le but de cette partie est de formaliser en \coq: les termes, la
+réécriture, les termes atteignables et le problème d'atteiganbilité
+lui-même.  Premièrement on utilise les entiers binaires positifs
+fournis par la librairie standard de \coq\ définir les ensembles de
+symboles comme les variables ($\X$) ou les symboles de fonctions
+($\F$), et les ensembles d'états ($\Q$). 
+Pour être plus explicite, on renomme les \lstinline!positive!
+en \lstinline!ident!. Alors, on définit l'ensemble des termes en
+utilisant une définition inductive:
+
+\switchlstcoq
+%A discuter....
+%Definition F := positive.
+%Definition X := positive.
+\begin{lstlisting}
+Definition ident := positive.
+
+Inductive term : Set :=
+| Fun : ident -> list term -> term
+| State : ident -> tern
+| Var : ident -> term.
+\end{lstlisting}
+
+Cet ensemble contient plus de termes que les ensembles $\TFX$, $\TF$ et $\TFQ$.
+Pour être exact, il définit tous les termes de l'algèbre $\TFQX$.
+Ainsi, on introduit les prédicats~\lstinline!TFX: term -> Prop!, \lstinline!TF: term -> Prop!
+et~\lstinline!TFQ: term -> Prop! pour caractériser respectivement chacun des sous-ensembles.
+
+Maintenant, le terme $f(x, a)$ sera construit comme~\lstinline!Fun 0 (Var0::(Fun 1 nil)::nil)!
+en supposant que l'on a la correspondance suivante entre les symboles,
+variables et les entiers binaires $f \mapsto 0$, $a \mapsto 1$ et $x
+\mapsto 0$ par exemple.  On remarque qu'il est possible de d'attacher
+la valeur $0$ à $f$ et $x$, comme \lstinline!Fun! et \lstinline!Var!,
+les constructeurs du type \lstinline!term!, permettent de distinguer
+les variables des symboles de fonction.
+
+\paragraph{Remarques:}
+Une faiblesse de \coq\ est la génération automatique du principe
+d'induction \lstinline!term_rect!. Le théorème généré ne tient pas
+compte dans le cas $Fun$ que le terme est constitué d'une
+\lstinline!list term! pour former les sous-termes et ce qui
+nécessite souvent d'utiliser l'hypothèse d'induction:
+\lstinline!term_rect! est trop faible pour prouver quoi que ce soit.
+Dès lors, il est nécessaire de définir un second théorème nommé \lstinline!term_rect'! pour
+construire les preuves qui nécessite une étude de cas sur \lstinline!term!.
+\begin{lstlisting}
+Lemma term_rect' : 
+   forall (P: term -> Type) (P0: list term -> Type),
+      (forall x, P (Var x)) -> (forall q, P (State q)) ->
+         (forall p l, P0 l -> P (Fun p l)) ->
+         P0 nil ->
+         (forall t lt, P t -> P0 lt -> P0 (t::lt)) ->
+           forall t, P t.
+\end{lstlisting}
+Ce principe d'induction repose sur l'imbrication mutuelle de deux prédicats~\lstinline!P! et~\lstinline!P0!
+portant respectivement l'un sur les termes et l'autre sur les listes de sous-termes. Le but de ce principe
+d'induction est de montrer la conclusion \lstinline!forall t, P t!.
+Le prédicat~\lstinline!P0! n'est là que pour fournir une aide sur la manière dont on veut raisonner pour transmettre
+(le pas d'induction) la propriété~\lstinline!P! des sous-termes qui constituent~\lstinline!l! vers un terme complet de la forme \lstinline!Fun f l!.
+En fait, dans la majorité des cas, il suffit de considérer une instance particulière de ce principe 
+où~\lstinline!P0! est instancié par~\lstinline!fun l => forall x, In x l -> P x!:
+\begin{lstlisting}
+Lemma term_rec_In :
+   forall (P: term -> Set),
+      (forall x, P (Var x)) -> (forall q, P (State q)) ->
+         (forall p l, (forall x, In x l -> P x) -> P (Fun p l)) ->
+            forall t, P t.
+\end{lstlisting}
+En fait, pour construire ce principe d'induction, on a besoin au préalable de montrer la décidabilité de l'égalité
+sur les termes. Cette propriété ne peut-être montré qu'avec une instance particulière du principe~\lstinline!term_rect'!
+où le prédicat~\lstinline!P0! exprime la décidabilité de l'égalité sur les listes de termes.
+De plus, le résultat sur la décision de l'égalité est la propriété indispensable que l'on utilise couramment 
+pour comparer les termes, dans les preuves où les algorithmes.
+\begin{lstlisting}
+Theorem term_eq_dec : forall u v: term, {u = v} + {u <> v}.
+\end{lstlisting}
+% This is required to be able to prove most of the theorems on terms.
+
+
+Une règle de réécriture $l \rw r$ est représentée par un couple de termes avec une preuve
+que la règle est bien formée, \textit{i.e.} un terme de preuve \coq\ qui assure que l'ensemble des variables du membre droit $r$
+est un sous-ensemble des variables du membre gauche $l$.
+A ce titre, la fonction \lstinline!Fv : term -> list ident! construit l'ensemble des variables d'un terme. 
+% In \coq, it becomes:
+\begin{lstlisting}
+Inductive rule: Set :=
+| Rule(l r: term) (Hsub: subseteq (Fv r)(Fv l))
+                  (Hl: TFX l) (Hr: TFX r)       : rule.
+\end{lstlisting}
+D'autre part, la complétion manipule des ensembles de règles linéaires à gauches. On a introduit donc une deuxième définition
+possède une hypothèse supplémentaire assurant la linéarité du membre gauche. Cette dernière  est assurée par le prédicat
+\lstinline!linear: term -> Prop! qui fixe le nombre d'occurrences de chaque variable à $1$ au maximum.
+\begin{lstlisting}
+Inductive l_rule: Set :=
+| Lrule(l r: term) (Hsub: subseteq(Fv r)(Fv l))
+                   (Hl: TFX l) (Hr: TFX r)
+                   (Hlin: linear l)             : lrule.
+\end{lstlisting}
+
+Dans la suite, le type \lstinline!list rule! représente un système de règles de réécriture et donc
+\lstinline!list lrule! un systèmes de règles de réécriture linéaires à gauche.
+On utilise la notation \lstinline!(t @ sigma)! pour dénoter le terme résultant de 
+l'application d'une substitution \lstinline!sigma! à chaque variable qui apparaît dans le terme~\lstinline!t!. 
+
+\begin{lstlisting}
+Definition substitution := ident -> option term.
+\end{lstlisting}
+
+\noindent
+En \coq, Le relation de réécriture \emph{"$u$ est récrit en $v$ par $l
+  \rightarrow r$"}, habituellement défini comme $\exists p \in \pos(t),\exists \sigma \
+t.q.\ u|_p = l\sigma \ \land \ v = u [ r\sigma ]_p$, est divisé en deux prédicats:
+
+\begin{itemize}
+\item Le premier définit la réécriture d'un terme à la racine du terme (à la position la "plus haute"). En
+  fait, l'ensemble des couples de termes $(t, t')$ qui sont réécrits à la racine par la règle $l \rw r$
+  peuvent être vus comme l'ensemble des termes $(l\sigma, r\sigma)$ pour toute substitution $\sigma$.
+
+\item 
+  Le second prédicat définit inductivement la relation de réécriture pour toute position d'un terme $t$
+  par la règle $l \rw r$, par la réécriture à la racine de tout sous-terme de $t$ par $l \rw r$.
+\end{itemize}
+
+
+\begin{lstlisting}
+(* Topmost rewriting : *)
+Inductive TRew (x : rule) : term -> term -> Prop :=
+| R_Rew :
+     forall s l r Hsub Hl Hr,
+        x = Rule l r Hsub Hl Hr -> TRew x (l @ s) (r @ s).
+\end{lstlisting}
+
+
+\begin{lstlisting}
+(* Rewriting at any position of any term *)
+Inductive Rew (r : rule) : term -> term -> Prop :=
+| RewT : forall t t', 
+     TRew r t t' -> Rew r t t'
+| RewSub : forall f l l', 
+     RewTerms r l l' -> Rew r (Fun f l) (Fun f l')
+with RewTerms (r : rule) : list term -> list term -> Prop :=
+| RewNext: forall t l l',
+     RewTerms r l l' -> RewTerms r (t::l) (t::l')
+| RewThis: forall l t t',
+     Rew r t t' -> RewTerms r (t::l) (t'::l).
+\end{lstlisting}
+
+
+De la même manière, en utilisant une définition inductive il est possible de 
+définir le \lstinline!Rew! prédicat pour la réécriture à n'importe quelle position.
+Alors on doit définir $\rw^*_{\R}$. En \coq, on prefèrera voir cela comme le prédicat
+\lstinline{Reachable R u} qui caractérise l'ensemble des termes atteignables à partir de
+$u$ par $\rightarrow^*_\R$.
+
+\begin{lstlisting}
+Inductive Reachable(R : list rule)(t : term) : term -> Prop:=
+| R_refl : Reachable R t t
+| R_trans : forall u v r, Reachable R t u -> In r R -> Rew r u v -> 
+    Reachable R t v.
+\end{lstlisting}
+
+Cette définition de la relation de réécriture présente la particularité
+d'être facilement manipulable. On est tout de même en droit de se demander si cette
+formalisation est équivalente à la définition standard. Une manière simple de répondre
+consiste à montrer l'équivalence des deux définitions. On introduit donc la définition standard~\lstinline!StdRew!
+et on montre l'équivalence:
+
+\begin{lstlisting}
+Definition StdRew (x: rule)(u v: term) := 
+   forall l r Hsub Hl Hr, Rule l r Hsub Hl Hr = x ->
+      exists p: position, exists s: substition, 
+         get u p = Some (l @ s) /\ v = set u p (r @ s).
+
+Theorem StdRew_Rew:
+   forall (x: rule)(u v: term), StdRew lr u v <-> Rew lr u v.
+\end{lstlisting}
+
+La définition standard utilise les fonctions~\lstinline!get! et~\lstinline!set!
+permettant respectivement d'accéder au de remplacer le sous-terme à la postion $p$:
+\lstinline!get u p = Some t! est équivalent à $u|_p = u$ et \lstinline!set u p t! équivaut à $u[t]_p$.
+On remarquera qu'il n'est pas nécessaire de préciser que la position $p$ appartient à $\pos(u)$.
+La fonction~\lstinline!get! est une fonction partielle (elle renvoie une valeur de type~\lstinline!option term!)
+dont l'évaluation est la forme~\lstinline!Some t! si et seulement si $p \in pos(u)$:
+\begin{lstlisting}
+Lemma Pos_get: forall t p, Pos t p <-> exists t', get t p = Some t'.
+\end{lstlisting}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End: 

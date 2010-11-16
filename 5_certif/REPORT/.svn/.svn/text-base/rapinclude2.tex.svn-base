@@ -1,0 +1,179 @@
+%\newtheorem{theorem}{Theorem}
+%\newtheorem{definition}{Definition}
+%\newtheorem{proposition}{Proposition}
+%\newtheorem{example}{Example}
+%\newtheorem{lemma}{Lemma}
+%\newtheorem{corollary}{Corollary}
+
+
+%\newcommand{\article}[1]{#1}
+%\newcommand{\report}[1]{}
+
+\newcommand{\nr}{N}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\T}{\mathcal{T}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\Q}{\mathcal{Q}}
+\newcommand{\f}{\rightarrow}
+\newcommand{\fg}{\leftarrow}
+
+\newcommand{\versionlongue}[1]{#1}
+\newcommand{\versioncourte}[1]{}
+\newcommand{\annexe}[1]{#1}
+\newcommand{\archive}[1]{}
+
+\newcommand{\rwD}{\rightarrow^*_{\Delta}}
+
+\def \N {\mathbb{N}}
+\def \norm {Norm}
+\def \merge {Merge}
+
+\def \R {\mathcal{R}}
+\def \card {{\rm \mathcal{C}ard}}
+\newcommand{\desc}{\R^*}
+
+
+
+\newcommand{\mytt}{\tt \small}
+
+%-------- Symboles speciaux
+\newcommand{\lmulti}{\{\!\!\{}
+\newcommand{\rmulti}{\}\!\!\}}
+\newcommand{\timbuk}{{\sf Timbuk}}
+%Benoit : \coq commande
+\newcommand{\coq}{{\sf Coq}}
+\newcommand{\relU}{\mathrel{\mbox{U}}}
+\newcommand{\bracl}{\llbracket}
+\newcommand{\bracr}{\rrbracket}
+\newcommand{\ncirc}[1]{\rlap{$\bigcirc$}
+                        \hspace*{1mm}\rlap{{\small
+                                #1}}\hspace*{2.2mm}}
+ 
+
+\newcommand{\uinter}[1]{\vspace*{-2mm}{\begin{alltt} {\scriptsize #1} \end{alltt}}\vspace*{-2mm}}
+\newcommand{\finter}[1]{\vspace*{-2mm}{
+        \begin{alltt}
+        {\scriptsize
+        \input{#1}}
+        \end{alltt}}\vspace*{-2mm}}
+
+
+\newfont{\amstoto}{msbm10}
+\newcommand{\NN}{\mbox{\amstoto\char'116}}
+\newcommand{\ZZ}{\mbox{\amstoto\char'132}}
+\newcommand{\arity}{ar}
+\newcommand{\Sub}{{\cal S}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\X}{{\cal X}}
+\newcommand{\Y}{{\cal Y}}
+\newcommand{\C}{{\cal C}}
+\newcommand{\D}{{\cal D}}
+\newcommand{\TF}{{\cal T(F)}}
+\newcommand{\TFX}{{\cal T(F, X)}}
+\newcommand{\TFQ}{{\cal T(F \cup Q)}}
+\newcommand{\TFQp}{{\cal T(F \cup Q')}}
+\newcommand{\TFQX}{{\cal T(F \cup Q, X)}}
+\newcommand{\TFXQ}{{\cal T(F, X \times Q)}}
+\newcommand{\TC}{{\cal T(C)}}
+\newcommand{\Qf}{{\cal Q}_f}
+\newcommand{\aut}{\langle \F, \Q, \Qf, \Delta \rangle} 
+\newcommand{\B}{{\cal B}}
+\newcommand{\ordlexico}{\prec}
+\newcommand{\bottom}{\perp}
+\newcommand{\match}{\unlhd}
+
+\newcommand{\fleche}{\mapsto}
+\newcommand{\send}{\hookrightarrow}
+\newcommand{\cale}[1]{\vrule height #1 depth 5pt width 0pt}
+\newcommand{\deduc}[2]{$ \textstyle #1 \mbox{\cale{0mm}} \over
+{\textstyle #2 \mbox{\cale{5mm}}}$}
+
+\newcommand{\Decompose}{{\bf Decompose}}
+\newcommand{\Clash}{{\bf Clash}}
+\newcommand{\Configuration}{{\bf Configuration}}
+\newcommand{\Distributivity}{{\bf Distributivity}}
+\newcommand{\Simplifyone}{{\bf Simplify~1}}
+\newcommand{\Simplifytwo}{{\bf Simplify~2}}
+
+
+\newcommand{\mycomment}[1]{}
+\newcommand{\et}{\mbox{ and }}
+\newcommand{\st}{\mbox{ s.t. }}
+\newcommand{\oute}{\mbox{ or }}
+\newcommand{\ou}{\; \vee \;}
+
+\newcommand{\spf}{\;\; \Longrightarrow \;\;}
+\newcommand{\dbf}{\;\; \Longleftrightarrow \;\;}
+\newcommand{\imp}{\; \Longrightarrow \;}
+\newcommand{\sep}{\; | \;}
+\newcommand{\dsep}{\; || \;}
+
+
+
+
+\def\build#1_#2^#3{\mathrel{
+    \mathop{\kern 0pt#1}\limits_{#2}^{#3}}}
+
+\def\CM#1{\build\hbox to 10mm {\rightarrowfill}_{}^{CM#1}}
+
+%  #2
+% --->
+%  #1   #3
+
+
+\newcommand{\rwl}[3]{\mathrel{{\build{\longrightarrow}_{#1}^{#2}}\mskip-2mu_{#3}}}
+\newcommand{\rws}[3]{\mathrel{{\build{\rightarrow}_{#1}^{#2}}\mskip-2mu_{#3}}}
+% Benoit : incompatible avec le package amsmath.sty
+%\newcommand{\xrightarrow}[1]{\rwl{}{#1}{}}
+
+
+%-------- Des fleches de reecriture...
+
+
+\newcommand{\rw}{\rightarrow}
+\newcommand{\lrwr}{\mathrel{\mathrel{_{\R}}\joinrel\leftarrow}}
+\newcommand{\lrwA}{\mathrel{\mathrel{_{\A}}\joinrel\leftarrow}}
+\newcommand{\rwR}{\rws{}{}{\R}}
+\newcommand{\rwA}{\rws{}{}{\A}}
+\newcommand{\rwB}{\rws{}{}{\B}}
+
+
+\newcommand{\pos}{{\cal P}os}
+\newcommand{\posf}{\pos_{\F}} 
+\newcommand{\posx}{\pos_{\X}} 
+\newcommand{\var}{{\cal V}ar}
+\newcommand{\ddom}{{\cal D}om}
+\newcommand{\ran}{{\cal R}an}
+\newcommand{\Root}{{\cal R}oot}
+\newcommand{\Card}{{\cal C}ard}
+
+%\newcommand{\calC}{{\cal C}}
+%\newcommand{\calD}{{\cal D}}
+%\newcommand{\calP}{{\cal P}}
+
+%\newcommand{\kk}{\leadsto}
+%\newcommand{\match}{\unlhd}
+%\newcommand{\Cterm}{Q-term}
+%\newcommand{\Cterms}{Q-terms}
+\newcommand{\Qsubst}{$\Q$-substitution}
+\newcommand{\Qsubsts}{$\Q$-substitutions}
+%\newcommand{\arw}{\leadsto}
+
+\newcommand{\Norm}{Norm}
+\newcommand{\States}{States}
+
+%\newcommand{\infini}{\omega}
+\newcommand{\comp}{{\cal C}_{\nr, \R}}
+\newcommand{\aapprox}{{\cal A}_{\nr, \R}}
+\newcommand{\aaex}{{\cal A}_{\R}}
+
+
+\newcommand{\Lang}{{\cal L}}
+
+\newcommand{\exskip}{\medskip}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

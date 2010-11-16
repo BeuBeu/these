@@ -1,0 +1,68 @@
+\begin{definition}[$\Delta-$coherence]
+  \label{prop:determinism}
+
+Let $\Delta$ be a set of normalized transitions. 
+Thus, $\aaex^i$ is said to be $\Delta-$coherent iff
+\begin{enumerate}
+  \item $\Delta\subseteq \Delta^i$,
+  \item if $\Delta^i\setminus\Delta$ contains two transitions of the form $f(q_1, \dots, q_n) \rw q$ and
+  $f(q_1, \dots, q_n) \rw q'$, then $q = q'$ and 
+\item if $\Delta^i\setminus\Delta$ contains two transitions of the form $t \rw q$ and
+  $t' \rw q$ with $t,t'$ two normalized configurations, then $t = t'$.
+\end{enumerate}
+  % Assuming $\Delta$ a set of normalized transitions such that $\Delta=\Delta^i\setminus\Delta^0$.
+%   If $\Delta$ contains two transitions of the form $f(q_1, \dots, q_n) \rw q$ and
+%   $f(q_1, \dots, q_n) \rw q'$, it means $q = q'$.
+\end{definition}
+
+
+Since $\aaex^i$ is $\Delta^0-$coherent, 
+it ensures that there exists a unique normal form of any term which is 
+  rewritten by $\Delta^i\setminus \Delta^0$. 
+\comments{Ne pas oublier de mettre ceci dans la partie notations
+We use the notation $u \rw^!_\delta v$ to say that $v$
+  is the normal form of $u$ by $\delta$.}
+
+
+
+
+
+  \begin{definition}[$\C$: an $\R-$transformation]
+    \label{def:Rcompletion-step}
+  Let $\Delta^0$ be the set of normalized transitions of the initial
+  $\RE-$automaton $\aaex^0$.  Let $\C(\aaex^i)$ is the $\RE-$automaton obtained from 
+  $\aaex^i$ such that $\C(\aaex^i)= \la\F, \Q',
+  \Q_F, \Delta'\cup \Drw' \cup \Deq' \ra$ and where each component is built as follows:
+  \begin{itemize}
+  \item $\Delta'= \normall(\tn,\Delta^i\setminus\Delta^0)\cup \Delta^0 $ where 
+      $\tn = \{r\sigma|\la r\sigma,q,\phi \ra\in S \}$
+    \item $\Drw'=\Drw\cup \{ q' \stackrel{\phi}{\f} q| \la l\sigma,r\sigma,q,\phi \ra\in S, r\sigma \rw^!_{\Delta^i\setminus\Delta^0} q'\}$
+    \item $\Q'=\states(\Delta^i)$ and 
+    \item $\Deq=\Deq$.
+    \end{itemize}
+\end{definition}
+
+
+\begin{definition}[Normalization of a set of terms]
+\label{def:normall}
+Let $\tn\subseteq \TFQ$ be a set of terms to normalize. Let $\Delta$ be 
+a set of normalized transitions. 
+The normalization of the whole set $tn$ is inductively defined as follows:
+ \[
+\normall(\tn , \Delta)=
+  \left\{
+    \begin{array}{ll}
+      \Delta & \textrm{if } \tn=\emptyset\\
+      \normall(\tn',\Delta') & t\in \tn, \tn'=\tn\setminus\{t\}\textrm{ and } \Delta'=\norm(t,\Delta)\\
+    \end{array}
+  \right.
+\]
+with $\norm(t,\Delta)$ is a set of normalized transition given in Definition \ref{def:normalization}.
+\end{definition}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-PDF-mode: t
+%%% TeX-master: "main"
+%%% End: 

@@ -1,0 +1,160 @@
+\documentclass{article}
+\usepackage{RR}
+%\usepackage{latexsym} 
+%\usepackage{amsmath}
+%\usepackage{alltt}
+\usepackage[curve]{xypic}
+\usepackage{stmaryrd}
+\usepackage{latexsym,amsmath, amssymb, amsfonts}
+\usepackage{bussproofs}
+%\usepackage[frenchb]{babel}
+\usepackage[latin1]{inputenc}
+%\usepackage[T1]{fontenc}
+%\usepackage{hyperref}
+
+\RRdate{21 février 2008}
+\RRauthor{Benoît Boyer \and Thomas Genet \and Thomas Jensen}
+
+\RRNo{6462}
+\authorhead{B. Boyer, T. Genet \& T. Jensen}
+\RRtitle{Certification d'un vérificateur de complétion d'automates}
+\RRetitle{Certifying a Tree Automata Completion Checker}
+\titlehead{Certifying a Tree Automata Completion Checker}
+
+\RRresume{La complétion d'automates d'arbres est une technique de vérification
+  pour les systèmes infinis. Celle-ci a déjà été utilisée pour la vérification 
+  des protocoles cryptographiques et le prototypage d'analyseurs statiques.
+  Cependant, comme dans le cas de beaucoup d'autres techniques de vérification, 
+  la correction des outils associés devient de plus en plus difficile à
+  garantir. Ceci est dû, d'une part à la constante augmentation de la taille de
+  ces logiciels et, d'autre part, aux optimisations de bas niveau nécessaires
+  pour améliorer leurs performances. Dans cet article, 
+  nous définissons un vérificateur pour les automates d'arbres produits par
+  complétion. Le vérificateur est défini en Coq et son implantation est
+  automatiquement extraite de sa spécification formelle.
+  L'extraction permet d'obtenir un vérificateur qui peut être exécuté
+  indépendamment de Coq. Nous avons défini un algorithme d'inclusion spécifique
+  qui permet de tester l'inclusion de langages régulier. Cet algorithme n'est 
+  pas complet en général mais l'est dans notre cas. Le vérificateur complet
+  est certifié en Coq, indépendant du type d'implantation de la complétion, 
+  utilisable avec n'importe quelle approximation appliquée pendant la
+  complétion, peut gourmand en mémoire et rapide. Ces résultats sont illustrés
+  sur des jeux d'essai.
+}
+
+\RRabstract{ Tree automata completion is a technique for the verification of
+  infinite state systems. It has already been used for the verification of
+  cryptographic protocols and the prototyping of Java static analysers.
+  However, as for many other verification techniques, the correctness of the
+  associated tool becomes more and more difficult to guarantee. It is due to the
+  size of the implementation that constantly grows and due to low level
+  optimizations which are necessary to scale up the efficiency of the tool to
+  verify real-size systems. In this paper, we define and develop a checker for
+  tree automata produced by completion. The checker is defined using Coq and its
+  implementation is automatically extracted from its formal specification. Using
+  extraction gives a checker that can be run independently of the Coq
+  environment. A specific algorithm for tree automata inclusion checking have
+  been defined so as to avoid the exponential blow up. The obtained checker is
+  certified in Coq, independant of the implementation of completion, usable
+  with any approximation performed during completion, small and fast. Some
+  benchmarks are given to illustrate the efficiency of the tool.}
+
+\RRmotcle{Systèmes de réécriture, Automate d'arbre, complétion d'automates
+  d'arbres, certification, Coq, atteignabilité}
+\RRkeyword{Term Rewriting Systems,Tree Automata, Tree Automata Completion,
+  Certification, Coq, Reachability}
+\RRprojet{Lande}
+
+\RRtheme{\THSym}
+
+\URRennes
+
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proof}{Proof}
+
+\input{rapinclude2}
+
+%All i need to have fun with Caml and Coq :)
+\RequirePackage{alltt}
+\RequirePackage{listings}
+\def\lstlanguagefiles{lstlangcoq.sty,lstlangcaml.sty}
+\lstloadlanguages{Coq,Caml} %Caml
+\newcommand{\switchlstcoq}{
+\lstset{language=Coq,flexiblecolumns=false,mathescape=true}
+\lstset{keywordstyle={\bfseries}}
+\lstset{commentstyle=\it,basicstyle=\small\tt}%,keywordstyle=\bfseries}
+\lstset{literate={=>}{{$\Rightarrow$}}1
+{\\Abstate}{{\Abstate}}1
+{forall}{{$\forall$\hspace{-1ex}}}1
+{exists}{{$\exists$\hspace{-1ex}}}1
+{not}{{$\neg$}}1
+{<=<}{{$\subseteq$}}2
+{>=}{{$\ge$}}1
+{>->}{{$\rightarrowtail$}}2{->}{{$\to$}}2 {/\\}{{$\land$}}1 {~}{{$<AC>$}}1}
+\lstset{escapeinside={(*@}{@*)}} % In the text as an example:
+}
+
+\renewcommand{\ttdefault}{pcr}
+
+
+\begin{document}
+\makeRR
+
+\input{intro}
+
+\input{preliminaries}
+
+\input{completion}
+
+\input{objectives}
+
+\input{rewriting}
+
+\input{automata}
+
+\input{inclusion}
+
+\input{closure}
+
+\input{benchs}
+
+%\section{Complete certificate}
+%\label{sec:certificate}
+%Peut-être une partie pour expliquer comment termine-t-on la preuve 
+%pour obtenir le certificat.
+
+\section{Conclusion and further research}
+\label{sec:conclusion}
+In this paper we have defined a \coq\ checker for tree automata completion.  The
+first characteristic of the work presented here is that the checker does not
+validate a specific implementation of completion but, instead, the result. As a
+consequence, the checker remains valid even if the implementation of the
+completion algorithm changes or is optimized. A second salient feature is that
+the code of the checker is directly generated from the correctness proof of its
+verified \coq\ specification through the \coq\ extraction mechanism. Third, we
+have payed particular attention to the formalization of the checker in order not
+to lose efficiency to obtain the certification. We have defined a specific
+inclusion algorithm in order to avoid the usual exponential blow-up obtained
+with the standard inclusion algorithm.  We have defined the \coq\ formal
+specification so that it was possible to extract an independent OCaml
+checker. Finally, we made an extensive use of efficient formal data structures
+leading to more complex proof but also to faster extracted checker.  An
+extension for non left-linear TRS, which are sometimes necessary for specifying
+cryptographic protocols, is under development.  Since many different kind of
+analysis can be expressed as reachability problems over tree automata, and since
+verification of completed automata revealed to be very efficient, we aim at
+using this technique in a PCC architecture where tree automata are viewed as
+program certificates. At last, note that even if this checker is external to
+\coq, we can use the correction proof of the checker and the \coq\ reflexivity
+mechanism to lift-up the external verification into a proof in the \coq\
+system. This can be necessary to perform efficient unreachability proofs on
+rewriting systems in \coq\ using an external completion tool.
+
+
+\bibliographystyle{alpha}
+\bibliography{sabbrev,eureca,genet}
+
+\end{document}

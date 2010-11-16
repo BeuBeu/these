@@ -1,0 +1,18 @@
+\section{Related work}
+\label{sec:related}
+
+
+The usual algorithm for proving inclusion of regular languages
+recognized by nondeterministic bottom-up tree automata, for instance
+for proving $\Lang(\A) \subseteq \Lang(\B)$, consists in proving that
+$\Lang(\A) \cap \Lang(\overline{\B}) =\emptyset$, where
+$\overline{\B}$ is the complement automaton for $\B$. However, the
+algorithm for building $\overline{\B}$ from $\B$ is
+EXPTIME-complete~\cite{TATA}. This is the reason why we here define a
+criterion, whose complexity is polynomial w.r.t. the size of tree
+automata $\A$ and $\B$ as defined in~\cite{TATA}. This
+criterion is generally not complete, i.e.  complete, i.e. not always
+able to prove that $\Lang(\A) \not \subseteq \Lang(\B)$. However, we will show
+in the following that, under certain conditions on $\A$ and $\B$ which
+are satisfied if $\B$ is obtained by completion of $\A$, this
+algorithm is also complete and thus becomes a decision procedure.\\

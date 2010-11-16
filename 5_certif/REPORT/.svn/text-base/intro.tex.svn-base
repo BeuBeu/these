@@ -1,0 +1,176 @@
+\section{Introduction}
+\label{sec:introduction}
+
+
+\versionlongue{
+In the field of infinite system verification, three of the most successful
+techniques are: assisted proof, abstract interpretation and symbolic/abstract
+model-checking. In all those techniques, the verification relies on specific
+softwares that may, themselves, contain bugs. On the one hand, a proof assistant
+like \coq~\cite{coqart} avoids this problem since any proof, on any exotic domain, is
+finally checked using a small unique certified kernel.  On the other hand, proof
+assistants like \coq\ offer poor automation when compared with fully
+automatic tools like static analyzers or model-checkers. However, the efforts
+achieved on the two last ones, to obtain a better automation and efficiency, have a
+great impact on their reliability. Static analyzers and model-checkers are
+usually huge, drastically optimized programs whose safety is not proved but
+essentially ``demonstrated'' by an extensive use.
+}
+
+Static program analysis is one of the cornerstones of software
+verification and is increasingly used to protect computing devices
+from malicious or mal-functioning code. However, program verifiers are
+themselves complex programs and a single error may jeopardize the
+entire trust chain of which they form part. 
+Efforts have been made to certify static
+analyzers~\cite{KleinN-TCS03,BartheD-FASE04,CacheraJPR-TCS05} or to certify the results obtained by static
+analyzers~\cite{LetouzeyT-TPHOL00,BessonJP-TCS06} in \coq\ in order to increase confidence
+in the analyzers. 
+%The latter is, in fact, more related
+%to proof carrying code~\cite{Necula-POPL97}, where a complex untrusted
+%verification software produce a certificate that is checked, afterwards, by a
+%small trusted checker.
+In this paper, we instantiate the general framework used
+in~\cite{BessonJP-TCS06} to the particular case of analyzing term
+rewriting systems by  tree automata
+completion~\cite{Genet-RTA98,FeuilladeGVTT-JAR04}. Given a term rewriting
+system, the tree automata completion is a technique for over-approximating the
+set of terms reachable by rewriting in order to prove the
+unreachability of certain ``bad'' states that violates a given
+security property. This technique has already been used to
+prove security properties on cryptographic protocols~\cite{GenetK-CADE00},
+\cite{GenetTTVTT-wits03,BoichutHKO-AVIS04,avispa,ZuninoD-FOSSACS06} and, more
+recently, to prototype static analyzers on Java byte
+code~\cite{BoichutGJL-RTA07}.
+
+In this paper, we show how to mechanize the proof, within the proof
+assistant \coq, that the tree automaton produced by completion
+recognizes an over-approximation of all reachable terms. 
+ \coq\ is based on constructive logic (Calculus of
+Inductive Constructions) and it is possible to 
+%Thanks to Curry-Howard isomorphism, proofs and
+%functionnal programs are very closed: if we have the proof that there exists an
+%algorithm solving a problem, \coq\ is abble to 
+extract an Ocaml or Haskell
+function implementing exactly the algorithm whose specification has
+been 
+expressed in \coq. The extracted code is thus a {\em certified}
+implementation of the specification given in the \coq\ formalism.  Extracted
+programs are standalone and do not require the \coq\ environment to be
+executed. For details about the extraction 
+%and reflection 
+mechanisms, readers can refer to~\cite{coqart}.
+
+%Our objective could be to specify formally the full completion and extract a
+%certified algorithm from the \coq\ specification. However, the more complex the
+%algorithm, the harder is the proof. 
+A specific challenge in the work reported here has been how to marry
+constructive logic and efficiency. Previous case studies with tree
+automata completion, on cryptographic
+protocols~\cite{GenetTTVTT-wits03} and on Java
+bytecode~\cite{BoichutGJL-RTA07} show that we need an efficient
+completion algorithm to verify properties of real models. 
+% the implementation of completion has to be drastically optimized. 
+For instance, the current implementation of completion (called
+\timbuk~\cite{timbuk-site}) is based on imperative data structures like hash
+tables whereas \coq\ allows only pure functional structures.  A second problem
+is the termination of completion. Since \coq\ can only deal with total
+functions, functions must be proved terminating for any
+computation. In general, such a property cannot be guaranteed on completion
+because it mainly depends on term rewriting system and approximation equations
+given initially.
+
+For these two reasons, there is little hope to specify and certify an
+efficient and purely functional version of the completion
+algorithm. Instead, we
+have adopted a solution based on a result-checking approach.  
+% the "Proof Carrying Code" approach\cite{Necula-POPL97}. 
+It consists of building a smaller program (called the
+\emph{checker}) - certified in \coq\ -  that checks if the tree automaton computed by \timbuk\ is
+sound. In this paper, we restrict to the case of left-linear term rewriting
+systems which revealed to be sufficient for verifying Java
+programs~\cite{BoichutGJL-RTA07}. However, a checker dealing with general term
+rewriting systems like completion does in~\cite{FeuilladeGVTT-JAR04} is under
+development.
+
+%
+%
+\archive{Note that this objective is similar
+to the one of Roberto Zunino in~\cite{Zunino}. However, our we aim at tackling
+this goal in a different way. Whereas~\cite{Zunino} produce the text of a \coq\
+proof certifying a specific result, we extract a certified efficient checker (in
+Ocaml~\cite{Ocaml}) from the \coq\ specification using the \coq\ extraction
+mechanism.
+%
+%
+Our aim is to extract a certified efficient checker (in Ocaml~\cite{Ocaml}) from
+the specification using the \coq\ extraction mechanism~\cite{coqart}.  As a
+result, a lot of efforts have to be payed to the definition of formal {\em and}
+efficient data structures: terms, tree automata, etc. This is crucial
+for verification of the Java byte code for instance because the tree
+automata to certify are huge. However, those efforts are worth since, once
+extracted, the certified Ocaml checker is fully independent of the \coq\
+environment: easier to run, less greedy with memory and faster.
+}
+%
+%
+\archive{This has several consequences.  First, a lot of effort has to be
+  payed to the definition of formal {\em and} efficient data structures: terms,
+  tree automata, etc. This is crucial because, for verification purposes like
+  the Java byte code for instance, the tree automata to certify are
+  huge. Second, since the obtained checker is an Ocaml program, it is no longer
+  executed in \coq., which is a big difference with~\cite{zunino}. This, again,
+  improves the efficiency but not only. In~\cite{zunino}, given a tree
+  automaton, the tool generates a \coq proof text that has to be verified
+  afterward in \coq.  The problem here is that there is no success guarantee:
+  the proof text may be rejected by \coq\ (without indicating if it is because the
+  property is false or because the proof text is ill-formed), or \coq\ may even
+  not terminate on this proof. In our case, the tree
+automaton is checked by an Ocaml program that {\em always terminates}, decides
+if the tree automaton is a valid fixpoint of tree automata completion and
+certify unreachability.  A great advantage of this approach using an external
+%
+%
+The extracted checker, we define here, is able to {\em decide} if the given
+tree automaton is a valid fixpoint of tree automata completion, and also certify
+unreachability.  A great advantage of using an external checker is that it is
+totally independent of the completion tool we use. In particular, the
+implementation of the completion tool can be optimized as necessary: as long as
+it outputs a tree automaton, this result can be certified by our checker.
+
+}
+
+The closest work to ours is the one done by X.~Rival and
+J.~Goubault-Larrecq~\cite{RivalGL-TPHOL01}. They have designed a library to
+manipulate tree automata in~\coq\ and proposed some optimized formal data
+structures that we reuse. However, we aim at dealing with larger tree automata
+than those used in their benchmarks. Moreover, we need some other tools which
+are not provided by the library as for example a specific algorithm to check
+inclusion. 
+\versionlongue{Inclusion checking may be done using closure operators
+(i.e. intersection and complementation) and emptiness checking but, as shown in
+Section~\ref{sec:inclusion}, this way of performing inclusion checking has a bad
+complexity.}
+
+This paper is organized as follows. Rewriting and tree automata are reviewed in
+Section~\ref{sec:preliminaries} and tree automata completion in
+Section~\ref{section:completion}. Section~\ref{section:objectives} states the main
+functions to define, inclusion and closure test, and the corresponding theorems
+to prove. Section~\ref{sec:rewriting} and Section~\ref{sec:automata} give the
+\coq\ formalization of rewriting and of tree automata,
+respectively. 
+The core of the checker consists of two algorithms: an optimized automata inclusion
+test, defined in Section~\ref{sec:inclusion}, and a procedure for
+checking that an automaton is \emph{closed} under rewriting w.r.t.~a
+given term rewriting system, defined in  Section~\ref{sec:closure}. 
+An important feature of the inclusion checker is that, while it is
+not complete for all tree automata, we can  prove that it is complete
+for the class of tree automata generated by the completion algorithm. 
+Section~\ref{sec:benchmarks} gives some details about the performances of the
+checker in practice. Finally, we conclude and list some on-going research on this
+subject. 
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

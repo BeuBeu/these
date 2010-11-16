@@ -1,0 +1,188 @@
+%%% Motiver l'introduction du $\RE$-Automaton
+\section{$\RE$-Automaton for refining}
+\label{sec:re-automaton}
+
+
+In this section, we propose to extend the completion technique with a
+counter-example based procedure. Contrary to existing approaches that
+have to perform a backward propagation from the bad term to the set of
+initial state, we propose to extend the transition relation of tree
+automata with information about the rewriting rules and equations that
+have been applied to the initial automaton.
+
+More precisely, we use the set $\Drw$ to distinguish a term
+from its successors that has been obtained by applying one or several
+rewriting rules. Instead of merging states according to the set of
+equations, our model link them with transitions that belongs to the
+set $\Deq$.
+
+% $\Deq$ denotes a subset
+% of the equivalence relation induced by the set of equations.
+% Moreover, we will be able to know that a term recognized using a
+% transition of $\Deq$ is the result of a widening step.  The
+% example~\ref{ex:semantics} illustrates the principle of a
+% $\RE$-Automaton.
+
+
+%We now give the formal definition for $\RE$-automata.
+
+\begin{definition}[$\RE$-automaton]
+  \label{def:re-automaton}
+  Given a TRS $\R$ and a set $E$ of equations, a $\RE$-automaton $\A$
+  is a tuple $\langle \F, \Q, \Q_F, % \Delta_0 \cup
+  \Delta \cup \Drw \cup \Deq\rangle$.  $\Delta$ is a set of normalized
+  transitions. $\Deq$ is a set of $\varepsilon$-transitions. $\Drw$ is
+  a set of $\varepsilon$-transitions labeled by $\top$ or conjunctions 
+  over predicates of the form $Eq(q, q')$ where $q, q' \in \Q$, and $q \rw
+  q' \in \Deq$. %$Eq(q, q')$ holds iff $q \rw q' \in \Deq$.
+\end{definition}
+
+
+\input{semantics_ex}
+
+%$\RE$-automata make it possible to check wether a term is {\em
+%  really} reachable, i.e. a counter example. 
+
+
+% A $\RE$-automaton is an extension of a $\R$-automaton introduced in
+% \cite{BoyerG-RULE09}. Intuitively, terms are recognized using
+% transitions of $\Delta$, the transitions of $\Drw$ denote the
+% rewriting relation between those terms, and the
+% $\varepsilon$-transitions of $\Deq$ denote the approximations. Each
+% transition of $\Drw$ is labeled by a logical formula denoting the
+% approximations needed so as to have the rewriting step.  Intuitively,
+% if the formula is $\top$, no approximation is necessary and the term
+% is reachable by rewriting only.
+%Otherwise, if the formula is not equivalent to $\top$, th
+
+%\comments{On s'en sert?: In the following, we assume that logical
+%formulas are always transformed into an equivalent \emph{Disjunctive Normal
+%  Form} using standard logic equivalences.}
+\noindent 
+%%Normalized transitions of $\Delta$ in a $\RE$-automaton recognize terms, called
+%%{\em representative}, whereas $\varepsilon$-transitions represent rewriting and
+%%equivalence relations between them. 
+
+%%\comments{Axel: shall we keep the definition of sets of representative?}
+
+In what follows, we use $\rwned$ to denote the transitive and
+reflexive closure of $\Delta$.  Given a set $\Delta$ of normalized
+transitions, the set of representatives of a state is defined by
+$Rep(q) = \{ t \in \TF | t \rwned q\}$. We now formally describe the
+runs of a $\RE$-automaton.
+
+%This $\rwned$ is a particular case of the new rewriting relation $\xrw{\alpha}_\A$
+%of $\RE$-automata. 
+
+\begin{definition}[Run of a $\RE$-automaton $\A$]
+  \label{def:xrw_alpha}
+  \begin{itemize}
+  \item $t|_p = f(q_1, \dots, q_n)$ and $f(q_1, \dots, q_n) \rw q \in \Delta$
+    then $t \xrw{\top}_\A t[q]_p$
+  \item $t|_p = q$ and $q \rw q' \in \Deq$ then $t \xrw{Eq(q, q')}_\A t[q']_p$
+  \item $t|_p = q$ and $q \xrw{\alpha} q' \in \Drw$ then $t \xrw{\alpha}_\A t[q']_p$ 
+%     where $\alpha = \left\{
+%       \begin{array}{ll}
+%         \alpha_k &\textrm{if } 1 \le k \le n \land \phi = \bigvee_1^n \alpha_i\\
+%         \top &  \textrm{if } \phi = \top
+%       \end{array}\right.
+%     $
+  \item $u \xrw{\alpha}_\A v$ and $v \xrw{\alpha'}_\A w$ then $u \xrw{\alpha \land \alpha'}_\A w$
+  \end{itemize}
+\end{definition}
+
+\noindent
+A run $\xrw{\alpha}$ abstracts a rewriting path of $\rwmod$. If $t
+\xrw{\alpha} q$, then there exists a term $s\in Rep(q)$ such that
+$s\rwmod^* t$. The formula $\alpha$ denotes the subset of transitions
+of $\Deq$ needed to recognize $t$ into $q$.
+%%i.e. the equivalence
+%%steps, induced by $E$, needed to rewrite $s$ into $t$ using
+%%$\rwmod$.
+\begin{example}
+  Consider the $\RE$-automaton $A$ of Example \ref{ex:semantics} and
+  let $g(b) \xrw{Eq(q_b, q_c) \land Eq (q_c, q_b)} q$, we know that
+  there exists a rewriting path of $\rwmod$ from $f(a)$, the unique
+  term of $Rep(q)$ to $g(b)$. The formula indicates that this
+  rewriting path uses the equivalence relation induced by $b = c$ in
+  both directions (transitions $q_b \rw q_c$ and $q_c \rw q_b$).
+\end{example}
+
+
+The relation $\xrw{\alpha}$ corresponds to the standard rewriting
+relation (see Section~\ref{sec:definitions}) of a tree-automaton
+instrumented with logical formulas.
+
+\begin{theorem}\label{th:equiv}{\quad\quad
+  $\forall t\in\TFQ,\; q \in \Q,\; t \xrw{\alpha}_\A q \equ t \rw_\A^* q$}
+\end{theorem}
+
+We now introduce {\em well-defined} $\RE$-automata. The well-defined
+property will be used in the refinement procedure to
+distinguish between counter-examples and false positives. 
+
+
+\begin{definition}[A well-defined $\RE$-automaton]
+  \label{def:well-defined}
+  $\A$ is a \emph{well-defined} $\RE$-automaton, if :
+% The second point of the definition is used to refine the $\RE$-automaton: a rewriting step of $\rwmod$
+% denoted by $q \xrw{\phi} q'$ holds thanks to the subset of transitions of $\Deq$
+% occurring in $\phi$. If we remove the transitions of $\Deq$ such that $\phi$
+% does not hold, then the transition $q \xrw{\phi} q'$ disappears and the term is 
+% no longer recognized.
+  \begin{itemize}
+  \item For all state $q$ of $\A$, and all term $v$ such that
+    $v \xrw{\top}_\A q$, there exists $u$ a term representative
+    of $q$ such that $u \rw^*_\R v$
+  \item If $q \xrw{\phi} q'$ is a transition of $\Drw$, then there exist terms
+    $s,t\in \TF$ such that $s\rwtag{\phi}_\A q$, $t\rwtag{\top}_\A q'$
+    and $t \rw_\R s$.
+  \end{itemize}
+\end{definition}
+
+\noindent
+The first item in the definition~\ref{def:well-defined} guarantees
+that every term recognized by using transitions labeled with the
+formula $\top$ is indeed reachable from the initial set.  The second
+item is used to refine the automaton. A rewriting step of $\rwmod$
+denoted by $q \xrw{\phi} q'$ holds thanks to some transitions of
+$\Deq$ that occurs in $\phi$. If we remove transitions in $\Deq$ in
+such a way that $\phi$ does not hold, then the transition $q
+\xrw{\phi} q'$ should also be removed.
+
+According to the above construction, a term $t$ that is recognized by
+using at least a transition labeled with a formula different from $\top$
+can be removed from the $\RE$-automaton by removing some transitions
+in $\Deq$. This ``pruning'' operation is illustrated hereafter.
+
+\begin{example}
+  \label{ex:pruning}
+  We consider the $\RE$-automaton $\A$ of Example~\ref{ex:semantics}.
+  This automaton recognizes the term $g(c)$. Indeed, by
+  Definition\ref{def:xrw_alpha}, we have $g(c) \xrw{Eq(q_c, q_b)}
+  q_f$. Consider now the rewriting path $f(a) \rw_\R f(b) =_E f(c)
+  \rw_\R g(c)$. We can see that if the step $f(b) =_E f(c)$ denoted by
+  the transition $q_c \rw q_b$ is removed, then $g(c)$ becomes
+  unreachable. The first step in pruning $\A$ consists thus in
+  removing this transition. In a second step, we propagate the
+  information by removing all transition of $\Drw$ labeled by a
+  formula formed with $Eq(q_c, q_b)$. This is done to remove all terms
+  obtained by rewriting with the equivalence $b =_E c$. After having
+  pruned all the transitions, we observe that the terms recognized by
+  $\A$ are given by the following set $\{f(a), f(b)\}$.
+\end{example}
+
+%%As we shall see, the prunning technique sketched in the above example
+%%will serve as a basis for the refinement technique presented in
+%%section~\ref{sec:refinement}.
+
+
+
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% TeX-PDF-mode: t
+%%% End: 

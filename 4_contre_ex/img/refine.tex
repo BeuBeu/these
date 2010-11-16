@@ -1,0 +1,41 @@
+\begin{figure}
+  \label{fig:completion_refinement}
+  \centering
+  \begin{tikzpicture}[scale=1]
+    \pgfdeclareimage[width=1.2cm]{A0}{4_contre_ex/img/A0}
+    \pgfdeclareimage[width=2cm]{A1}{4_contre_ex/img/A1}
+    \pgfdeclareimage[width=2.2cm]{A2}{4_contre_ex/img/A2}
+    \pgfdeclareimage[width=2.2cm]{A3}{4_contre_ex/img/A3}
+    \pgfdeclareimage[width=2.4cm]{A4}{4_contre_ex/img/A4}
+    % 
+    \node (a0) at (0, 0) {\pgfuseimage{A0}};
+    \node (a1) at (4, 0) {\pgfuseimage{A1}};
+    \node (a2) at (7.5, -.5) {\pgfuseimage{A2}};
+    \node (a3) at (11, 0) {\pgfuseimage{A3}};
+    \node (a4) at (15, 0) {\pgfuseimage{A4}};
+    % virtual nodes
+    % \node [circle, minimum size=0.8cm] (v0) at (3, 0) {};\\
+    \node [circle, minimum size=2cm] (v1) at (7.6, 0) {};
+    % 
+    \node (n0) at (0, 0)       {\footnotesize $\aaex^0$};
+    \node (n1) at ( 3.9, -.27) {\footnotesize $\aaexeq^{k}$};
+    \node (n2) at ( 7.5, -.27) {\footnotesize $\aaexeq^{k+1}$};
+    \node (n3) at (11, -.27) {\footnotesize $\aaexeq^{k+2}$};
+    \node (n4) at (15  , -.27) {\footnotesize $\aaexeq^*$};
+    \node (bad)at ( 7.3, -1.9) {\footnotesize $Bad$};
+    % 
+    \draw [->, dashed] (a0) to node[above] {\footnotesize $k-1$} node[below] {\footnotesize iter.} (a1);
+    \draw [->] (a1) to node[above] {C + W } (v1);
+    \draw [->] (v1) to node[above] {P} (a3);
+    %\draw [->, dashed] (a3) to node[above] {\footnotesize point-fixe} (a4);
+    \draw [->, dashed] (a3) to (a4);
+  \end{tikzpicture}
+  \caption{Etape de raffinement durant la complétion}
+\end{figure}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../../main"
+%%% TeX-PDF-mode: t
+%%% End: 

@@ -1,0 +1,254 @@
+
+% Section Rappel du principe de la completion...
+\section{The Tree Regular Model Checking Problem}
+\label{sec:completion}
+
+Our objective is to verify properties of a given system. We will focus
+on models of systems whose set of reachable states may be, for
+modeling reasons, infinite\,\cite{WB98} -- but our solution also works
+for huge finite-state systems. Our first problem is to provide a
+symbolic representation to represent and manipulate possibly infinite
+sets of states. The problem is undecidable and only partial solutions
+exist. Here, we will use {\em Tree Regular Model Checking
+  (TRMC)}\,\cite{ALRd05}.
+\noindent
+In TRMC, a program is a tuple $(\F, I,
+Rel)$, where
+
+\begin{itemize}
+\item
+$\F$ is an alphabet on which a set of terms $\TF$ can be defined;
+
+\item
+$I$ is a set of initial configurations represented by a
+tree automaton $\A$, i.e. $\Lang(\A)=I$;
+
+\item $Rel$ is a transition relation represented by a set of
+  left-linear rewriting rules $\R$.
+\end{itemize}
+
+\noindent
+In our setting, a program will thus be represented by the tuple $(\F,\A,\R)$.
+It has been shown that the above framework can be used to represent a
+wide range of applications going from cryptographic protocols to JAVA
+applications. We consider reachability problems.
+
+\begin{definition}[Reachability problem]
+\label{def:reachability}
+Consider a program $(\F,\A,\R)$ and $Bad$ a set of forbidden terms
+$Bad$. The reachability problem consists in checking whether there
+exists terms of $\desc(\Lang(\A))$ that belong to $Bad$.
+\end{definition}
+
+% We will consider the verification of {\em reachability properties},
+% i.e., properties that are represented by sets of states. We say that a
+% program satisfies a reachability property $\phi$ if all of its
+% reachable state is included in the set of states that represent
+% $\phi$. Assuming the existence of a tree automaton for representing
+% $\phi$, verifying reachability properties reduces to solve the {\em
+%   reachability problem}.
+
+% \begin{definition}
+% \label{def:reachability}
+%   Given a programme $(\F, {\phi}_I, R)$, we consider the reachability
+%   problem that consists in computing a tree automaton $\aaex^*$ for
+%   the set $R^*(\phi_I)$.
+% \end{definition}
+
+
+
+\noindent
+For finite-state systems, computing the set of reachable terms
+($\desc(\Lang(\A))$) reduces to enumerate the terms that can be
+reached from the initial set of configurations. Unfortunately, for
+infinite-state systems, this enumeration may never terminate.  There
+is thus also a need to ``accelerate'' the search through the state
+space in order to reach, in a finite amount of time, states at
+unbounded depths. Among the existing algorithms used to compute a tree
+automaton representing the set of reachable terms of a system, one
+finds {\em completion algorithm}. A completion algorithm is a
+semi-algorithm that computes an automaton $\aaex^*$ that is possibly
+an over-approximation of the set of reachable terms. In the rest of
+this section we introduce the principle of completion and point its
+current limits.
+
+We say that a tree automaton $\B$ is $\R$-closed if for all terms
+$s,t$ such that $s\f_\R$ and $s$ is recognized by $\B$ into state $q$ then so is
+$t$. The situation is represented with the following graph.
+\begin{tabular}{lc}
+  \hspace{-.3cm}
+  \begin{minipage}{.8\linewidth}
+    It is easy to see that $\Lang(\B) \supseteq \desc(\Lang(\A))$ if
+    $\B$ is $\R$-closed and $\Lang(\B)\supseteq
+    \Lang(\A)$~\cite{BoyerGJ-IJCAR08}. From an algorithmic point of
+    view, building a $\R$-closed $\aaex^*$ from $\A$ consists in {\em
+      completing} $\A$ with new transitions.  The completion algorithm
+    computes successive automata $\aaex^1,\aaex^2,\ldots$ that
+    represent the effect of applying the set of rewriting rules to the
+    initial automaton.
+  \end{minipage}
+  &
+  \begin{minipage}{.2\linewidth}
+    $
+    \xymatrix{
+      s \ar[r]_{\R}\ar[d]^{*}_{\B} & t \ar@/^1.2pc/[ld]_{*}^{\B}\\
+      q & %\ar[l]^{\A_{i+1}} q'
+    }
+    $
+  \end{minipage}
+\end{tabular}
+
+Each application of $\R$ is called a {\em completion step} and
+consists in searching for {\em critical pairs} $\langle t,q \rangle$ where the above
+diagram is not closed, i.e. $ s\rwR t$, $s \rw_{\A}^* q$ and $t
+\not\rw_{\A}^* q$.
+% remis car il faut introduire la notation \aaex^i, utilisée dans la suite.
+The idea being that the algorithm solves the critical pair by
+constructing from $\A$, a new tree automaton $\aaex^1$ with the
+additional transitions needed to obtain $t \rw_{\aaex^1}^* q$,
+representing the effect of applying $\R$. Then a similar algorithm is
+applied on $\aaex^1$ to obtain $\aaex^2$, and so on until a fixpoint
+$\aaex^*$ is reached.
+
+As the language recognized by $A$ may be infinite, it is not possible to find
+all the critical pairs by enumerating the terms that it recognizes. The solution
+that was promoted in \cite{Genet-RTA98} consists in applying sets of
+substitutions $\sigma: \X \mapsto \Q$ mapping variables of rewrite rules to
+states representing infinite sets of (recognized) terms. Given a tree automaton
+$\aaex^i$ and a rewrite rule $l \rw r \in \R$, to find all the critical pairs of
+$l \rw r$ on $\aaex^i$, completion uses a {\em matching
+  algorithm}~\cite{FeuilladeGVTT-JAR04} that produces the set of substitutions
+$\sigma: \X \mapsto \Q$ and states $q\in \Q$ such that $l \sigma \rw_{\aaex^i}^*
+q$ and $r\sigma \not\rw_{\aaex^i}^* q$. Solving critical pairs thus consists in
+adding new transitions: $r\sigma \rw q'$ and $q' \rw q$. Those transitions may
+have to be normalized to respect the definition of transitions of tree
+automata. As it was shown in~\cite{Genet-RTA98}, this operation may add not only
+new transitions but also new states to the automaton. In the rest of the paper,
+the completion-step operation will be represented by $\compl$, i.e., the
+automaton obtained by applying the completion step to $\aaex^i$ is denoted
+$\compl(\aaex^i)$.
+
+The problem is that, except for particular
+classes~\cite{FeuilladeGVTT-JAR04,Genet-Habil}, the automaton
+representing the set of reachable terms cannot be obtained from $A$ by
+applying a finite number of completion steps and the process thus
+needs to be accelerated. For doing so, one can uses an approximation
+technique based on a set of equations $E$ and produce an
+over-approximation of the set of reachable terms, i.e., a tree
+automaton $\aapprox$ such that $\Lang(\aapprox) \supseteq
+\desc(\Lang(\A))$.
+
+To produce such an automaton, each automaton $\aaex^i$ obtained by
+applying $i$ completion steps to $A$ is approximated using a
+widening function $\widen$ parametrized by $E$. An equation $u=v$ is
+applied to a tree automaton $\A$ as follows: for all substitution
+$\sigma:\X \mapsto \Q$ and distinct states $q_1$ and $q_2$ such that
+$u \sigma \rw_{\A}^* q_1$ and $v\sigma \rw_{\A}^* q_2$, states $q_1$
+and $q_2$ are merged.  Completion and widening steps can be
+linked, i.e. $\aaexeq^0=\A$ and $\aaexeq^{i+1}= \widen(\compl(\aaexeq^i))$, until a
+$\R$-closed fixpoint $\aapprox$ is found.  In~\cite{GenetR-JSC10}, it
+has been shown that, under some assumptions, the obtained automaton
+recognizes no more that terms reachable by rewriting with $\R$ modulo
+$E$. As a result, the approximation framework and methodology is close
+to equational abstractions of~\cite{MeseguerPM-TCS08}.
+
+% The completion technique has successfully been used for the
+% verification of cryptographic
+% protocols~\cite{GenetK-CADE00,GenetTTVTT-wits03}.
+
+
+% Furthermore, the
+% tree automata completion implementation, \timbuk, is used as a
+% verification backend in AVISPA~\cite{BoichutHKO-AVIS04,avispa}. More
+% recently, tree automata completion has been used for fast prototyping
+% of static analyzers for Java bytecode
+% programs~\cite{BoichutGJL-RTA07}. In this settings, $\R$ encodes the
+% system ({\em e.g.} protocol and intruder behavior or Java virtual
+% machine semantics), $\aapprox$ represents the over-approximation of
+% all states of the system. Then, 
+
+
+%%the verification consists in showing
+%%that the intersection between $\aapprox$ and an automaton $$
+
+\begin{example}
+\label{ex:comp}
+Let $\R=\{f(x) \rw f(s(s(x)))\}$, $E=\{s(s(x))=s(x)\}$, $\A=\langle \F, \Q, \Q_F,
+\Delta\rangle$ be a tree automaton such that $\Q_F=\{q_0\}$ and $\Delta=\{ a \rw
+q_1, f(q_1) \rw q_0\}$, i.e. $\Lang(\A)=\{f(a)\}$.
+\begin{tabular}{lc}
+  \hspace{-.3cm}
+  \begin{minipage}{.75\linewidth}
+    The first completion step finds the following critical pair: $f(q_1) \rwA^* q_0$
+    and $f(s(s(q_1))) \not\rwA^* q_0$. Hence, the completion algorithm produces
+    $\aaex^1=\compl(\A)$ having all transitions of $\A$ plus $\{s(q_1) \rw q_2, s(q_2) \rw q_3,
+    f(q_3) \rw q_4, q_4 \rw q_0\}$ where $q_2, q_3, q_4$ are new states produced
+    by normalization of $f(s(s(q_1))) \rw q_0$. Applying $\widen$ with
+    the equation $s(s(x))=s(x)$ on $\aaex^1$ merges the states $q_3$ and $q_2$.
+  \end{minipage}&
+  \begin{minipage}{.25\linewidth}
+    $\xymatrix{
+      s(s(q_1)) \ar@{=}[r]\ar[d]_{\aaex^1}^{*} & s(q_1) \ar[d]_{*}^{\aaex^1}\\
+      q_3 & q_2
+    }
+    $
+  \end{minipage}
+\end{tabular}
+
+
+
+
+  %$s(s(q_1))
+  %\rw^*_{\aaex^1} q_3$ and $s(q_1) \rw^*_{\aaex^1} q_2$. 
+
+In~\cite{GenetR-JSC10}, $\A^1_{\R,E}=\widen(\aaex^1)$ is built from $\aaex^1$ by renaming $q_3$ by
+$q_2$. The set of transitions of $\A^1_{\R,E}$ is thus $\Delta \cup \{s(q_1) \rw
+q_2, s(q_2) \rw q_2, f(q_2) \rw q_4, q_4 \rw q_0\}$.  Completion stops on
+$\A^1_{\R,E}$ because it is $\R$-closed, thus $\aapprox=\A^1_{\R,E}$.
+Now, let us assume that $Bad=\{f(s(a)), f(s(s(a)))\}$. The first term is not in
+$\desc(\Lang(\A))$ but the second is. However, those two terms are 
+%However, $f(s(a))$ is not in $\desc(\Lang(\A))$ but $f(s(s(a)))$ is.Those two terms are
+recognized by $\aapprox$ and there is no way to distinguish between
+the two: no way to detect that the second is {\em really} reachable
+nor to automatically refine the abstraction so as to reject the first
+one.
+\end{example}
+
+
+If the intersection between $\aapprox$ and $Bad$ is not empty, then it
+does not necessarily mean that the system does not satisfy the
+property. There is thus the need for techniques to decide whether a
+counter-example is indeed a reachable term that does not satisfy the
+property or if it is a term added by the abstraction and that cannot
+be reached from the set of initial states. If the latter case occurs,
+one has to propose a refinement technique that will remove the
+false-positive from the abstraction. Studying such techniques for
+completion automata is the main objective of this paper.
+
+%%The rest of the paper is organized as follows. In Section
+%%\ref{sec:re-automaton}, we introduce $\RE$-automaton that is an
+%%extended tree automata. Section \ref{sec:re-automaton} proposes a
+%%completion algorithm for $\RE$-automata, while Section \ref{} shows
+%%how the extended structure can be used to refine in an efficient
+%%manner.
+
+
+
+
+% Tree automata completion~\cite{genet-RTA98,FeuilladeGVTT-JAR04,GenetR-JSC10} is
+% an algorithm for computing sets of reachable terms $\desc(I)$, given a regular
+% language of initial terms $I=\Lang(\A)$. For most of the known classes of TRS
+% $\R$ for which $\desc(\Lang(\A))$ is regular, the output of completion is a tree automaton
+% $\aaex^*$ such that $\Lang(\aaex^*)=\desc(\Lang(\A))$. When
+% $\desc(\Lang(\A))$ is not regular, it is possible to parameterize the algorithm
+% by a set of equations $E$, and to compute a tree automaton $\aapprox$ 
+% over-approximating reachable terms,
+% i.e. $\Lang(\aapprox) \supseteq \desc(\Lang(\A))$. 
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-PDF-mode: t
+%%% TeX-master: "main"
+%%% End: 

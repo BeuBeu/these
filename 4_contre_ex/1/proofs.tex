@@ -1,0 +1,229 @@
+\section{Proof about semantics}
+\setcounter{savetheorem}{\thetheorem}
+\setcounter{theorem}{4}
+
+\begin{theorem}
+  \[\forall t\in\TFQ,\; q \in \Q,\; t \xrw{\alpha}_\A q \equ t \rw_\A q \]
+\end{theorem}
+
+\begin{proof}
+  The proof is easily done by induction by arguing that it is enough to forget the formulas
+  manipulated by the definition~\ref{def:xrw_alpha} to have the equivalent step with $\rw_\A$.
+\end{proof}
+\setcounter{theorem}{\thesavetheorem}
+
+\section{Proofs about $\compl$}
+\input{proofs-C}
+
+\section{Proofs about $\widen$}
+
+\begin{lemma}[$\widen$ preserves well-definition]
+  Let $\A$ be a $\RE$-automaton. If $\A$ is well-defined, then so is $\widen(\A)$.
+\end{lemma}
+
+\begin{proof}
+  Assume that $\A = \la \F, \Q, Q_f, \Delta \cup \Drw \cup \Deq\ra$ is well-defined.
+  We have $\widen(\A) = \la \F, \Q, \Q_f, \Delta \cup \Drw \cup \Deq'\ra$, where $\Drw \supseteq \Drw'$,
+  since $\widen$ only adds transitions to the $\Drw$. We have to prove the two items of definition~\ref{def:well-defined}.
+  \begin{itemize}
+  \item 
+    The transitions of $\Deq'$ are never used for a run $\xrw{\alpha}$ where $\alpha = \top$,
+    thanks to the second point of the definition~\ref{def:xrw_alpha}.
+    It means that for all term $t$ and all state $q$, $t \xrw{\top}_{W(\A)} q$ is equivalent to $t \xrw{\top}_\A q$.
+    Since $\A$ is well-defined, we know that there exists $u \in Rep(q)$ such that $u \rw^*_\R t$.
+    $u$ is also a representative of $\widen(\A)$, and we deduce that first point of the definition~\ref{def:well-defined} 
+    holds for $\widen(\A)$.
+  \item
+    Function $\widen$ only adds transitions to $\Deq'$ and do not remove transitions of $\A$.
+    For all transitions $q \xrw{\alpha} q' \in \Drw'$ we have $q \xrw{\alpha} q' \in Drw$.
+    Since $\A$ is well-defined, we know that there exist terms $s,t\in \TF$ such that
+    $s\xrw{\phi}_\A q$, $t\xrw{\top}_\A q'$ and $t \rw_\R s$.
+    We also have $s\xrw{\phi}_{\widen(\A)} q$, $t\xrw{\top}_{\widen(\A)} q'$ and $t \rw_\R s$.
+  \end{itemize}
+\end{proof}
+
+\begin{lemma}
+  For all $\RE$-automaton $\A$, $\Lang(\widen(\A)) \supseteq \Lang(\A)$.
+\end{lemma}
+\begin{proof}
+This is easy to see since widening only adds transitions, and thus, does
+not restrict the recognized language.
+\end{proof}
+
+
+% \begin{lemma}
+% \label{lem:wf}
+% The widening relation $\simp_E$ is well founded. 
+% \end{lemma}
+
+% \begin{proof} Widening can add, at most, transitions between all states
+%   of the tree automaton $\A$ which has a finite number of states.
+% \end{proof}
+
+
+% Couvert par l'autre section
+
+% \section{Proofs about intersection}
+
+% \begin{lemma}[Emptiness decision of the product of a $\RE$-automaton and a
+%   tree automaton]
+%   Let $\A$ be a $\RE$-automaton and $\B$ a tree automaton. Let $S$ be the set of
+%   reachable states of $\A\times \B$ defined according to
+%   definition~\ref{def:reachable-states}. For all final state $q$ of $\A$, all
+%   final state $q'$ of $\B$, all formulas $\phi_S\neq\bot$, $\phi\neq \bot$ and
+%   all term $t\in\TF$, we have $t\xrw{\phi}^*_\A q$ and $t \rw_\B^* q'$
+%   (i.e. $\Lang(\A)\cap \Lang(\B) \neq \emptyset$) if and only if there exists a
+%   triple $(q,q',\phi_S)\in S$ such that $\phi \models \phi_S$. 
+% \end{lemma}
+
+% \begin{proof}
+%   Let $\A =\langle \F, \Q^\A,\Q^\A_f,\Delta^\A, \Drw, \Deq \rangle$
+%   be the $\RE$-automaton and $\B=\langle \F, \Q^\B,\Q^\B_f,\Delta^\B \rangle$ be
+%   the tree automaton.  
+%   % We use definition~\ref{def:xrw_alpha} for the recognized language
+%   % $\Lang(\A,q)=\{t\in \TF \sep t \xrw{\phi}_\A^* q \mbox{ and $\phi$ 
+%   %   satisfiable}\}$. 
+%   % We prove that $(q,q',\phi_S)\in S$ if 
+%   % and only if %$\Lang(\A,q) \cap \Lang(\B,q') \neq \emptyset$.
+%   % there exists a term $t\in\TF$ such that $t\xrw{\phi}^*_\A q$, $t
+%   % \rw_\B^* q'$ and $\phi\models \phi_S$.
+%   We prove a stronger property on all states $q$ of $\A$ and $q'$ of $\B$ (and not
+%   only for final states).
+%   First, we prove the 'only if' part. Let us assume that 
+%   % $\Lang(\A,q) \cap \Lang(\B,q') \neq \emptyset$, hence that 
+%   there exists a term $t\in\TF$ such that $t\xrw{\phi}^*_\A q$, $t \rw_\B^* q'$.
+%   % and $\phi$ satisfiable. 
+%   By induction on the height of $t$ we have:
+  
+%   \begin{itemize}
+%   \item If $t$ is a constant, since $\B$ is an epsilon-free tree automaton, the
+%     only way to have $t \rw^*_\B q'$ is to have $t \rw q' \in \B$. With regards to
+%     $\A$, by definition~\ref{def:xrw_alpha}, $t\xrw{\phi}^*_\A q$ means that
+%     there exists states $q_0,q_1, \ldots, q_n$ and formulas $\phi_1,\ldots,
+%     \phi_n$ such that $t \rw_{\Delta_\A} q_0 \xrw{\phi_1} q_1 \xrw{\phi_2}
+%     \ldots q_n$ with $q=q_n$ and $\phi=\phi_1\wedge \ldots \wedge
+%     \phi_n$.% is satisfiable.
+%     Transitions $q_i \xrw{\phi_i} q_{i+1}$ are either transitions of $\Drw$ or
+%     transitions of $\Deq$ with $\phi_i=\top$.  Because of transitions $t \rw q_0
+%     \in \Delta_\A$ and $t \rw q' \in \Delta_\B$, using the first case of
+%     definition~\ref{def:reachable-states}, we get that $(q_0,q',\top) \in
+%     S$. Similarly, using the second case of the definition, we obtain that there
+%     exists formulas $\phi'_i$ with $i=1\ldots n$ such that $(q_1,q', \phi_1\vee
+%     \phi'_1), (q_2,q',(\phi_1\wedge\phi_2)\vee \phi'_2),\ldots (q_n,q', (\phi_1
+%     \wedge \ldots \wedge \phi_n)\vee \phi'_n)$ belong to $S$. Finally, since
+%     $q_n=q$ and $\phi=\phi_1\wedge \ldots \wedge \phi_n$, we that
+%     $(q,q',\phi\vee\phi_n') \in S$. Furthermore, we trivially have that $\phi_S=
+%     \phi\vee \phi_n'$ and $\phi \models \phi_S$. % since $\phi$ is
+%     % satisfiable, so is $\phi \vee \phi'$.
+    
+%   \item Assume that for all term of height lesser or equal to $n\in\NN$, the
+%     property is true. Let us prove that it is also true for a term $f(t_1, \ldots,
+%     t_n)$ with $t_1, \ldots, t_n$ of height lesser or equal to $n$. Since $f(t_1,
+%     \ldots, t_n) \rw^*_\B q'$ and $\B$ is an epsilon free tree automaton, we
+%     obtain that $\exists q'_1,\ldots,q'_n\in\Q^\B$ such that $\forall i=1\ldots n:
+%     t_i \rw^*_\B q'_i$ and $f(q'_1,\ldots,q'_n) \rw q' \in \Delta_\B$. With
+%     regards to $\A$,
+%     by definition~\ref{def:xrw_alpha}, $f(t_1, \ldots, t_n)
+%     \xrw{\phi}^*_\A q$ means that there exists states $q_0,q_1, \ldots,
+%     q_m,q''_1,\ldots,q''_n$ and formulas $\phi_1,\ldots, \phi_m, \phi'_1, \ldots,
+%     \phi'_n$ such that $\forall i=1\ldots n: t_i \xrw{\phi'_i}^*_\A q''_i$,
+%     $f(q''_1,\ldots, q''_n) \rw_{\Delta_\A} q_0$ and $q_0 \xrw{\phi_1} q_1
+%     \xrw{\phi_2} \ldots q_n$, $q=q_n$. Furthermore, we obtain that $\phi=
+%     \bigwedge_{i=1}^{n} \phi'_i \wedge \bigwedge_{i=1}^{m} \phi_i$. % is
+%     % satisfiable. 
+%     Since terms $t_i$ are of height lesser or equal to $n$, $\forall
+%     i=1\ldots n: t_i \rw^*_\B q_i$ and $\forall i=1 \ldots n: t_i \xrw{\phi'_i}_\A^*
+%     q''_i$, we can apply the induction hypothesis and obtain that $\forall
+%     i=1\ldots n: (q_i, q''_i, \phi''_i) \in S$ with $\phi'_i \models \phi''_i$. % and $\phi'_i$ satisfiable.  
+%     Besides to this, using case~1 of definition~\ref{def:xrw_alpha} on
+%     $f(q_1,\ldots,q_n) \rw q' \in \Delta_\B$, $f(q''_1,\ldots,q''_n) \rw q_0 \in
+%     \Delta_\A$, and $\forall i=1\ldots n: (q_i, q''_i, \phi''_i) \in S$, we obtain
+%     that there exists a formula $\phi'$ such that $(q_0,q', (\bigwedge_{i=1}^n
+%     \phi''_i) \vee \phi')\in S$. Then, like in the base case, since $q_0
+%     \xrw{\phi_1} q_1 \xrw{\phi_2} \ldots q_n$, $q=q_n$, we can deduce that
+%     there exists a formula $\phi''$ such that $(q,q',(\bigwedge_{i=1}^n \phi''_i
+%     \wedge \bigwedge_{i=1}^{m} \phi_i) \vee \phi'')\in S$. Let $\phi_S= (\bigwedge_{i=1}^n \phi''_i
+%     \wedge \bigwedge_{i=1}^{m} \phi_i) \vee \phi''$. Since we know from above that
+%     $\phi=\bigwedge_{i=1}^n \phi'_i \wedge \bigwedge_{i=1}^{m} \phi_i$ and
+%     $\forall i=1\ldots n: \phi'_i \models \phi''_i$, we obtain that % is satisfiable, so is 
+%     $\phi \models \phi_S$.
+%   \end{itemize}
+  
+%   \medskip
+%   Second, we prove the 'if' part: if $(q,q',\phi_S)\in S$ and $\phi_S \neq \bot$
+%   then there exists a term $t$ and a formula $\phi \neq \bot$ such that $\phi \models \phi_S$,
+%   % and $S$ satisfiable,
+%   $t\xrw{\phi}^*_\A q$ and $t \rw_\B^* q'$. We make a proof by induction
+%   on the number of applications of the two rules of
+%   definition~\ref{def:reachable-states}, necessary to prove that $(q,q',\phi_S)$ in $S$.
+
+%   \begin{itemize}
+%   \item If the number of steps is $0$ then, since the computation of $S$ starts
+%     from the set $\Q^\A \times \Q^\B \times \bot$, then all $(q,q',\phi_S)$
+%     are such that $\phi_S=\bot$, which is a contradiction.
+
+%   \item We assume that the property is true for any triple $(q,q',\phi_S)$ which can
+%     be deducted by $n$ or less applications of the rules of
+%     definition~\ref{def:reachable-states}. Now, we consider the case of a triple
+%     $(q,q',\phi_S)$ that is deduced at the $n+1$-th step of application of the
+%     deduction rules.
+%     \begin{itemize}
+%     \item If the first rule is concerned, this means that there exists triples
+%       $(q_1,q'_1, \phi_1),\ldots,(q_n,q'_n,\phi_n)$ and $(q,q',\phi)$ in $S$
+%       deduced before $n+1$-th step, as well as transitions $f(q_1,\ldots,q_n)\rw q
+%       \in \Delta_\A$ and $f(q'_1,\ldots,q'_n)\rw q' \in \Delta_\B$. Furthermore,
+%       we know that $\phi_S=\phi \vee \bigwedge_{i=1}^n \phi_i$.
+%       % and by hypothesis $\rho$ is satisfiable. 
+%       If $\phi\neq \bot$ then, since $(q,q',\phi)$ was shown to belong to $S$
+%       before $n+1$-th step, we can apply the induction hypothesis and directly
+%       obtain that there exists a term $t$ and a formula $\phi'$ such that $\phi'
+%       \models \phi$, $t \xrw{\phi'}^*_\A q$ and $t \rwB^* q'$. Note that $\phi'
+%       \models \phi$ implies $\phi' \models \phi_S$.
+%       Otherwise, if $\phi=\bot$, then % $\bigwedge_{i=1}^n \phi_i$ is then 
+%       we can apply the induction hypothesis on triples $(q_i,q'_i,\phi_i)$,
+%       $i=1\ldots n$ and obtain that $\forall i=1\ldots n:\exists \phi_i':\exists
+%       t_i \in\TF: \phi'_i \models \phi_i$, $t_i \xrw{\phi_i'}_\A^* q_i$ and $t_i
+%       \rwB^* q'_i$. Finally, 
+%       because of the two transitions $f(q_1,\ldots,q_n)\rw q \in \Delta_\A$ and
+%       $f(q'_1,\ldots,q'_n)\rw q' \in \Delta_\B$, we get that $f(t_1,\ldots,t_n)
+%       \xrw{\phi'}_\A^* f(q_1,\ldots,q_n) \rwA^* q$ with
+%       $\phi'=\bigwedge_{i=1}^n \phi'_i$ on one side and $f(t_1,\ldots,t_n) 
+%       \rwB f(q'_1,\ldots,q'_n) \rwB^* q$ on the other side. Furthermore,
+%       since $\forall i=1\ldots n: \phi'_i \models \phi_i$, we have
+%       $\bigwedge_{i=1}^n \phi'_i \models \bigwedge_{i=1}^n \phi_i$. Recall that
+%       $\phi'= \bigwedge_{i=1}^n \phi'_i$ and $\phi_S= \phi\vee \bigwedge_{i=1}^n
+%       \phi_i$. Hence, $\phi' \models \phi_S$.
+%     \item If the second rule is concerned, this means that there exists triples
+%       $(q_1,q',\phi_1)$ and $(q,q',\phi_2)$ in $S$ deduced before the $n+1$-th
+%       step. Furthermore, we know that $\phi_S=(\phi_1 \wedge \phi) \vee \phi_2$.
+%       Like above, if $\phi_2 \neq \bot$ then we can apply induction hypothesis on
+%       $(q,q',\phi_2)$ and trivially get the result. Otherwise, if $\phi_2=\bot$
+%       then we can use induction hypothesis on the triple $(q_1,q',\phi_1)$ and
+%       obtain that there exists a formula $\phi_1'$ and a term $t_1$ such that 
+%       $t_1\xrw{\phi_1'}_\A^* q_1$, $t_1 \rwB^* q'$ and $\phi_1' \models \phi_1$.
+%       Then, by case on the epsilon transition used for the deduction on $S$, we
+%       prove that $t_1 \xrw{\phi_1'\wedge \phi}_\A^* q$:
+%       \begin{itemize}
+%       \item Assume that $q_1 \xrw{\phi} q \in \Drw$. Then, by
+%         definition~\ref{def:xrw_alpha}, we obtain that $t_1
+%         \xrw{\phi'_1 \wedge \phi}_\A^* q$. Furthermore, since $\phi'_1
+%         \models \phi_1$, we have that $\phi'_1 \wedge \phi \models
+%         \phi_1 \wedge \phi$ and, finally, that $\phi'_1 \wedge \phi
+%         \models \phi_S$.
+%       \item Assume that $q_1 \rw q \in \Deq$. Then, by
+%         definition~\ref{def:xrw_alpha}, we obtain that $t \xrw{\phi_1
+%           \wedge Eq(q_1,q)}_\A^* q$. Finally, like above, we can
+%         deduce that $\phi'_1 \wedge Eq(q_1,q) \models \phi_1 \wedge
+%         Eq(q_1,q)$ and thus $\phi'_1 \wedge Eq(q_1,q) \models \phi_S$.
+%       \end{itemize}
+%     \end{itemize}
+%   \end{itemize}
+% \end{proof}
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% TeX-PDF-mode: t
+%%% End: 

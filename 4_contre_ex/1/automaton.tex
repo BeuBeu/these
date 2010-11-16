@@ -1,0 +1,32 @@
+Since the $\kw{merge}$ procedure does not allow to differentiate the
+exact term from the approximation. Instead of renaming states, a way
+to make the difference is to introduce an odered relation between
+those states. This relation denoted by ($\Deq$) a set of labelled
+$\varepsilon$-transitions of the form $q' \rwtag{eq} q$ has to be understood as : the language
+of $q'$ is considered as the approximation added by the equation $eq$ to
+the language of $q$. That prompts us to extend the definition of 
+an $\R$-Automaton.
+
+\begin{Definition}{$\RE$-Automaton}
+  \label{def:RE-automaton}
+  A $\RE$-Automaton is a tree automton defined as quadruple $\A= \langle \F, \Q, \Q_F,\Delta \cup \Deps \cup \Deq\rangle$,
+  where $\Q_F \subseteq \Q$ and transitions are now splited in three sets~:
+  \begin{description}
+  \item [$\Delta$:] the normalized transitions
+  \item [$\Deps$:] $\varepsilon$-transitions labelled by constraints.
+  \item [$\Deq$:] $\varepsilon$-transitions labelled by an equation as detailled bellow.
+  \end{decription}
+  
+  The equivalence relation induced by $(Q, \rw^!)$ simply associates to each state sets of terms.
+  Since the relation $\f^!$ is deterministic, thoses sets are disjoined.
+
+  We introduce $\f^=$ which denotes the transitive closure of transitions of $\Delta \cup \Deq$.
+  The couple $(Q, \f^=)$ induces the equivalence relation such that if terms $u$ and $v$
+  are in the same equivalence classe, then $u =_E v$.
+  
+  
+\end{Definition}
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

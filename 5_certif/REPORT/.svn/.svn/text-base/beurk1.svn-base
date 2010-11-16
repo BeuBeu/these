@@ -1,0 +1,252 @@
+\documentclass[a4paper,10pt]{llncs}
+\usepackage[latin1]{inputenc}
+\usepackage[english]{babel}
+\usepackage{xypic}
+
+\input{rapinclude}
+\begin{document}
+\title{Tree Automata Completion Checker}
+
+\author{Benoît Boyer \and Thomas Genet \and Thomas Jensen}
+
+\institute{
+  IRISA / Universit\'e de Rennes\,1 / CNRS \\
+  Campus de Beaulieu \\
+  F-35042 Rennes Cedex \\
+  {\tt {bboyer,genet,jensen}@irisa.fr} 
+}
+\maketitle
+
+
+\begin{abstract}
+Youpi
+\end{abstract}
+
+\section{Introduction}
+
+\section{Preliminaries}
+\label{sec:preliminaries}
+
+
+Comprehensive surveys can be found in~\cite{DershowitzJ-89,BaaderN-book98} for
+term rewriting systems, and in~\cite{TATA,GilleronTison-FI95} for tree automata
+and tree language theory.
+
+Let $\F$ be a finite set of symbols, each associated with an arity function, and
+let $\X$ be a countable set of variables. $\TFX$ denotes the set of terms, and
+$\TF$ denotes the set of ground terms (terms without variables). The set of
+variables of a term $t$ is denoted by $\var(t)$. A substitution is a function
+$\sigma$ from $\X$ into $\TFX$, which can be extended uniquely to an
+endomorphism of $\TFX$. A position $p$ for a term $t$ is a word over $\NN$. The
+empty sequence $\epsilon$ denotes the top-most position. The set $\pos(t)$ of
+positions of a term $t$ is inductively defined by:
+\begin{itemize}
+\item $\pos(t)= \{ \epsilon\} $ if $t \in \X$
+\item $\pos(f(t_1,\dots,t_n)) = \{ \epsilon \} \cup \{i.p \mid 1 \leq i \leq n
+  \et p \in \pos(t_i) \}$
+\end{itemize}
+If $p \in \pos(t)$, then $t|_p$ denotes the subterm of $t$ at position $p$ and
+$t[s]_p$ denotes the term obtained by replacement of the subterm $t|_p$ at
+position $p$ by the term $s$. A term rewriting system $\R$ is a set of {\em
+  rewrite rules} $l \rw r$, where $l, r \in \TFX$, $l \not \in \X$, and $\var(l)
+\supseteq \var(r)$. A rewrite rule $l \rw r$ is {\em left-linear} if each
+variable of $l$ (resp. $r$) occurs only once in $l$.  A TRS $\R$ is left-linear
+if every rewrite rule $l \rw r$ of $\R$ is left-linear).  The TRS $\R$ induces a
+rewriting relation $\rw_{\R}$ on terms whose reflexive transitive closure is
+denoted by $\rw^{\star}_{\R}$. The set of $\R$-descendants of a set of ground
+terms $E$ is $\desc(E) = \{t \in \TF \sep \exists s \in E \st s \rw^{\star}_{\R}
+t \}$.
+
+The verification technique we propose in this paper is based on the computation
+of $\desc(E)$.  Note that $\desc(E)$ is possibly infinite:
+$\R$ may not terminate and/or $E$ may be infinite. The set $\desc(E)$
+is generally not computable~\cite{GilleronTison-FI95}. However, it is possible
+to over-approximate it~\cite{FeuilladeGVTT-JAR04,Takai-RTA04} using tree
+automata, i.e. a finite representation of infinite (regular) sets of terms. We
+next define tree automata.
+
+Let $\Q$ be a finite set of symbols, with arity $0$, called {\em states} such
+that $\Q \cap \F= \emptyset$.  $\TFQ$ is called the set of {\em configurations}.
+\begin{definition}[Transition and normalized transition]
+  \label{def:normalized}
+  A {\em transition} is a rewrite rule $c \f q$, where $c$ is a configuration
+  i.e. $c \in \TFQ$ and $q \in \Q$. A {\em normalized transition} is a
+  transition $c \f q$ where $c = f(q_1, \ldots, q_n)$, $f \in \F$ whose arity is
+  $n$, and $q_1, \ldots, q_n \in \Q$.
+\end{definition}
+
+% An epsilon transition is a transition of the form $q \f q'$ where $q$ and $q'$
+% are states. Any set of transition $\Delta \cup \{q \f q'\}$ can be
+% equivalently replaced by $\Delta \cup \{c \f q' \sep c \f q \in \Delta \}$.
+
+\begin{definition}[Bottom-up non-deterministic finite tree automaton]
+  A bottom-up non-deterministic finite tree automaton (tree automaton for short)
+  is a quadruple $\A= \langle \F, \Q, \Q_f,\Delta \rangle$, where $\Q_f
+  \subseteq \Q$ and $\Delta$ is a set of normalized transitions.
+\end{definition}
+
+The {\em rewriting relation} on $\TFQ$ induced by the transitions of $\A$ (the
+set $\Delta$) is denoted by $\f_{\Delta}$.  When $\Delta$ is clear from the
+context, $\f_{\Delta}$ will also be denoted by $\f_{\A}$.
+% Similarly, by notation abuse, we will often note $q \in \A$ and $t\f q \in \A$
+% respectively for $q \in \Q$ and $t \f q \in \Delta$.
+
+\begin{definition}[Recognized language]
+  The tree language recognized by $\A$ in a state $q$ is $\Lang(\A,q) = \{t \in
+  \TF \sep t \f^{\star}_{\A} q \}$.  The language recognized by $\A$ is
+  $\Lang(\A) = \bigcup_{q \in \Q_f} \Lang(\A, q)$. A tree language is regular if
+  and only if it can be recognized by a tree automaton.
+  % A state $q$ is a {\em dead state} if $\Lang(\A, q)= \emptyset$.
+\end{definition}
+
+
+% \begin{example}
+%   Let $\A$ be the tree automaton $\langle \F, \Q, \Q_f, \Delta \rangle$ such
+%   that $\F=\{f,g,a\}$, $\Q= \{q_0, q_1\}$, $\Q_f=\{q_0\}$ and $\Delta= \{f(q_0)
+%   \f q_0, g(q_1) \f q_0, a \f q_1 \}$. In $\Delta$ transitions are {\em
+%     normalized}. A transition of the form $f(g(q_1)) \f q_0$ is not
+%   normalized. The term $g(a)$ is a term of $\TFQ$ (and of $\TF$) and can be
+%   rewritten by $\Delta$ in the following way: $g(a) \f_{\Delta} g(q_1)
+%   \f_{\Delta} q_0$. Note that $\Lang(\A, q_1)= \{a\}$ and $\Lang(\A)=\Lang(\A,
+%   q_0) = \{g(a),f(g(a)), f(f(g(a))),\ldots\}=\{f^{\star}(g(a))\}$.
+%   % Note also that $\Lang(\A, q_2)=\emptyset$ since no term of $\TF$ rewrites to
+%   % $q_2$, hence $q_2$ is a dead state.
+% \end{example}
+
+
+\section{Completion}
+\label{section:completion}
+
+Given a tree automaton $\A$ and a TRS $\R$, the tree automata completion
+algorithm, proposed in~\cite{Genet-RTA98,FeuilladeGVTT-JAR04}, computes a tree
+automaton $\aaex^k$ such that $\Lang(\aaex^k)=\desc(\Lang(\A))$ when it is
+possible (for the classes of TRSs where an exact computation is possible,
+see~\cite{FeuilladeGVTT-JAR04}) and such that $\Lang(\aaex^k) \supseteq
+\desc(\Lang(\A))$ otherwise.
+
+The tree automata completion works as follows. From $\A=\aaex^0$ completion
+builds a sequence $\aaex^0.\aaex^1\ldots\aaex^k$ of automata such that if
+$s\in\Lang(\aaex^i)$ and $s\f_{\R} t$ then $t\in\Lang(\aaex^{i+1})$. If we find
+a fixpoint automaton $\aaex^k$ such that $\desc(\Lang(\aaex^k)) =
+\Lang(\aaex^k)$, then we have $\Lang(\aaex^k)=\desc(\Lang(\aaex^0))$ (or
+$\Lang(\aaex^k)\supseteq \desc(\Lang(\A))$ if $\R$ is not in one class
+of~\cite{FeuilladeGVTT-JAR04}). To build $\aaex^{i+1}$ from $\aaex^{i}$, we
+achieve a \textit{completion step} which consists of finding \textit{critical
+  pairs} between $\f_{\R}$ and $\f_{\aaex^i}$. To define the notion of critical
+pair, we extend the definition of substitutions to terms of $\TFQ$. For a
+substitution $\sigma:\X\mapsto\Q$ and a rule $l\f r \in \R$, a critical pair is
+an instance $l\sigma $ of $l$ such that there exists $q\in\Q$ satisfying
+$l\sigma \f^*_{\aaex^i}q$ and $l\sigma \f_{\R} r\sigma$. Note that since $\R$,
+$\aaex^i$ and the set $\Q$ of states of $\aaex^i$ are finite, there is only a
+finite number of critical pairs.  For every critical pair detected between $\R$
+and $\aaex^i$ such that $r\sigma \not\f^*_{\aaex^i}q$, the tree automaton
+$\aaex^{i+1}$ is constructed by adding a new transition $r\sigma \f q$ to
+$\aaex^i$ such that $\aaex^{i+1}$ recognizes $r\sigma$ in $q$, i.e. $r\sigma
+\f_{\aaex^{i+1}} q$.
+
+$$
+\xymatrix{
+ l\sigma \ar[r]_{\R}\ar[d]_{\A_i} & r\sigma \ar[d]^{\A_{i+1}}\\
+ q & \ar[l]^{\A_{i+1}} q'
+}
+$$
+
+
+However, the transition $r \sigma \f q$ is not necessarily a normalized
+transition of the form $f(q_1, \ldots, q_n) \f q$ and so it has to be normalized
+first.  
+Since normalization consists in associating state symbols to subterms of the
+left-hand side of the new transition, it always succeed. Note that, when using
+new states to normalize the transitions, completion is as precise as possible.
+However, without approximation, completion is likely not to terminate (because
+of general undecidability results~\cite{GilleronTison-FI95}). To enforce
+termination, and produce an over-approximation, the completion algorithm is
+parametrized by a set $\nr$ of {\em approximation rules}. When the set $\nr$ is
+used during completion to normalize transitions, the obtained tree automata are
+denoted by $\aapprox^1, \ldots, \aapprox^{k}$. Each such rule describes a
+context in which a list of rules can be used to normalize a term. For all
+$s,l_1, \ldots, l_n \in\TFQX$ and for all $x,x_1, \ldots, x_n \in \Q\cup\X$, the
+general form for an approximation rule is:
+\[[s \rw x] \rw [l_1 \rw x_1, \ldots, l_n \rw x_n].\] The expression $[s \rw x]$
+is a pattern to be matched with the new transitions $t \rw q'$ obtained by
+completion. The expression $ [l_1 \rw x_1, \ldots, l_n \rw x_n]$ is a set of
+rules used to normalize $t$. To normalize a transition of the form $t \rw q'$,
+we match $s$ with $t$ and $x$ with $q'$, obtain a substitution $\sigma$ from the
+matching and then we normalize $t$ with the rewrite system $\{l_1\sigma \rw
+x_1\sigma, \ldots, l_n \sigma \rw x_n\sigma\}$. Furthermore, if $\forall
+i=1\ldots n: x_i\in \Q$ or $x_i \in \var(l_i) \cup \var(s) \cup \{x\}$ then
+since $\sigma: \X \mapsto \Q$, $x_1
+\sigma, \ldots, x_n\sigma$ are necessarily states. If a transition cannot be
+fully normalized using approximation rules $\nr$, normalization is finished
+using some new states, see Example \ref{example:approx}.
+
+The main property of the tree automata completion algorithm is that, whatever
+the state labels used to normalize the new transitions, if completion terminates
+then it produces an over-approximation of reachable
+terms~\cite{FeuilladeGVTT-JAR04}. 
+% In other words, approximation safety does not
+% depend on the set of approximation rules used. Since the role of approximation
+% rules is only to select particular states for normalizing transitions, the
+% safety theorem of~\cite{FeuilladeGVTT-JAR04} can be reformulated in the
+% following way.
+\begin{theorem}[\cite{FeuilladeGVTT-JAR04}]
+  \label{safety}
+  Let $\R$ be a left-linear TRS, $\A$ be a tree automaton and $\nr$ be a set of
+  approximation rules. If completion terminates on $\aapprox^k$ then
+$$\Lang(\aapprox^k)\supseteq \desc(\Lang(\A))$$
+\end{theorem}
+
+Here is a simple example illustrating completion and the use of approximation
+rules when the language $\desc(E) $ is not regular.
+\begin{example}
+  \label{example:approx}
+  Let $\R=\{g(x,y) \rw g(f(x),f(y))\} $ and let $\A$ be the tree automaton such
+  that $\Q_f=\{q_f\}$ and $\Delta=\{a \rw q_a, g(q_a,q_a)\rw q_f\}$. Hence
+  $\Lang(\A)= \{g(a,a)\}$ and $\desc(\Lang(\A))=\{g(f^n(a),f^n(a))~|~n\geq 0\}$. Let
+  $\nr=[g(f(x),f(y)) \rw z] \rw [f(x) \rw q_1, f(y) \rw q_1]$. During the first
+  completion step, we find a critical pair $g(q_a, q_a) \rwR g(f(q_a),f(q_a))$
+  and $g(q_a,q_a)\rw^*_{\A} q_f$. We thus have to add the transition
+  $g(f(q_a),f(q_a)) \rw q_f$ to $\A$. To normalize this transition, we match
+  $g(f(x), f(y))$ with $g(f(q_a),f(q_a))$ and match $z$ with $q_f$ and obtain
+  $\sigma=\{x \mapsto q_a, y \mapsto q_a, z \mapsto q_f\}$. Applying $\sigma$ to
+  $[f(x) \rw q_1, f(y) \rw q_1]$ gives $[f(q_a) \rw q_1, f(q_a) \rw q_1]$. This
+  last system is used to normalize the transition $g(f(q_a),f(q_a)) \rw q_f$
+  into the set $\{g(q_1, q_1) \rw q_f, f(q_a)\rw q_1 \}$ which is added to $\A$
+  to obtain $\aapprox^1$. The completion process continues for another step and
+  ends on $\aapprox^2$ whose set of transition is $\{a \rw q_a, g(q_a,q_a)\rw
+  q_f, g(q_1, q_1) \rw q_f, f(q_a)\rw q_1, f(q_1)\rw q_1\}$. We have
+  $\Lang(\aapprox^k)=\{g(f^n(a),f^m(a))~|~n,m\geq 0\}$ which is an
+  over-approximation of $\desc(\Lang(\A))$.
+\end{example}
+
+The tree automata completion algorithm and the approximation mechanism are
+implemented in the Timbuk~\cite{Timbuk-site} tool. On the previous example, once
+the fixpoint automaton $\aapprox^k$ has been computed, it is possible to check
+whether some terms are reachable, i.e. recognized by $\aapprox^k$ or not. This
+can be done using tree automata 
+intersections~\cite{FeuilladeGVTT-JAR04}. Another way to do
+that is to search instances for a pattern $t$, where $t\in \TFX$, in the tree
+automaton. 
+Given $t$ it is possible to check if there exists
+a substitution $\sigma: \X \mapsto \Q$ and a state $q \in \Q$ such that $t\sigma
+\rw_{\aapprox^k}^* q$. If such a solution exists then it proves that there
+exists a term $s\in\TF$, a position $p \in \pos(s)$ and a substitution $\sigma':
+\X \mapsto \TF$ such that $s[t\sigma']_p \in \Lang(\aapprox^k) \supseteq
+\desc(\Lang(\A))$, i.e. that $t\sigma'$ occurs as a subterm in the language
+recognized by $\Lang(\aapprox^k)$. On the other hand, if there is no solution
+then it proves that no such term is in the over-approximation, hence it is not
+in $\desc(\Lang(\A))$, i.e. it is not reachable.
+
+In the patterns we use in this paper, '$?x$' denotes variables for which a value
+is wanted and '$\_$' denotes anonymous variables for which no value is needed.
+For instance, the pattern $g(f(\_), g(\_,\_))$ has no solution on 
+$\aapprox^{2}$ of example~\ref{example:approx}, meaning that no term
+containing any ground instance of this pattern is reachable by rewriting $g(a,a)$.
+
+\section{Checker}
+
+\section{Further research}
+\bibliographystyle{alpha}
+\bibliography{sabbrev,eureca,genet}
+
+\end{document}

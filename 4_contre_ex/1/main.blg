@@ -1,0 +1,60 @@
+This is BibTeX, Version 0.99c (TeX Live 2009)
+The top-level auxiliary file: main.aux
+The style file: abbrv.bst
+A level-1 auxiliary file: proofs.aux
+A level-1 auxiliary file: thm.aux
+Database file #1: sabbrev.bib
+Database file #2: eureca.bib
+Database file #3: genet.bib
+Database file #4: additional.bib
+Database file #5: thesis.bib
+Warning--I didn't find a database entry for "pDauchetTison-LICS90"
+Warning--I didn't find a database entry for "pBrainerd-IC69"
+Warning--I didn't find a database entry for "pSalomaa88"
+Warning--I didn't find a database entry for "pCoquideDauchetGV-FCT89"
+Warning--I didn't find a database entry for "pJacquemard-RTA96"
+Warning--I didn't find a database entry for "pRety-LPAR99"
+Warning--empty note in TATA
+Warning--empty booktitle in Genet-Habil
+You've used 24 entries,
+            2118 wiz_defined-function locations,
+            991 strings with 13090 characters,
+and the built_in function-call counts, 9169 in all, are:
+= -- 902
+> -- 401
+< -- 22
++ -- 158
+- -- 134
+* -- 635
+:= -- 1425
+add.period$ -- 86
+call.type$ -- 24
+change.case$ -- 139
+chr.to.int$ -- 0
+cite$ -- 26
+duplicate$ -- 397
+empty$ -- 760
+format.name$ -- 134
+if$ -- 2043
+int.to.chr$ -- 0
+int.to.str$ -- 24
+missing$ -- 23
+newline$ -- 123
+num.names$ -- 46
+pop$ -- 162
+preamble$ -- 1
+purify$ -- 116
+quote$ -- 0
+skip$ -- 275
+stack$ -- 0
+substring$ -- 469
+swap$ -- 143
+text.length$ -- 22
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 94
+warning$ -- 2
+while$ -- 74
+width$ -- 26
+write$ -- 283
+(There were 8 warnings)

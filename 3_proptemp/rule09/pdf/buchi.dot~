@@ -1,0 +1,37 @@
+/*   Fichier genere avec timbuktu    */
+digraph G {
+        ratio=auto;
+        center=true;
+        q0 [shape=none label=""];
+
+        node [shape = doublecircle];
+        q4 [ label ="4"];
+        q5 [ label ="5"];
+        q6 [ label ="6"];
+        q7 [ label ="7"];
+        q0 -> q4;
+        q4 -> q5;
+        q5 -> q6;
+        q6 -> q7;
+        q7 -> q5;
+        
+
+        //size="8,10.4";
+        //label = "Automaton A0";
+//         q0 -> qa [label=""];
+//         qa -> qb [label=""];
+//         qb -> qc [label=""];
+
+//         q0 -> qf [label=""];
+//         qf -> qg [label=""];
+//         qg -> qh [label=""];
+//         qh -> qf [label=""];
+
+
+
+//         qa [ label ="a"];
+//         qb [ label ="b"];
+//         qc [ label ="c"];
+
+
+}

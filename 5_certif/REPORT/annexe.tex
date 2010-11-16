@@ -1,0 +1,377 @@
+\begin{theorem}{(Termination)}
+  At each deduction step, the measure decreases strictly:
+  \[
+  \dfrac{
+    \Gamma \vdash_{\A, \B} \alpha \Subset \beta
+  }{
+    \Gamma' \vdash_{\A, \B} \alpha' \Subset \beta'
+  }
+  \Longrightarrow \mu({\Gamma \vdash_{\A, \B} \alpha \Subset \beta}) \ll \mu({\Gamma' \vdash_{\A, \B} \alpha' \Subset \beta'})
+  \]
+\end{theorem}
+\begin{proof}
+  The following array summarizes for each derivation rule what component of the tuple
+  proves that $\mu$ decreases between conclusion and premises of the rule:
+  
+  \[\begin{array}[h]{l|c|c|}%c|}
+    \footnotesize
+    & \mu_1 & \mu_2 \\ \hline % & \mu_3\\ \hline
+    \textrm{Induction}   & \strut \mu_1(\Gamma) < \mu_1(\Gamma') & - \\ \hline
+    \textrm{Split-l} & \mu_1(\Gamma) = \mu_1(\Gamma')
+                     & \mu_2(c_i) = 1 < \mu_2(\{c_i\}_1^n)\\ \hline
+    \textrm{Weak-r} & \mu_1(\Gamma) = \mu_1(\Gamma') 
+                    & \mu_2(c_k) < \mu_2(\{c_i\}_1^n)\\ \hline
+    \textrm{Config} & \mu_1(\Gamma) = \mu_1(\Gamma') & 
+    \begin{array}{l}
+      \mu_2(f(\dots, q_i, \dots)) = \mu_2(f(\dots, q'_i, \dots)) = 1\\
+      \mu_2(q_i) = \mu_2(q'_i) = 0 \textrm{ thus } 2 > 0
+    \end{array}\\ \hline
+  \end{array} \]
+  For the Split-l (resp. Weak-r) rule, we consider $n > 1$ to have a set $\alpha = \{c_i\}_1^n$ (resp. $\beta$) with
+  at least two elements. If ($n = 1$) then this rule does not apply on the current statement
+  ${\Gamma \vdash \alpha \Subset \beta}$.\\
+
+\end{proof}
+
+\begin{theorem}{(Cut in $\Subset$-proof trees)}
+  \label{thm:cut}
+  For all tree automata $\A$ and $\B$, if there exists $\prod$ a proof tree
+  of $\Gamma \vdash_{\A, \B} q \Subset q'$, and a proof tree of 
+  $\Gamma \cup \{q \Subset q'\}\vdash_{\A, \B} q_a \Subset q_b$
+  then exists also a proof tree of $\Gamma \vdash_{\A, \B} q_a \Subset q_b$.
+\end{theorem}
+\begin{proof}
+  We proceed by induction on $\mu(\Gamma)$.
+
+  \noindent
+  If $\mu(\Gamma) = 0$, we have immediately $\Q_\A \times \Q_\B =
+  \Gamma$. Hence,
+  since $q_a \Subset q_b \in \Gamma$, 
+  we can prove $\Gamma \vdash_{\A,\B} q_a \Subset q_b$ using the Axiom rule.
+
+  \medskip
+  \noindent
+  Now, as induction hypothesis, let us assume that $\forall \Gamma\ 
+  s.t.\ \mu(\Gamma) = n$, $\forall q\ q'$, if there exists a proof tree $\prod$ of
+  $\Gamma \vdash_{\A, \B} q \Subset q'$ and if for all $q_a, q_b$ there exists a
+  proof tree of $\Gamma \cup \{q \Subset q'\}\vdash_{\A, \B} q_a \Subset q_b$ then we
+  have also a proof tree of $\Gamma \vdash_{\A, \B} q_a \Subset q_b$.  Now, we
+  aim at proving that this property is true for $\Gamma$ such that $\mu(\Gamma)
+  = n+1$.
+  
+  \medskip
+  \noindent
+  Let us consider the proof tree of the second hypothesis $\Gamma \cup \{q \Subset
+  q'\}\vdash_{\A, \B} q_a \Subset q_b$.  Firstly, if the proof tree is built
+  using the Axiom rule we have $(q_a \Subset q_b) \in \Gamma \cup \{(q \Subset
+  q')\}$.  Two cases are possible:
+  \begin{itemize}
+  \item either $(q_a \Subset q_b) \in \Gamma$, and then we build the proof of 
+    $\Gamma \vdash_{\A,\B} q_a \Subset q_b$ using the Axiom rule.
+
+  \item or $q = q_a$ and $q' = q_b$, and then the goal $\Gamma \vdash_{\A,\B} q_a
+    \Subset q_b$ is equivalent to $\Gamma \vdash_{\A, \B} q \Subset q'$ whose
+    proof tree is $\prod$.
+  \end{itemize}
+
+  \noindent
+  Secondly, if the proof tree of $\Gamma \cup \{q \Subset q'\}\vdash_{\A, \B} q_a
+  \Subset q_b$ is built using the Induction rule, then we have: 
+
+\medskip
+  \newcommand{\env}{\Gamma \cup \{q_a \Subset q_b\} \cup \{q \Subset q'\} \vdash_{\A, \B}}
+
+\centerline{
+  \begin{minipage}{21cm}
+    {\tiny
+      \begin{prooftree}
+        \AxiomC{\small $\prod_{c_1}$}
+        \UnaryInfC{$\env c_1 \Subset c'_{k_1}$}
+        \LeftLabel{(Weark-r)}
+        \UnaryInfC{$\env 
+          c_1 \Subset  \{c_k'| c_k' \rightarrow_\B q_b\}_1^m$}
+        % Pointillets du milieu
+        \AxiomC{\small \dots\dots}
+        \AxiomC{\small $\prod_{c_n}$}
+        \UnaryInfC{$\env c_n \Subset c'_{k_n}$}
+        \RightLabel{(Weark-r)}
+        \UnaryInfC{$\env
+          c_n \Subset  \{c_k'| c_k' \rightarrow_\B q_b\}_1^m$}
+        \LeftLabel{(Split-l)}
+        \TrinaryInfC{$\env
+          \{c_i| c_i \rightarrow_\A q_a\}_1^n \Subset  \{c_i'| c_i'\rightarrow_\B q_b\}_1^m$}
+        \LeftLabel{(Induction)}
+        \UnaryInfC{$\Gamma \cup \{q \Subset q'\} \vdash_{\A, \B} q_a \Subset q_b$}
+      \end{prooftree}
+    }
+  \end{minipage}}
+
+\medskip
+    \noindent
+    Where each $\prod_{c_i}$ has the following form (assuming
+    that $c_i = f(q_{i_1}, \dots, q_{i_n})$ and $c'_{k_i} = f
+    (q'_{i_1}, \dots, q'_{i_n})$ ):
+    
+    {\tiny
+      \begin{prooftree}
+        \AxiomC{\small $\prod_{i_1}$}
+        \UnaryInfC{$\env q_{i_1} \Subset q'_{i_1}$}
+        \AxiomC{\small \dots\dots}
+        \AxiomC{\small $\prod_{i_n}$}
+        \UnaryInfC{$\env q_{i_n} \Subset q'_{i_n}$}
+        \LeftLabel{(Config)}
+        \TrinaryInfC{$\env f(q_{i_1}, \dots, q_{i_n}) \Subset f (q'_{i_1}, \dots, q'_{i_n})$}
+      \end{prooftree}
+    }
+    
+    If we try to build the proof tree of our goal $\Gamma \vdash_{\A,\B} q_a
+    \Subset q_b$, it necessarily begins in the same way except that $\{q \Subset
+    q'\}$ will not appear in the left-hand side of statements. Each branch of
+    this tree will end by a statement of the form $\Gamma \cup \{q_a \Subset
+    q_b\} \vdash_{\A, \B} q_{i_j} \Subset q'_{i_j}$. Now to conclude the proof,
+    we have to find proof trees $\prod'_{i_j}$ for all those statements. We know
+    that there exists proof trees $\prod_{i_j}$ for all statements $\Gamma \cup \{q
+    \Subset q'\} \cup \{q_a \Subset q_b\} \vdash_{\A, \B} q_{i_j} \Subset
+    q'_{i_j}$.  We can use the induction hypothesis on $\prod_{i_j}$ to obtain
+    $\prod'_{i_j}$ as follows:
+    \begin{itemize}
+
+    \item Since $\mu(\Gamma) = n + 1$, then $\mu(\Gamma\cup \{q_a \Subset q_b\}) = n$
+      
+
+    \item Since $\prod$ is a proof of $\Gamma \vdash_{\A, \B} q \Subset q'$, it is also a proof of
+      $\Gamma \cup \{q_a \Subset q_b\}\vdash_{\A, \B} q \Subset q'$.
+
+    \item Each $\prod_{i_j}$ is a proof of $\env  q_{i_j} \Subset q'_{i_j}$
+    \end{itemize}
+
+    \noindent
+    Using induction, we deduce that for all $i,j$ there exist proof trees
+    $\prod'_{i_j}$ of $\Gamma \cup \{q_a \Subset q_b\} \vdash_{\A, \B} q_{i_j}
+    \Subset q'_{i_j}$.  This ends the proof tree of our goal $\Gamma \vdash_{\A,
+      \B} q_a \Subset q_b$.
+  \end{proof}
+
+
+
+\begin{theorem}{(Soundness)}
+  \label{thm:soundness}
+  For all tree automata $\A$ and $\B$, if there exists $\prod$ a proof tree
+  of $\emptyset \vdash_{\A, \B} q \Subset q'$ then we have $\Lang(\A, q) \subseteq \Lang(\B, q')$
+\end{theorem}
+
+\begin{proof}
+  We prove that $\forall t$, $t \in \Lang(\A, q) \imp t \in \Lang(\B, q')$ by
+  induction on $t$. Let $t = f(t_1, \dots, t_n)$. We assume that the property is
+  true for each subterm $t_i$, i.e. for all $q_i, q'_i$ s.t. if there exists a
+  proof tree $\prod_i$ of $\emptyset \vdash_{\A, \B} q_i \Subset q'_i$ then $t_i
+  \rightarrow^*_{\A} q \imp t \rightarrow^*_{\B} q_i'$.  Since $t=f(t_1, \dots,
+  t_n) \in \Lang(\A, q)$, then for each subterm $t_i$, we know that there exists
+  $q_1, \ldots, q_n$ such that $t_i \in \Lang(\A, q_i)$ and $f(q_1, \dots, q_n)
+  \rightarrow q \in \A$. Besides this, by unfolding $\prod$ the proof tree of
+  $\emptyset \vdash_{\A, \B} q \Subset q'$, we can deduce that for each
+  transition like $f(q_1, \dots, q_n) \rightarrow q \in \A$, there exists $f(q'_1,
+  \dots, q'_n) \rightarrow q' \in \B$ s.t. we have a proof tree $\prod_i$ of
+  $\{q \Subset q'\} \vdash_{\A, \B} q_i \Subset q'_i$. 
+  Since $f(q_1, \ldots, q_n) \rw q \in \A$, we obtain that $f(q'_1, \dots, q'_n)
+  \rightarrow q' \in \B$ and a proof $\prod_i$ for $\{q \Subset q'\} \vdash_{\A,
+    \B} q_i \Subset q'_i$. To conclude that $f(t_1, \dots, t_n) \in \Lang(\B,
+  q')$ we just have to prove that $t_i \in \Lang(\B, q'_i)$. Note that we have a
+  proof tree $\prod_i$ for $\{q \Subset q'\} \vdash_{\A,\B} q_i \Subset q'_i$
+  and that to apply the induction hypothesis we need a proof tree for $\emptyset
+  \vdash_{\A,\B} q_i \Subset q'_i$. Using the Theorem~\ref{thm:cut} on $\prod$
+  and $\prod_i$, we can deduce the existence of $\prod'_i$ the proof tree of
+  $\emptyset \vdash_{\A, \B} q_i \Subset q'_i$. Then using induction hypothesis
+  on $t'_i, q_i, q'_i$ and $\prod'_i$,
+  we obtain that for each $t_i \in \Lang(\A, q_i)$, we also have $t_i \in
+  \Lang(\B, q'_i)$. Finally, since $f(q'_1, \ldots, q'_n)\rw q' \in \B$, we
+  obtain that $t=f(t_1, \dots, t_n) \in \Lang(\B, q')$.
+  
+\end{proof}
+
+\annexe{
+We need to extend the renaming $\varrho$ to the structures and sets used in the following:
+\begin{itemize}
+\item $\varrho(\{q_i\}_1^n)$ stands for $\{\varrho(q_i)\}_1^n$
+
+\item $\varrho(c) = \left\{\begin{array}{ll}
+      f (\varrho(c_1), \dots, \varrho(c_n)) &\textrm{ if } c = f(c_1, \dots, c_n)\\
+      c &\textrm{ if } c \in \F_{0}\\
+      \varrho(q) &\textrm{ if } c = q\in \Q\\
+    \end{array}\right.$
+  
+\item $\varrho(c \rightarrow q)$ stands for $\varrho(c) \rightarrow \varrho(q)$
+
+  
+\item $\varrho(\Delta)$ stands for $\{ \varrho(c\rightarrow q)\ |\ c \rightarrow q \in \Delta \}$.
+\end{itemize}
+}
+\begin{lemma}
+\label{lem:renaming}
+  Given a tree automaton $\A$,
+  
+  \[
+  \begin{array}{llll}
+    1. & \mbox{ if } \A' = \A \cup \norm(r\sigma \rw q) & \mbox{ then } &\A \sqsubseteq \A' \\
+    2. & \mbox{ if } \A' = \merge(\A, q_1,q_2) &\mbox{ then }& \A \sqsubseteq \A'  \\
+  \end{array}
+  \]
+\end{lemma}
+
+\begin{proof}
+  \begin{enumerate}
+  \item This is easy to show since we trivially have $\Delta_{\A'} \supseteq
+    \Delta_\A$ whatever $r\sigma$ or $q$ may be.
+    Then by choosing $\varrho = id$, we have immediately the conclusion $\A
+    \sqsubseteq \A'$.
+    
+  \item Let $\Delta_\A$ be the transition set of $\A$. Let $q_i$ and $q_j$ be
+    the two states to merge.  We can apply to $\Delta_\A$
+    a renaming function $\varrho$ which has the same behavior than state merging
+    with regard to $q_1 = q_2$:
+    \[
+    \varrho(q) = \left\{
+      \begin{array}{l}
+        \textrm{if }(q\ =\ q_2)\\
+        \quad \quad q_1\\
+        \textrm{else}\\
+        \quad \quad q
+      \end{array}\right.
+    \]
+    
+    So state merging builds $\Delta_{\A'} = \varrho(\Delta_\A)$ and by
+    Definition~\ref{eq:prop0} we have trivially $\Delta_\A \sqsubseteq
+    \Delta_{\A'}$.
+  \end{enumerate}
+\end{proof}
+
+
+\begin{theorem}
+  Given a tree automaton $\mathcal{A}^0$, a TRS $\R$ and an
+  equation set $\mathcal{E}$, after $k$ completion steps we obtain
+  $\A_\R^k$ such that $\A^0 \sqsubseteq \A_\R^k$.
+\end{theorem}
+
+\begin{proof}
+  By induction on $k$:
+  
+  \begin{itemize}
+  \item Since $\sqsubseteq$ is reflexive, we have trivially $\A^0
+    \sqsubseteq \A^0$.
+  \item Let $\mathcal{A}_k$ be a tree automaton obtained after $k$ completion
+    steps such that $\A^0 \sqsubseteq \A_\R^k$. By definition of completion
+    $\A_\R^{k+1}$ is built from $\A_\R^k$ by applying successively normalization
+    and merge. Using Lemma~\ref{lem:renaming}, we have $\A_\R^k \sqsubseteq
+    \A_\R^{k+1}$.  By transitivity of $\sqsubseteq$, from $\A^0 \sqsubseteq
+    \A_\R^k$ and $\A_\R^k \sqsubseteq \A_\R^{k+1}$ we deduce immediately that
+    $\A^0 \sqsubseteq \A_\R^{k+1}$.
+  \end{itemize}
+\end{proof}
+
+\begin{theorem}{(Completeness)}
+  Given two tree automata $\A$ and $\B$ if $\A \sqsubseteq \B$ then it
+  exists $\prod$ a proof of statement $\emptyset \vdash_{\A, \B}
+  \{\#(q_f)\ |\  q_f \in \mathcal{Q}_{F_A}\} \Subset  \{\#(q'_f)\ |\  q'_f \in \mathcal{Q}_{F_B}\}$.
+\end{theorem}
+
+\begin{proof}
+  By definition of $\A \sqsubseteq \B$, we can deduce that there exists a
+  renaming $\varrho$ s.t. $\varrho(\Delta_\A) \subseteq \varrho(\Delta_\B)$ and
+  $\varrho(\Q_{F_\A}) \subseteq \varrho(\Q_{F_\B})$. The proof is done by
+  induction on $\mu_1(\Gamma)$. Recall that $\mu_1(\Gamma)= |\Q_\A \times \Q_\B|
+  - |\Gamma|$. Assuming that $\A \sqsubseteq \B$, we want to prove that for all
+  $q$ there exists a proof tree $\prod$ for $\Gamma \vdash_{\A,\B} q \Subset
+  \varrho(q)$. 
+  We assume that $\forall q_i$, there exists a proof tree $\prod_i$
+  of $\Gamma \cup \{ q \Subset \varrho(q) \} \vdash_{\A, \B} q_i \Subset
+  \varrho(q_i)$. Now, we aim at proving that there exists a proof tree for
+  the statement: $\Gamma \vdash_{\A, \B} q \Subset \varrho(q)$.
+
+  \begin{itemize}
+  \item if $q \Subset \varrho(q) \in \Gamma$ then the proof tree
+    is trivial:
+  \begin{prooftree}
+    \AxiomC{}
+    \LeftLabel{(Axiom)}
+    \UnaryInfC{$\Gamma  \vdash_{\A, \B} q \Subset \varrho(q)$}
+  \end{prooftree}
+   
+\item if $q \Subset \varrho(q) \not \in \Gamma$ then we need to
+  apply Induction rule to obtain the following tree:
+  
+    \newcommand{\env}{\Gamma \cup \{q \Subset \varrho(q)\} \vdash_{\A, \B}}
+    {\tiny
+      \begin{prooftree}
+        \AxiomC{\small $\prod_{c_1}$}
+        \UnaryInfC{$\env 
+          c_1 \Subset  \{c_k'| c_k' \rightarrow \varrho(q)\}_1^m$}
+        % Pointillets du milieu
+        \AxiomC{\small \dots\dots}
+        \AxiomC{\small $\prod_{c_n}$}
+        \UnaryInfC{$\env
+          c_n \Subset  \{c_k'| c_k' \rightarrow \varrho(q)\}_1^m$}
+        \LeftLabel{(Split-l)}
+        \TrinaryInfC{$\env
+          \{c_i| c_i \rightarrow q\}_1^n \Subset  \{c_k'| c_k'\rightarrow \varrho(q)\}_1^m$}
+        \LeftLabel{(Induction)}
+        \UnaryInfC{$\Gamma \vdash_{\A, \B} q \Subset \varrho(q)$}
+      \end{prooftree}
+    } From hypothesis $\varrho(\Delta_\A) \subseteq \Delta_\B$ for each rule $c
+    \rightarrow q$ of $\Delta_A$, we have $\varrho(c\rightarrow q) \in
+    \Delta_\B$. Thus for all $(c\rightarrow q)\in \Delta_\A$, we have
+    $\varrho(c) \in \{c_k' | c_k' \rightarrow \varrho(q)\}_1^m$.  Then for each
+    $c_i$, the proof tree $\prod_{c_i}$ is built in a similar way. Let us detail
+    it for a particular $c_i= f(q_{i_1}, \dots, q_{i_n})$. We can construct the
+    corresponding tree $\prod_{c_i}$ whose proof tree is concluded by
+    $\prod_{i_j}$ an instance of induction hypothesis for the corresponding
+    state $q_{i_j}$: {\tiny
+      \begin{prooftree}
+        \AxiomC{\small $\prod_{i_1}$}
+        \UnaryInfC{$\env q_{i_1} \Subset \varrho(q_{i_1}) $}
+        \AxiomC{\small \dots\dots}
+        \AxiomC{\small $\prod_{i_n}$}
+        \UnaryInfC{$\env q_{i_n} \Subset \varrho(q_{i_n}) $}
+        %%%%%%%%%%%%%%%%%%%%%%% 
+        \LeftLabel{(Config)}
+        \TrinaryInfC{$\env c_i \Subset  \varrho(c_i) $}
+        \LeftLabel{(Weak-r)}
+        \UnaryInfC{$\env c_i \Subset  \{c_k'| c_k' \rightarrow \varrho(q)\}_1^m$}
+      \end{prooftree}
+    }
+  \end{itemize}
+
+  Now, we have shown that for all $\Gamma$ and $q \in \Q_\A$ there exists a proof
+  tree $\prod$ for all statement $\Gamma \vdash_{\A, \B} q \Subset \varrho(q)$.
+  In particular, this is true for $\Gamma = \emptyset$ all $q$ of
+  $\Q_{F_\A}$.  Since we have $\A \sqsubseteq \B \imp
+  \varrho(\Q_{F_\A}) \subseteq \Q_{F_\B}$, we can build a proof tree
+  as:
+
+  {\small
+    \begin{prooftree}
+      \AxiomC{$\prod_{q_{f_1}}$}
+      \UnaryInfC{$\emptyset \vdash_{\A, \B} q_{f_1} \Subset \varrho(q_{f_1})$}
+      % \AxiomC{$\emptyset \vdash_{\A, \B} [\ ] \Subset [\ ]$}
+      \LeftLabel{(Config)}
+      \UnaryInfC{$\emptyset \vdash_{\A, \B} \#(q_{f_1}) \Subset \#(\varrho(q_{f_1}))$}
+      \LeftLabel{(Weak-r)}
+      \UnaryInfC{$\emptyset \vdash_{\A, \B} q_{f_1} \Subset \Q_{F_\B}$}
+      \AxiomC{\small \dots\dots}
+      \AxiomC{$\prod_{q_{f_n}}$}
+      \UnaryInfC{$\emptyset \vdash_{\A, \B} q_{f_1} \Subset \varrho(q_{f_1})$}
+      % \AxiomC{$\emptyset \vdash_{\A, \B} [\ ] \Subset [\ ]$}
+      \RightLabel{(Config)}
+      \UnaryInfC{$\emptyset \vdash_{\A, \B} \#(q_{f_n}) \Subset \#(\varrho(q_{f_n}))$}
+      \RightLabel{(Weak-r)}
+      \UnaryInfC{$\emptyset \vdash_{\A, \B} \#(q_{f_n}) \Subset \{\#(q)\ |\ \Q_{F_\B}\}$}
+      \LeftLabel{(Split-l)}
+      \TrinaryInfC{$\emptyset \vdash_{\A, \B} \{\#(q)\ |\ q \in \Q_{F_\A}\} \Subset \{\#(q)\ |\ q \in \Q_{F_\B}\}$}
+    \end{prooftree}}
+\end{proof}
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

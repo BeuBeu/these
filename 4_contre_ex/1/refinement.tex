@@ -1,0 +1,354 @@
+\section{Approximation Refinement}
+\label{sec:refinement}
+
+Let $I$ be a set of initial terms characterised by the $\RE-$automaton
+$\aaexeq^0$, $\R$ be a TRS, and $Bad$ the set of forbidden terms
+represented by $A_{Bad}$ a tree automaton.  The reachability problem
+boils down to check $\desc(I) \cap Bad
+\stackrel{?}{=}\emptyset$. There are classes of systems for which
+$\desc(I)$ is regular and can be computed in a finite amount of time
+(see appendix~\ref{sec:exact}) but, in general, the computation does
+not terminate. For such cases, our only hope is to work with a
+\textit{Counterexample-Guided Abstraction
+  Refinement\,\cite{DBLP:conf/time/Clarke03}} procedure that computes
+successive abstractions and successively refine them until the
+property can be prove correct or not. In the first part of the paper,
+we have focused on computing the abstraction. We now propose a
+technique that checks whether a term is indeed reachable from the
+initial set of terms. If the term is a spurious counterexample, then
+it has to be eliminated from the approximation. We then generalize the
+operation to (possibly infinite) sets of terms.
+
+%Finally, we develop a complete example of our new approach.
+
+% show how the procedure $P$ handles a term of ment procedure. 
+%  In
+% Section \ref{subsec:refinementstep}, which exploits the
+% well-definition introduced in Section \ref{sec:re-automaton} in order
+% to refine a $\RE$-automaton by removing a (possibly infinite) set of
+% terms that is characterized by a formula of equations on the states of
+% the automaton.
+
+
+%\Input{ref-step}
+
+% Instead, most automata based techniques compute the
+% intersection between $\aaexeq^i$ and $Bad$ and decide its
+% emptiness. This cannot be straightforwardly applied here. First,
+% designing an intersection algorithm is difficult because our two
+% automata do not have a common structure. Second, the emptiness
+% algorithm is very specific since emptiness is constrained by formulas
+% on $\Drw$ transitions of $\aaexeq^i$.
+
+%%we propose an
+%%algorithm that given an approximation $\aaex^*$ and a set $Bad$
+%%computes such a formula. If all the terms in $\aaex^*\cap Bad$ are
+%%indeed reachable, then this formula reduces to $\top$ , else the
+%%formula characterize a set of terms (accepted from the states
+%%characterized by the equations) that may or may not be reachable and
+%%that must be refined.
+
+
+% %From a verification point of view, given a
+% %reachability property $\phi$, $Bad$ represents the set of
+% %configurations satisfying $\neg\phi$.  
+% For some classes of $\R$,
+% $\desc(\Lang(\A))$ is regular. Thus, the reachability problem,
+% i.e. $\desc(\Lang(\A))\cap Bad \stackrel{?}{=}\emptyset$, can be
+% decided. For most of those classes, reachability can be decided using
+% $\RE$-automata completion since it stops without approximation
+% ($E=\emptyset$) on a $\RE$-automaton $\aaex^*$ such that
+% $\Lang(\aaex^*)=\desc(\Lang(\A))$ (see Theorem~\ref{thm:regular}).
+% When the TRS is outside of those (restricted) classes, approximation
+% and refinement are necessary. The principle of our approach is based on CEGAR
+% approach. In~\cite{DBLP:conf/time/Clarke03}, the CEGAR
+% (\textit{Counterexample-Guided Abstraction Refinement}) paradigm has
+% been summarised and a general algorithm consisting in refining an
+% abstraction function by analysing a spurious counterexample has been
+% given. In section \ref{sec:recompletion}, it has been shown that the
+% property of {\it well-definition of $\RE-$automaton}, see Definition
+% \ref{def:well-defined}, is preserved by our approach. So, our approach
+% fits perfectly with the CEGAR paradigm, since the previous property
+% allows the discrimination between terms actually reachable and
+% artifacts of the approximations. Moreover, an artifact of the
+% approximation is characterized by a logic formula pointing out 
+% which approximations done have produced the problematic term. 
+
+% In section \ref{subsec:refinementstep}, we first describe how
+% refinement is performed on a $\RE-$automaton $\aaexeq^i$ obtained by
+% completion.  Moreover, we observe that $Bad \cap \Lang(\aaexeq^i)$ may
+% be infinite. So, we can not iterate on each term in the intersection
+% to prune $\aaexeq^i$. Thus, section \ref{subsec:intersectionformula}
+% proposes to characterize by a logical formula the set of approximations performed 
+% leading to a non-empty intersection. Obtaining the formula $\top$ means that there exists 
+% actually a reachable term in the intersection. 
+
+
+Let $\aaexeq^k = \la \F, \Q^k, \Q_f, \Delta^k \cup \Drw^k \cup \Deq^k
+\ra$ be a $\RE$-automaton obtained after $k$ steps of completion and
+widening from $\aaexeq^0$ and assume
+that %the verification of the property fails for this $\RE$-automaton:
+$\Lang(\aaexeq^k) \cap Bad \not=\emptyset$.  Let $t$ be a term of
+$\Lang(\aaexeq^k) \cap Bad$.  Then, we know that there exists a run $t
+\xrw{\phi}_{\aaexeq^k} q_f$ with $q_f \in \Q_f$.  We know that
+$\aaexeq^k$ is well-defined by construction.  It implies that if $\phi
+= \top$, we deduce $t \in \desc(I)$.  It means that $t$ is a
+counter-example, so from a verification point of view, the property is
+broken as formulated in Section~\ref{sec:completion}.  Otherwise, we
+have that $\phi = \bigwedge_1^n Eq(q_j, q'_j)$, and $t$ is possibly a
+spurious counterexample. We thus decide to remove it from the
+approximation. For doing so, we use the {\em pruning
+  methodology} that was informally introduced in
+Example\,\ref{ex:pruning}.
+\vspace{-.6cm}
+\paragraph{The pruning step $\prune$.}
+\label{subsec:refinementstep}
+As we have seen in Example~\ref{ex:pruning}, we compute the pruned
+$\RE$-automaton $\prune(\aaexeq^k, \phi)$ in two steps. The first step
+consists of removing some transitions of $\Deq^k$ until $\phi$ does
+not not hold anymore {\em i.e.} $\phi = \bottom$.  Consider the
+formula $\phi$ containing the predicate $Eq(q,q')$: we replace this
+predicate by $\bottom$ if we decide to remove the transition $q \rw
+q'$ from $\Deq^k$.  The second step consists in propagating the
+information. Indeed, we also have to remove all transitions $q
+\xrw{\alpha} q' \in \Drw^k$, where the conjunction $\alpha$ contains
+some atoms transitions removed from $\Deq^k$.  The procedure is
+iterated for each possible reduction of $t$ in $\aaexeq^k$ and thus,
+we finally get $\aaexeq^{k+1}$.  It is easy to see that, for any
+$\phi$, there exists no run $t \xrw{\phi}_{\aaexeq^{k+1}} q_f$.
+
+Observe that, when removing $t$ from the abstraction, our procedure
+may also remove other terms that are generated by $\phi$. We now
+briefly show (see the appendix for details) that the {\em possibly
+  infinite} set of terms that belong to both the abstraction and the
+set of bad states can be removed by exploiting the structure of the
+formula. More precisely, we build a set $S$ containing triples of the
+form $(q,q',\phi)$ where $q$ is a state of $\aaexeq^k$, $q'$ is a
+state of $A_{Bad}$ and $\phi$ is a formula on $\Deq$ transitions of
+$\aaexeq^k$.  For all triple $(q,q',\phi)$, the formula $\phi$ holds
+if and only if $\Lang(\aaexeq^k,q)\cap \Lang(A_{Bad},q')\not=
+\emptyset$. For all triple $(q,q',\phi)$, where $q$ is final in
+$\aaexeq^k$, $q'$ is final in $A_{Bad}$ and $\phi = \top$, then some
+of the terms recognized by $q'$ in $A_{Bad}$ are reachable.
+Otherwise, $\phi$ is the formula to invalidate, i.e. negate some of
+its atom so that it becomes $\bot$. Starting from $\phi$, the
+refinement process is performed using the technique that presented
+above.
+
+\vspace{-.6cm}
+%\input{ref-example}
+\paragraph{Example.}
+Consider the $\RE-$automaton $\aaexeq^1$ given in Example~\ref{ex:W}.
+We define $A_{Bad}$ to be the tree automaton whose final state is
+$q'_0$ and whose transitions are $a\f q'_1, s(q'_1)\f q'_2, s(q'_2)\f
+q'_1$ and $s(q'_2)\f q_0$.  The forbidden terms that belong to the
+language of $\Lang(A_{Bad})$ are of the form $f(s^{2k + 1}(a))$.
+% Let us recall that the set of transitions of $\aaexeq^1$ is $\Delta^1\cup\Drw^1\cup\Deq^1$ with
+% $\Delta^1= \Delta^0 \cup \{s(q_1)\f q_2,s(q_2)\f q_3,f(q_3)\f q_4\}$,
+% $\Drw^1=\{q_4\stackrel{\top}{\f}q_0\}$ and $\Deq^1=\{q_2\f q_3, q_3\f
+% q_2\}$. 
+We observe that $\Lang(\aaexeq^1) \cap \Lang(A_{Bad}) \not=
+\emptyset$.  According to the intersection algorithm sketched above,
+one can construct a set $S$ of triples $(q_0,q'_0,\phi)$, where $\phi$
+is the formula used to prune $\aaexeq^1$ in order to remove those
+terms that belong to $\Lang(\aaexeq^1) \cap \Lang(A_{Bad})$.  Here,
+$S=\{(q_0,q'_0,Eq(q_2,q_3)\land Eq(q_3,q_2)), (q_0,q'_0,Eq(q_2,q_3)),(q_0,q'_0,Eq(q_3,q_2))\}$.  We apply the pruning step for each
+formula $\phi$ in the set.  We compute $\prune(\aaexeq^1,
+Eq(q_2,q_3)\land Eq(q_3,q_2))$.  Removing the transition $q_2 \f q_3$
+from $\Deq^1$ is sufficient to invalidate $Eq(q_2,q_3)\land
+Eq(q_3,q_2)$. Moreover, this removing invalidates
+$(q_0,q'_0,Eq(q_2,q_3))$ too. It remains to prune with
+$(q_0,q'_0,Eq(q_3,q_2))$. This is done by removing the transition
+$q_3\f q_2$ from $\Deq^1$.  At this step, no transition of $\Drw^1$
+can be removed anymore. Indeed, all these transitions are all labeled
+by $\top$. We thus define
+$\aaexeq^2=\prune(\prune(\prune(\aaexeq^1,Eq(q_2,q_3)\land
+Eq(q_3,q_2)),Eq(q_2,q_3)),$ $Eq(q_3,q_2))$ with $\Delta^2=\Delta^1$,
+$\Drw^2= \Drw^1$ and $\Deq^2=\emptyset$. We observe that $\aaexeq^2$
+is not $\R-$closed and should be completed. We thus define
+$\aaexeq^3=\widen(\compl(\aaexeq^2))$. We found a new critical pair
+for $f(x) \rw f(s(s(x)))$ and we obtain $\Delta^3 = \Delta^2 \cup
+\{(q_3)\f q_5, s(q_5)\f q_6, f(q_6) \f q_7$, and $\Drw^3 = \Drw^2 \cup
+\{q_7\xrw{\top}q_4\}$.
+
+The interesting point concerns the application of $\widen$.  Observe
+that the transitions of $\Deq^3$ directly results from the application
+of the equation $s(x) = s(s(x))$ {\em i.e.} transitions $q_2\f q_3,
+q_3\f q_2, q_3\f q_5,q_5\f q_3, q_5\f q_6,$ and $q_6\f q_5$.  After
+the transitive closure of $\Deq^3$ has been computed, some new
+transitions are inferred and added to $\Deq^3$, i.e., $q_2\f q_5,q_5\f
+q_2, q_2\f q_6, q_6\f q_2, q_3\f q_6$ and $q_6\f q_3$.  We again check
+the emptiness of $\Lang(\aaexeq^3) \cap \Lang(A_{Bad})$.  This
+intersection is still not empty and most of the transitions in
+$\Deq^3$ can be removed by the pruning operation.  Let $\aaexeq^4$ be
+the $\RE-$automaton obtained by applying $\prune$ on $\aaexeq^3$, it
+only remains $ q_3\f q_6$ and $q_6\f q_3$ in $\Deq^4$. We also observe
+that no transition of $\Drw^3$ are removed: $\Drw^4=\Drw^3$. In fact,
+all the transitions in $\Drw^4$ are labeled by $\top$. Then, we
+restart the completion process and we observe that
+$\aaexeq^4=\compl(\aaexeq^4)$.  We have thus reached a
+fix-point. There, we observe that $\Lang(\aaexeq^4)\cap
+\Lang(A_{Bad})=\emptyset$ and conclude that $\R^*(I) \cap Bad
+=\emptyset$. Observe that our refinement is accurate in this
+case. Indeed $\Lang(\aaexeq^4)=f(s^{2*k}(a))$, that is the exact set
+of reachable states.
+
+\begin{remark}
+The above example cannot be handled with
+the approach of~\cite{BCHK08} that also proposes a counterexample
+guided abstraction technique. Indeed this technique would prove that a
+property where the bad terms are bounded: $Bad_k = \{ f(s^{2*i +1}(a))
+\sep i < k\}$ Else the procedure loops, if we consider all the set
+$Bad$.
+\end{remark}
+% compute $\prune(\widen(\compl(\aaexeq^1)))$. According to Section
+% \ref{sec:recompletion}, the set of transitions of $\widen(\compl(\aaexeq^1))$ is
+% $\Delta^2\cup\Drw^2\cup\Deq^2$ with $\Delta^2=\Delta^1\cup\{s(q_3)\f
+% q_5,s(q_5)\f q_6,f(q_6)\f q_7 \}$,
+% $\Drw^2=\Drw^1\cup\{q_7\stackrel{\top}{q_4}\}$ and $\Deq^2=\{q_2\f
+% q_3, q_3\f q_2, q_3\f q_5,q_5\f q_3, q_5\f q_6,q_6\f q_5, q_2\f
+% q_5,q_5\f q_2, q_2\f q_6, q_6\f q_2, q_3\f q_6,q_6\f q_3\}$. Note that
+% the transitions $q_2\f q_5,q_5\f q_2, q_2\f q_6, q_6\f q_2, q_3\f
+% q_6,q_6\f q_3$ have been inferred from the transitions resulting from
+% equation applications i.e. $\{q_2\f q_3, q_3\f q_2, q_3\f q_5,q_5\f
+% q_3, q_5\f q_6,q_6\f q_5\}$. Applying the same process as previously,
+% one concludes that the transitions $q_2\f q_3, q_3\f q_2, q_3\f
+% q_5,q_5\f q_3, q_5\f q_6,q_6\f q_5, q_2\f q_6, q_6\f q_2, q_2\f q_5$
+% and $q_5\f q_2$ have to be removed from $\Drw^2$.
+ %  Consequently, one obtains $\aaexeq^4$ whose set of transitions is
+%   $\Delta^4\cup\Drw^4\cup\Deq^4$ with $\Deq^4=\{q_3\f q_6, q_6\f
+%   q_3\}$. 
+
+
+% all $(\sigma,\alpha)\in S$ where $t\match q \vdash_{\aaexeq^k}S$ and
+% $q\in\Q_f$, one can deduce that $\sigma=\emptyset$ and $\alpha
+% \not=\top$.  Composing the formula $\alpha_t$ such that
+% $\alpha_t=\bigvee_{(\sigma,\alpha)\in S}\alpha$, $\alpha_t$
+% characterizes the set of approximations required to make $t$ be a term
+% of $\Lang(\aaexeq^k)$.
+%
+% We propose a refinement operator $P$ such that t
+% $\Lang(\prune(W(C(\aaexeq^{k}))))\cap Bad = \emptyset$
+%
+% We extend our new completion algorithm with 
+% a refinement step denoted by $P$. Thus, $\aaexeq^{i+1}$ is defined as 
+% $\prune(W(C(\aaexeq^i)))$. 
+% Let $\aaexeq^k$ be the current automaton obtained by completion from
+% $\aaex^0$ and such that
+% $W(C(\aaexeq^k))=\la\F,\Q^k,\Q_f,\Delta^k\cup\Drw^k\cup\Deq^k\ra$ and 
+% $\Lang(\aaexeq^{k})\cap Bad =\emptyset$. 
+%
+% If $\Lang(W(C(\aaexeq^{k})))\cap Bad =\emptyset$ then
+% $\prune(W(C(\aaexeq^{k}))) = W(C(\aaexeq^{k}))$.  Assume now that
+% $\Lang(W(C(\aaexeq^{k})))\cap Bad \not=\emptyset$ as illustrated in
+% Figure \ref{fig:completion_rafinement} (considering that
+% $A'=W(C(\aaexeq^{k}))$) and for all $i<k$,
+% $\Lang(W(C(\aaexeq^{i})))\cap Bad=\emptyset$.
+%
+%
+% Consequently, if one removes the transitions of $\Deq^k$ involved in
+% $\psi$, then the term $t$ not recognized anymore.  This step is called
+% {\it approximation refinement}.  The $\RE-$automaton
+% $\aaexeq^{k+1}=\prune(W(C(\aaexeq^i)))$ is then obtained by constructing
+% the smallest formula $\psi$ as a disjunction of $Eq(q,q')$ atoms with
+% $q\f q'\in \Deq^k $ such that $\alpha_t\wedge\neg(\psi)$ can be
+% simplified into $\bottom$.  Thus, the transitions of $\Deq^k$ involved
+% in $\psi$ are removed from $\Deq^k$. Moreover, for all transitions
+% $q''\stackrel{\alpha}{\f}q'\in\Drw^k$, let $\alpha'$ be the formula
+% built from $\alpha$ in such a way that all $Eq(q,q')$ occuring in
+% $\psi$ are replaced by $\bottom$ in $\alpha$. Consequently, one can
+% simplified the formula by applying the rules $x \vee \bottom \f x$ and
+% $x\wedge \bottom \f \bottom$ ($\vee$ and $\wedge$ are
+% commutative). Let $\beta$ be the normal form after having applying
+% these rules on $\alpha'$. If $\beta=\bottom$ then the transition
+% $q''\stackrel{\alpha}{\f}q'''$ is removed from $\Drw^k$. Otherwise,
+% $q''\stackrel{\alpha}{\f}q'''$ is replaced by
+% $q''\stackrel{\beta}{\f}q'''$ in $\Drw^k$. Let $\Drw^{k+1}$ and
+% $\Deq^{k+1}$ be respectively the updated sets $\Drw^k$ and
+% $\Deq^k$. One can construct $\Delta^{k+1}$ by cleaning $\Delta^k $ of
+% useless transitions.
+%
+%
+%
+%
+%
+%%Finally, one obtains
+%%$\prune(W(C(\aaexeq^k)=\la\F,\Q^k,\Q_f,\Delta^{k+1}\cup\Drw^{k+1}\cup\Deq^{k+1}\ra
+%%$ after having iterating this process on each term $t\in
+%%\Lang(\aaexeq^{k})\cap Bad \not=\emptyset$. Note that
+%%$\Lang(\aaexeq^{k+1})\cap Bad=\emptyset$.  Completion goes on until
+%%finding a fixpoint proving the property $\phi$ or a counterexample of
+%%$\phi$.
+%
+%
+% $P$, which can be done at any time during the completion process,
+% consists of prunning the current $\RE$-automaton to remove from it some spurious counterexamples.
+% Assuming the reachability problem composed by $I$, $\R$, $Bad$, and $E$ a set of equations.
+% If $\aaexeq^i$ is the $\RE$-automaton obtained after $i$ steps of completion and
+% approximation, we know that $\aaexeq^i$ is well-defined.
+% For all term $t$ of $Bad$, if we have $t \xrw{\top} q$, then $t$ is reachable, 
+% and $t$ is a counterexample of the expected property. But, if we have $t \xrw{\alpha} q$
+% with $\alpha \not\models \top$, then $t$ is a spurious counterexample, and we prune $\aaexeq^i$
+% to remove $t$ before resuming the completion. $\alpha$ denotes the transitions of $\Deq$ corresponding
+% to the approximation steps used to obtain $t$ by rewriting. Thus, we use $\alpha$ to find the transitions
+% of $\aaexeq^i$ to prune.
+%
+% We observe that $Bad \cap \Lang(\aaexeq^i)$ may be infinite, we can not iterate on each term in the intersection
+% to prune $\aaexeq^i$. We propose to a compute a formula that why the $\RE$-automaton 
+%
+%
+%
+%
+%\input{img/refine}
+%
+%
+%
+%\begin{figure}
+%\begin{center}
+%\includegraphics[scale=0.7]{img/refine.pdf}
+%\end{center}
+%\end{figure}
+%
+% Schéma "à la Bouajjani" qui explique le principe de l'approche à la CEGAR:
+% \begin{itemize}
+% \item Completion + Etape eventuelle de raffinement ...
+%
+% \item Dans quel cas l'étape de raffinement est-elle déclenchée???
+%
+%   \begin{itemize}
+%   \item On a calculé $\aaex^{i+1}$
+%   \item Un terme de "bad" est reconnu par l'automate : on calule en utilisant le filtrage
+%     toutes les formules $\phi$:
+%     soit c'est un contre-exemple car il existe $\phi = \top$ (preuve de correction pour le matching alors...)
+%     donc le système viole la propriété sinon c'est un contre-exemple 
+%     sinon on raffine
+%   \item Expliquer que 3 étapes sont nécessaires pour raffiner :
+%     \begin{itemize}
+%     \item 
+%       supprimer toutes les transitions de $\Drw$ telles que
+%       toutes les formules deviennent fausses puisque $Eq(q, q') \equiv q \rw q' \in \Drw$
+%       si toutes les formules $\phi$ sont fausses alors le terme n'est plus reconnus
+%     \item 
+%       exliquer le mécanisme pour garder l'information que l'on pouvait inférer
+%       par clôture!!! Reprendre l'exemple $f(s(\dots s(a)\dots ))$
+%      
+%     \item
+%       il faut supprimer tous les termes obtenus par réécriture de termes contenus
+%       par dans la partie de l'approx que l'on vient de raffiner... 
+%       on ne sait plus si ils sont atteignables pour l'instant, 
+%       tant que l'on a pas tenter de compléter l'automate obtenu par l'élagage.
+%     \end{itemize}
+%   \end{itemize}
+% \end{itemize}
+%
+%
+%%\subsection{Intersection and emptyness decision}
+%%\input{intersection.tex}
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-PDF-mode: t
+%%% TeX-master: "main"
+%%% End: 

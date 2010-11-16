@@ -1,0 +1,217 @@
+\section{Formalization of closure by rewriting}
+\label{sec:closure}
+
+In this part we aim at defining formally the \lstinline!IsClosed! predicate, the
+function \lstinline!closure! and prove the soundness of this function
+w.r.t. \lstinline!IsClosed!. Recall that to
+check if a tree automaton $\A = \langle \Q_F,\ \Delta \rangle$ is closed
+w.r.t. a TRS $\R$, it is enough to prove that for all $t \in \Lang(\A)$, if
+$t'$ is reachable from $t$ by $\rw_\R^*$ then $t' \in \Lang(\A)$. 
+Now that we have defined in \coq\ rewriting and tree
+automata, we can define more formally the \lstinline!IsClosed! predicate and recall
+the \lstinline!closure_sound! theorem to prove:
+
+\begin{lstlisting}
+Definition IsClosed (R : list rule) (A : t_aut) : Prop :=
+   forall q t t', IsRec A.delta q t -> Reachable R t t' -> IsRec A.delta q t'.
+
+Theorem closure_sound:
+      forall R A', closure R A' = true -> IsClosed R A'.
+\end{lstlisting}
+
+
+The algorithm to check closure of $\A$ by $\R$ computes for each rule $l
+\rightarrow r \in \R$ the full set of the substitutions $\sigma$ s.t. $l\sigma
+\rightarrow_\Delta^* q$ and then, checks that $r\sigma \rightarrow_\Delta^*
+q$. Then, the correctness proof consists in showing that if \lstinline!closure!
+answers true, then $\Lang(\A)$ closed by $\rw_\R$.
+
+We now give some hints to define the \lstinline!closure! function.  First, for
+all rule $l \rw r$ of $\R$, this function has to find all the substitutions
+$\sigma:\X \mapsto \Q$ and all the states $q \in \Q$ such that 
+$l\sigma \rightarrow_\Delta^* q$. This is what we call the 
+\emph{matching-problem}. Second, this function has to check that for all the $q$
+and $\sigma$ found, we have $r\sigma \rw_{\Delta}^* q$. Third, in the
+correctness theorem, we have to show that all the substitutions $\sigma:
+\X\mapsto \Q$ cover the set of substitutions on terms, i.e. of the form $\sigma':
+\X \mapsto \TF$, and hence cover all reachable terms.
+
+We note $l \unlhd q$ the matching problem consisting in finding all the
+substitutions $\sigma:\X \mapsto \Q$ and all the states $q \in \Q$ such that
+$l\sigma \rightarrow_\Delta^* q$. An algorithm solving this kind of
+problems was defined in~\cite{Genet-RR97b}. It consists in normalizing
+the formula $l \unlhd q$ with the following deduction rules:
+
+\[\textrm{(Unfold) }
+\dfrac {
+  f(s_1, \dots, s_n)\unlhd f(q_1,\dots, q_n)
+}{
+  s_1 \unlhd q_1 \land \dots \land s_n \unlhd q_n
+}\quad \quad
+\textrm{(Clash) }
+\dfrac {
+  f(s_1, \dots, s_n) \unlhd g(q'_1, \dots q'_m)
+}{
+\bottom}
+\]
+\[\textrm{(Config) }
+\dfrac {
+  s \unlhd q
+}{
+  s \unlhd c_1 \lor \dots \lor s \unlhd c_k \lor \bottom
+}
+\textrm{if }s \notin \X \textrm{, and } \{c_i\ |\ c_i \rightarrow q \in \Delta\}_1^k. 
+\]
+
+Moreover, after each application of one of this rules,
+the result is also rewritten into disjunctive normal form.
+\versionlongue{ using:
+\[
+\dfrac{ 
+  \phi_1\land (\phi_2 \lor \phi_3)
+}{
+  (\phi_1 \land \phi_2) \lor (\phi_1 \land \phi_3)
+}\quad
+\dfrac {\phi_1 \lor \bottom }{\phi_1}\quad
+\dfrac {\phi_1 \land \bottom}{\bottom}
+\]
+}
+When normalization of the initial problem is terminated, we obtain a
+formula like $ \bigvee_{i=1}^{n} \phi_i$ where
+$\phi_i=\bigwedge_{j=1}^{m}x^i_j \unlhd q^i_j$ such that $x^i_j \in
+\X$ and $q^i_j \in \Q$. Each $\phi_i$ can be seen as a
+substitution $\sigma_i = \{x^i_j \mapsto q^i_j\}$.
+\versionlongue{
+\begin{theorem}{\cite{Genet-RR97b}}
+\label{th:completeness}
+  Substitutions $\sigma_i$ obtained by the matching algorithm are the only
+  substitutions s.t. $s\sigma_i \rightarrow^*_\Delta q$.
+\end{theorem}}
+The implementation of the \lstinline!matching! function in \coq\ is very close
+to this algorithm. 
+\versionlongue{We implement disjunction as lists where $\bottom$ is mapped to
+\lstinline!nil!.  The \coq\ signature of the matching function is
+\lstinline!Delta.t -> state -> term -> list substitution!.  For this algorithm,
+the termination is bound by a syntactic argument.  We can define it easily in
+\coq\ by a simple structural recursion over the \lstinline!term! which has to be
+matched.}
+\versionlongue{
+Moreover, the soundness and completeness properties, corresponding to
+Theorem~\ref{th:completeness}, can be defined in \coq\ as follows:
+}
+\versioncourte{Moreover, the soundness and completeness properties of this
+algorithm can be defined in \coq\ as follows:
+}
+\begin{lstlisting}
+Theorem matching_sound :
+   forall D q l s, In s (matching D q l) -> IsRec D q (l @ s).
+
+Theorem matching_complete :
+   forall D q l s, IsRec D q (l @ s) -> In s (matching D q l).
+\end{lstlisting}
+
+The second part of the \lstinline!closure! function consists in verifying that
+for each substitution $\sigma$ s.t. $l\sigma \rightarrow_\Delta^* q$, we also
+have $r\sigma \rightarrow_\Delta^* q$.  This job is performed using the
+\lstinline!all_red! function, we define, whose purpose is to check that this
+property is true for all the found substitutions. Then, we only need to prove
+the soundness of this function using the following \coq\ theorem:
+
+\begin{lstlisting}
+Theorem all_red_sound : 
+  forall D q r sigmas, 
+     all_red D q r sigmas = true -> forall s, In s sigmas -> IsRed D q (r@s).
+\end{lstlisting}
+
+By combining the \lstinline!matching! and the \lstinline!all_red! functions, 
+we obtain the algorithm for checking up all critical pairs
+found at state $q$ and for the rule $l \rightarrow r$. We define the combination
+as:
+
+\versionlongue{
+
+\begin{lstlisting}
+Definition closure_at_state D q l r := all_red D q r (matching D q l).
+\end{lstlisting}}
+
+\begin{lstlisting}
+Theorem closure_at_state_sound : 
+   forall D q l r, closure_at_state D q l r = true -> 
+      (forall s, IsRed D q (l @ s) -> IsRed D q (r @ s)).
+\end{lstlisting}
+
+  Given a rule $l \rightarrow r$ and a state $q$, this algorithm answers
+  \lstinline!true! if for all substitution $\sigma: \X \mapsto \Q$ s.t. $l
+  \sigma \rw^*_\Delta q$ then $r\sigma \rw^*_{\Delta} q$. Now that we have
+  proved this result for substitutions $\sigma:\X \mapsto \Q$, we have to prove
+  that it implies the same property for substitutions $\sigma':\X \mapsto \TF$,
+  this is Lemma~\ref{lem:qtotf}. On the opposite, to prove that every reachable
+  term of $\TF$ will be covered by a configuration of $\TFQ$ in $\Delta$, we
+  have to prove that if there exists a substitution $\sigma': \X \mapsto \TF$,
+  then we can construct a corresponding substitution $\sigma: \X \mapsto \Q$,
+  this is Lemma~\ref{lem:tftoq}.
+\begin{lemma}
+\label{lem:qtotf}
+Given a term $u \in \T(\F, \X)$, $\sigma :\X \mapsto \Q$ a substitution
+s.t. $u\sigma \rightarrow^*_\Delta q$, if we have a substitution $\sigma' :\X
+\mapsto \TF$ s.t. $\forall x \in \ddom(\sigma): \sigma' x \in \Lang(\Delta,
+\sigma x)$, then we have $u\sigma' \rw^*_{\Delta} q$ and thus $u\sigma' \in
+\Lang(\Delta, q)$.
+\end{lemma}
+
+Roughly, if the left or right-hand side $u$ of a rewriting rule matches
+a configuration $u\sigma \in \TFQ$ and $u\sigma
+\rw^*_{\Delta} q$ then, all terms $u\sigma' \in \TF$, matched by $u$, 
+are also reducible into $q$, i.e. $u\sigma' \rw^*_{\Delta} q$ and $u\sigma' \in
+\Lang(\Delta,q)$.
+
+\begin{lemma}
+\label{lem:tftoq}
+Given a term $u \in \T(\F, \X)$, if there exists a substitution $\sigma':\X
+\mapsto \TF$ such that $u\sigma' \rw_{\Delta}^* q$, then there exists a
+substitution $\sigma:\X\mapsto \Q$ s.t. $\sigma' x \in \Lang(\Delta, \sigma x)$
+and $u\sigma\rw^*_{\Delta} q$.
+\end{lemma}
+
+\versionlongue{In the same way, for all term $u\sigma' \in \Lang(\Delta, q)$ that can be
+matched by $u$, there exists a configuration $u\sigma$ s.t. $u\sigma'
+\rightarrow^*_\Delta u \sigma$ and $u\sigma \rightarrow^*_\Delta
+q$.}
+Using those two lemmas, we can conclude that for all term $t\in\Lang(\Delta,q)$
+rewritten in $t'$ at the topmost position by $l \rightarrow r$, then $t' \in
+\Lang(\Delta, q)$. This property is easily lifted as a property of the
+\lstinline!closure! function for all states of $\Q$ and using all rules of $\R$
+at topmost position.
+\versioncourte{
+Then, it is enough to lift this property to general rewriting at any
+position. Finally, the \lstinline!closure_sound! general theorem is 
+shown by using a reflexive and transitive application of the last 
+property.
+}
+
+\begin{lstlisting}
+Theorem closure_sound_0 : 
+   forall D R, closure D R = true ->
+      forall q lr, In q (states D) -> In lr R ->
+         forall t t', IsRec D q t -> TRew lr t t' -> IsRec D q t'.
+\end{lstlisting}
+The next step consists in showing the same property but using rewriting at any
+position, hence proving the same theorem with \lstinline!Rew! (general
+rewriting) instead of \lstinline!TRew! (topmost rewriting) between
+$t$ and $t'$.
+
+\begin{lstlisting}
+Theorem closure_sound_1 : 
+   forall D R, closure D R = true ->
+      forall q lr, In q (states D) -> In lr R ->
+         forall t t', IsRec D q t -> Rew lr t t' -> IsRec D q t'.
+\end{lstlisting}
+Finally, the \lstinline!closure_sound! general theorem is 
+shown by using a reflexive and transitive application of this
+\lstinline!closure_sound_1! in order to deal with any term $t'$ that can be
+reached using the \lstinline!Reachable! predicate.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

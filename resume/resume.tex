@@ -1,0 +1,51 @@
+\section*{Résumé}
+{
+Cette thèse s'intéresse à la vérification de programmes modélisés sous forme de systèmes de règles de réécriture.
+La vérification de propriétés est basée sur une analyse statique semi-automatique qui construit une sur-approximation, représentée par un automate d'arbres,
+de l'ensemble des termes atteignables. L'analyse est paramétrée par une abstraction qui doit être suffisamment précise pour que la propriété attendue
+puisse être vérifiée. Or, il est difficile de construire une telle abstraction à priori. On propose un mécanisme original de raffinement automatique
+par élagage de l'automate d'arbres lorsque la sur-approximation calculée, trop imprécise, est susceptible de contenir de fausses alarmes.
+Non seulement l'analyse s'applique à la vérification de propriétés de sûreté par non-atteignabilité, mais on montre qu'elle peut être adaptée afin de
+vérifier des propriétés temporelles, notamment sur le graphe des appels de méthodes d'un programme Java. Enfin, les outils réalisant cette analyse reposent sur
+des implémentations optimisées, clairement éloignées de la spécification originale. Pour accroître la confiance en ces outils, on fournit un vérificateur
+chargé de la validation de leurs résultats à posteriori. La spécification et la correction de ce validateur sont formulées et démontrées dans l'assistant
+de preuves Coq.
+}
+
+
+\section*{Abstract}
+{
+This thesis addresses the verification of programs, symbolized as term rewriting systems.
+Program properties are verified using a semiautomatic static analysis that returns a tree automaton recognizing 
+an over-approximation of reachable terms.
+This analysis is parameterized by an abstraction that has to be precise enough to check the expected property.
+However, it is generally hard to give such an abstraction to the analysis. 
+Using tree automaton pruning, we propose an original mechanism of automatic refinement, which allows us to avoid
+false alarms that are contained in the over-approximation.
+The technique is initially designed to check safety properties by unreachability. 
+We show how to extend it to check temporal properties, especially for properties about the graph of method calls for a Java program. 
+Finally, to increase their performance, the tools performing this analysis are very optimized and their implementation is quite far 
+from of the original specification. 
+To trust the results of these tools, we provide a checker that is in charge of validating the results. 
+The specification and the correction of the checker are designed and proved in the proof assistant Coq.
+}
+
+% {
+% This thesis addresses the verifivation of program that are modelised by term rewriting systems.
+% The property verification is based on a semiautomatic static analysis that returns a tree automaton reconinzing an over-approximation of reachable terms.
+% This analysis is parametrized by an abstraction that has to be precise enough to check the expected property.
+% It is generally hard to give such an abstraction to the analysis. We propose an original mecanism of automatic refinement 
+% by tree automaton pruning to avoid false alarms that are contained in the over-approximation.
+% The analysis is initially designed to check safety properties by unreachabilty. We show how to extend it to check temporal properties,especially 
+% for properties about the graph of method calls for a Java programm. Finally, to increase their preformance, the tools performing
+% this analysis are very optimised and their implementation is quite far from of the original specification.
+% To trust the results of these tools, we provide a checker that is in charge of the validation of results. 
+% The specification and the correction of the ckecker are designed and demonstrated in the proof assistant Coq.
+% }
+
+%%% Local Variables: 
+%%% coding: utf-8
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% TeX-PDF-mode: t
+%%% End: 

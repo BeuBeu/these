@@ -1,0 +1,278 @@
+
+
+\setcounter{savetheorem}{\thetheorem}
+
+\begin{property}
+  $\aaexeq^0$ is well-defined.
+\end{property}
+
+\begin{proof}
+   $\aaexeq^0 = \la \F, \Q^0, \Q_f, \Delta^0\ra$ fits the definition \ref{def:well-defined}, only if the two items
+   of the definition \ref{def:well-defined} are verified.
+
+   We know that $\aaex^0$ has no $\varepsilon$-transitions. All
+   terms are recognized using transitions of $\Delta^0$. It means that for all state $q$
+   the set of terms is defined as $\{ t \in \TF | t \rwne{\Delta^0} q\}$ which is
+   equal to $Rep(q)$, the set of representatives for $q$.
+   We also remark that for all term $t$, $t \rwne{\Delta_0} q$ implies $t \xrw{\top}_{\aaexeq^0} q$:
+   the second and third point of the definition \ref{def:xrw_alpha}, are not used, since $\Drw^0$ and $\Deq^0$ are empty.
+   The first item of definition \ref{def:well-defined} is ensured: for all state $q$, and all term $t \xrw{\top} q$,
+   we have $t \in Rep(q)$, and $t \rwR^* t$ by reflexivity.
+
+   The second item of \ref{def:well-defined} holds, since $\Drw^0$ is empty. 
+\end{proof}
+
+
+
+
+\begin{lemma}[Solving one critical pair preserves well-definition]
+\label{lemma:C-well-defined}
+  Let $\A$ and $\A'$ be two $\RE-$automaton such that 
+  $\A'$ is obtained from $\A$ by solving 
+  a critical pair $\la r\sigma,\alpha,q \ra$ of $\A$. 
+  If $\A$ is well-defined then so is $\A'$. 
+\end{lemma}
+\begin{proof}
+  Assume that $\A=\la \F, \Q, \Q_f, \Delta\cup \Drw\cup \Deq\ra$ and
+  $\A'=\la \F, \Q', \Q_f, \Delta'\cup \Drw'\cup \Deq' \ra$.  According
+  to Definition \ref{def:resolution_cp}, $\Delta'=\Delta \cup
+  \norm(r\sigma, \Delta\setminus \Delta^0)$, $\Drw'= \{
+  q'\xrw{\alpha} q\}\cup \Drw$ and $\Deq'=\Deq$.
+  Following Definition \ref{def:well-defined}, we first show in (\ref{one}) that 
+  for all state $q''$ of $\A'$, and all term $v$ such that
+  $v \xrw{\top}_{\A'} q''$, there exists $u$ a term representative
+  of $q''$ such that $u \rw^*_\R v$. Then, in (\ref{two}) we show that
+  if $q_1 \xrw{\phi} q_2$ is a transition of $\Drw'$, then there exist terms
+    $s,t\in \TF$ such that $s\rwtag{\phi}_{\A'} q_1$, $t\rwtag{\top}_{\A'} q_2$
+    and $t \rw_\R s$.
+
+\medskip
+  
+\begin{enumerate}
+\item \label{one} 
+
+% Let $q_{\A'}$ be a state of $\Q'$.  Since $\A$ is
+%   sintactically included in $\A'$, one can deduce that the property
+%   still holds for any term $v\in\TF$ sucht $v \xrw{\top}_{\A}
+%   q_{\A'}$.  Suppose now a term $v\in\TF$ such that
+%   $v\in\Lang(\A',q_{\A'})$, $v\notin\Lang(\A,q_{\A'})$ and
+%   $v\rwtag{\top}q_{\A'}$.  Then, there are two possibilities: either
+%   $q_{\A'}$ is a new state, i.e. $q_{\A'}\notin \Q$, or $q_{\A'}$ is a
+%   state of $\A$, $\alpha=\top$ and the transition $q'\rwtag{\top} q$
+%   added to $\Drw$ is used at least once during the reduction of $v$ on
+%   $q_{\A'}$.  Let us study the two possibilies.
+
+
+\newcommand{\xrwa}{\xrw{\top}_\A}
+\newcommand{\xrwap}{\xrw{\top}_{\A'}}
+
+We prove the property by induction on the height of $t$. Let us assume that for all term $t'$ of height
+lesser than the height of $t$ and for all $q\in \Q_{\A'}$, we have $t' \xrwap q
+\spf \exists u\in Rep(q): u \rwR^* t'$. Now let us prove that this is true for
+$t$. We prove it by case on $q\in\Q_\A$ and $t\xrwa q$:
+
+\begin{itemize}
+\item If $q\in\Q_\A$ and $t\xrwa q$ then since $\A$ is well defined, we get the
+  representative $u\in Rep(q)$ such that $u\rwR^* t$ from well-definition of $\A$.
+\item If $q\in\Q_\A$, $t \not\xrwa q$ and $t \xrwap q$. We prove the property by
+induction on the height of $t$. Now let us consider the term $t$. Since $t$ is recognized
+in $\A'$ and not in $\A$, this means that the run $t' \xrwap q$ needs the
+transitions added by the resolution of a critical pair. Hence there exists a
+rewrite rule $l \rw r$, a substitution $\sigma:\X \mapsto \Q_\A$, a formula
+$\alpha$ and a state $q_c$ such that $l\sigma \xrw{\alpha}_\A q_c$ and $\la
+r\sigma, \alpha, q_c\ra$ is the critical pair. Moreover, the resolution of this
+critical pair creates $\Delta_{\A'}=\norm(r\sigma,\Delta_\A\setminus \Delta_0)$
+and $\Drw^{\A'}=\Drw^{\A} \cup \{q'_c \rw q_c\}$ such that $r\sigma
+\rw^!_{\Delta'\setminus\Delta_0} q'_c$. Recall that $t' \xrwap q$ needs transitions not occurring
+in $\A$. However, all the {\em new} transitions produced by
+$\norm(r\sigma,\Delta_\A\setminus \Delta_0)$ necessarily range on {\em new}
+states, i.e. states not occurring in $\Q_\A$. As a result, those transitions
+cannot be used to get $t' \xrwap q$ with $q\in\Q_\A$. This means that the run $t
+\xrwap q$ uses at least once $q'_c \rw q_c$ and $\alpha=\top$ since the whole
+run is labelled by $\top$. To sum up, we know that there exists a ground context
+$C[\,]$ such that $t=C[t'] \xrwap C[q'_c] \xrwap C[q_c] \xrwa q$. Note that if
+$q'_c \rw q_c$ the same reasonning can be applied. We start to reason on the 
+occurrence of $q'_c \rw q_c$ that is the closest to $q$. Now, our
+objective is to show that there exists $u\in Rep(q_c')$ such that $u \rwR^*
+t'$. If $t'\xrwa q'_c$ then since $\A$ is well defined we directly have the
+result using definition~\ref{def:well-defined}. Otherwise this means that $q'_c$
+is new for $\A$ (i.e. $q'_c\not\in\Q_\A$) and has been added by the resolution
+of the critical pair, i.e. $r\sigma \rw^!_{\Delta'} q'_c$. Because of
+Theorem~\ref{lem:norm_determinism}, we get that there exists a substitution
+$\sigma':\X \mapsto \TF$ such that $t'=r\sigma'$. Using the same theorem, from
+$t'=r\sigma' \xrwap q'_c$ and $r\sigma \xrwap q'_c$, we get that for all
+variable $x$ of $r$: $\sigma'(x) \xrwap \sigma(x)$. Note that
+$\sigma(x)\in\Q_\A$ and that $\sigma'(x)$ are necessarily terms of height lesser
+to the height of $t$. Using the induction hypothesis, we get that for all state
+$\sigma(x)$ there exists a representative $u_x$ such that $u_x \rwR^*
+\sigma'(x)$. Let $\sigma_{Rep}$ be the substitution mapping every variable $x$
+to $u_x$. We have $r\sigma_{Rep} \in Rep(q'_c)$. Moreover, $r\sigma_{Rep} \rwR^*
+r\sigma'=t'$. Now, our objective is to show that $l\sigma_{Rep} \rwR
+r\sigma_{Rep}$. This is not straightforward since $\var(l)\supseteq \var(r)$.
+However, it is possible to extend $\sigma_{Rep}$ into $\sigma'_{Rep}$ where every
+variable $y$ of $\var(l)$ not occurring in $\sigma_{Rep}$ is mapped to a
+representative of $\sigma(y)$. Hence, $l \sigma'_{Rep} \rwR r\sigma'_{Rep}
+\rwR^* t'$. From the critical pair we know that $l\sigma \xrw{\alpha}_\A q_c$ and
+we found that $\alpha=\top$. Hence $l\sigma'_{Rep} \xrwa q_c$. Since $\A$ is
+well-defined, we get that there is a representative $v \in Rep(q_c)$ such that
+$v \rwR^* l\sigma'_{Rep}$. By transitivity of $\rwR$, we get that $v \rwR^* t'$.
+Above, we found that $t=C[t'] \xrwap C[q'_c] \xrwap C[q_c] \xrwa q$. From this
+and $v\in Rep(q_c)$, we get that $C[v] \xrwa q$. Since $\A$ is well defined, we
+know that there exists a representative $w\in Rep(q)$ such that $w\rwR^* C[v]$.
+To conclude, we found $w\in Rep(q)$ and $w \rwR^* C[v] \rw C[t']=t$.
+
+\item If $q \not \in \Q_A$ ($q\in\Q'_\A\setminus \Q_\A$), $t \not\xrwa q$ and $t
+  \xrwap q$. Since $q\in \Q'_\A\setminus \Q_\A$, we know that $q$ has been added
+  by the resolution of a critical pair. As above, we can deduce that there
+  exists a rewrite rule $l \rw r$, a substitution $\sigma:\X \mapsto \Q_\A$, a
+  formula $\alpha$ and a state $q_c$ such that $l\sigma \xrw{\alpha}_\A q_c$ and
+  $\la r\sigma, \alpha, q_c\ra$ is the critical pair. Moreover, the resolution
+  of this critical pair creates $\Delta_{\A'}=\norm(r\sigma,\Delta_\A\setminus
+  \Delta_0)$ and $\Drw^{\A'}=\Drw^{\A} \cup \{q'_c \rw q_c\}$ such that $r\sigma
+  \rw^!_{\Delta'\setminus\Delta_0} q'_c$. Since $q$ is a new state of $\A'$, $q$
+  has been necessarily used for the normalization of a subterm of
+  $r\sigma$. More precisely, we know that there exists a term $s\in\TFX$ and a
+  context $C[\,]$ (possibly empty) such that $r\sigma=C[s]$, $C[s]\sigma \rw_{\Delta'}^* q'_c$
+  and $s\sigma \rw^*_{\Delta'} q$. Similarly, we know that there exists a
+  substitution $\sigma':\X \mapsto \TF$ such that $s\sigma'=t$.
+  We get that for every variable $x$ of $r$: $\sigma'(x) \xrwap \sigma(x)$.
+  Note that $\sigma(x)\in\Q_\A$ and that $\sigma'(x)$ are necessarily terms of
+  height lesser to the height of $t$. Using the induction hypothesis, we get
+  that for every state $\sigma(x)$ there exists a representative $u_x$ such that
+  $u_x \rwR^* \sigma'(x)$. Let $\sigma_{Rep}$ be the substitution mapping every
+  variable $x$ to $u_x$. We have $s\sigma_{Rep} \in Rep(q)$ and $s\sigma_{Rep}
+  \rwR^* s\sigma'=t$.
+\end{itemize}
+
+
+    
+\item \label{two} Easily, for any transitions $q_1\stackrel{\phi}{\f}
+  q_2\in \Drw$, the property still holds.  Let us focus now on the
+  transition $q'\stackrel{\alpha}{\f}q$ resulting from the resolving
+  of the critical pair $\la r\sigma,\alpha,q\ra$.  By definition, the
+  critical pair $\la r\sigma,\alpha,q\ra$ results from the application
+  of the matching algorithm of Definition
+  \ref{def:matching-algorithm}.  So there exists a rule $l\f r\in \R$
+  such that $(\alpha,\sigma)\in S$ with $l\match q \vdash_\A S
+  $. Moreover, since the critical pair has to be solved:
+  $l\sigma\stackrel{\alpha}{\f}q$ and there is no formula $\alpha'$
+  such that $r\sigma \xrw{\alpha'}_{\A} q$.  Since $\R$ is
+  left-linear, for each variable $x\in\var(l)$, one can define the
+  substitution $\sigma':\X\f \TF$ as follows: Assuming $q_s$ being the
+  state of $\A$ such that $\sigma(x)=q_s$, let $\sigma'(x)=Rep(q_s)$.
+  By definition of $Rep$, $Rep(q_s)\stackrel{\top}{\f}q_s$.  So, there
+  exists a derivation such that $l\sigma'\stackrel{\top}{\f}l\sigma$
+  and $l\sigma\stackrel{\alpha}{\f}q$.  One can deduce that
+  $r\sigma'\stackrel{\top}{\f}{r\sigma}$. According to Lemma
+  \ref{lem:norm_determinism}, one can deduce that there exists a
+  unique $q'$ such that
+  $r\sigma\f^*_{\norm(r\sigma,\Delta\setminus\Delta^0)}q'$. If
+  $\norm(r\sigma,\Delta\setminus\Delta^0)\not=\emptyset$ then each
+  transition composing it is of the form $f(q'_1,\ldots,q'_n)\f
+  q'_{n+1}$. Consequently, $r\sigma\stackrel{\top}{\f} q'$.
+  Considering the transition $q'\stackrel{\alpha}{\f}{q}$, one has
+  $r\sigma'\stackrel{\top}{\f}r\sigma\stackrel{\top}{\f}q'\stackrel{\alpha}{\f}{q}
+  $.  Finally, assuming $s=l\sigma'$ and $t=r\sigma'$, there exists
+  $s,t\in\TF$ such that one has $s\stackrel{\alpha}{\f}q $,
+  $t\stackrel{\alpha}{\f}q' $ and $s\rw_\R t $.
+
+\end{enumerate}
+To conclude, $\A'$ is also well-defined.
+
+\end{proof}
+
+
+
+\setcounter{theorem}{9}
+
+
+\begin{theorem}
+  \label{thm:C}
+  If $\aaexeq^i$ is well-defined then so is $\compl(\aaexeq^i)$, 
+  and $\forall q \in \Q^i$, $\forall t \in
+  \Lang(\aaexeq^i, q)$, $\forall t \in\TF$, $t \rw_\R t' \imp t' \in
+  \Lang(\compl(\aaexeq^{i}), q)$.
+\end{theorem}
+
+\begin{proof}
+
+  Let $CP$ be the finite set of critical pairs computed from
+  $\aaexeq^i$ to solve.  Assume that $CP=\{\la
+  r1\sigma_1,\alpha_1,q_1\ra,\ldots, \la r1\sigma_m,\alpha_1,q_m\ra
+  \}$. By definition, considering $\A_0=\aaexeq^i$ there exists a
+  sequence of $\RE-$automata $\A_1,\ldots,\A_m$ where $\A_j$ is obtained
+  from $\A_{j-1}$ by solving the critical pair $\la r_j\sigma_j,
+  \alpha_j,q_j\ra$ according Definition \ref{def:resolution_cp}. Thus, 
+  $\compl(\aaexeq^i)=\A_n$. For a 
+  question of readability and in order to prevent any confusion between notations, 
+  each $\RE-$automaton $\A_j$ is defined as follows:  $\A_j=\la \F,\Q^{n+1},\Q_{f},\Delta'^{j}\cup \Drw'^{j}\cup\Deq'^{j} \ra$.
+
+  First, let us show that $\compl(\aaexeq^i)$ is well-defined if $\aaexeq^i$ is well-defined.
+
+  \paragraph{ $\compl(\aaexeq^i)$ is well-defined: }
+    
+  Let $P_n$ be the following proposition: $\A_n$ is well-defined. 
+
+  \begin{itemize}
+  \item $P_0$: Trivial since $\A_0=\aaexeq^i$ and $\aaexeq^O$ is well-defined by hypothesis.
+  \item $ P_n\Rightarrow P_{n+1}$: By hypothesis, $\A_{n+1}$ is
+    obtained from $\A_n$ by solving the critical pair $\la
+    r_{n+1}\sigma_{n+1},\alpha_{n+1},$ $q_{n+1}\ra$. Applying Lemma \ref{lemma:C-well-defined}, 
+    one obtains automatically that $\A_{n+1}$ is well-defined. 
+  \end{itemize}
+  So, one can deduce that $\compl(\aaexeq^i)$ is well-defined.
+
+  \paragraph{$\compl(\aaexeq^i)$  covers terms accessible in one rewrite step from terms of  $\aaexeq^i$:}
+  Let $q$ be a state of $\aaexeq^i$ and $t$ be a term of
+  $\Lang(\aaexeq^i,q)$.  Suppose there exist a position $p\in
+  \pos(t)$, a rule $l\f r\in\R$ and a substitution $\sigma':\X\f \TF$
+  such that $t|_p=l\sigma'$.  Let $t'$ be the term such that
+  $t'=t[r\sigma']_p$.  Since $t\in \Lang(\aaexeq^i,q)$, there exists a
+  state $q'$ of $\aaexeq^i$ such that $t|_p=l\sigma'\f^*_{\aaexeq^i}
+  q'$ and $t[q']_p\f^*_{\aaexeq^i}q$.  Following Property
+  \ref{prop:matching-complete}, there exists $(\alpha,\sigma)\in S$
+  with $l\match q'\vdash_{\aaexeq^i}S$ such that
+  $l\sigma'\f^*_{\aaexeq^i}l\sigma$ and $l\sigma\f^*_{\aaexeq^i} q'$.
+  If $\la r\sigma,\alpha,q' \ra$ is already solved then
+  $r\sigma\f^*_{\aaexeq^i}q'$. Consequently, $r\sigma'$ can also be
+  reduced to $q'$ in $\aaexeq^i$. Since
+  $t'=t[r\sigma']_p\f^*_{\aaexeq^i}q$, $t'\in
+  \Lang(\compl(\aaexeq^i),q)$. Suppose now that
+  $r\sigma\not\f^*_{\aaexeq^i}q'$.  So, there exists $\la r_i\sigma_
+  i,\alpha_i,q_i\ra\in CP$ such that $\la r_i\sigma_
+  i,\alpha_i,q_i\ra=\la r\sigma,\alpha,q'\ra$.  By construction,
+  $r\sigma\f^*_{\A_i}q'$. Consequently, $r\sigma'$ can also be
+  reduced to $q'$ in $\A_i$. Since $\A_i$ is syntactically included in $\compl(\aaexeq^i)$, one can deduce that 
+  $t'=t[r\sigma']_p\f^*_{C(\aaexeq^i)}q$. 
+  Concluding the proof.
+\end{proof}
+
+\medskip
+
+\setcounter{theorem}{\thesavetheorem}
+
+
+% \begin{definition}[$\Delta-$coherence]
+%   \label{prop:determinism}
+
+% Let $\Delta$ be a set of normalized transitions. 
+% Thus, $\aaex^i$ is said to be $\Delta-$coherent iff
+% \begin{enumerate}
+%   \item $\Delta\subseteq \Delta^i$,
+%   \item if $\Delta^i\setminus\Delta$ contains two transitions of the form $f(q_1, \dots, q_n) \rw q$ and
+%   $f(q_1, \dots, q_n) \rw q'$, then $q = q'$ and 
+% \item if $\Delta^i\setminus\Delta$ contains two transitions of the form $t \rw q$ and
+%   $t' \rw q$ with $t,t'$ two normalized configurations, then $t = t'$.
+% \end{enumerate}
+% \end{definition}
+% \comments{Yohan : A virer ? }
+
+
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% TeX-PDF-mode: t
+%%% End: 

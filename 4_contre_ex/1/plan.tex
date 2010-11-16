@@ -1,0 +1,211 @@
+\documentclass{fsttcs}
+
+% Note that \begin{document} comes before title information
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb,graphicx}
+\usepackage{url}
+\input{macros}
+
+\begin{document}
+
+\title{Nouveau plan du papier}
+
+% These are required for headers and for copyright on title page
+\runningtitle{Plan du Nouveau Papier}
+\runningauthors{Boichut, Boyer, Genet, Legay}
+
+% Multiple authors, sharing an affiliation, use  \affiliation{...}
+
+%\author[lab2]{B. Boyer}{BenoÃ®t Boyer}
+%\address[lab2]{IRISA - UniversitÃ© Rennes 1, France}
+%\email{Benoit.Boyer@irisa.fr}  %optional
+
+\author{
+  Y. Boichut\inst{1}%\thanks{Funded by DOT MOT ROT},
+  ,
+  B. Boyer\inst{2}%\thanks{Funded by DOT MOT ROT},
+  ,
+  T. Genet\inst{2}%\thanks{Funded by DOT MOT ROT},
+  and
+  A. Legay\inst{3}%\thanks{Funded by DOT MOT ROT}
+}
+  
+%   S. Mello, R. Shello\thanks{\ldots but no thanks!}}
+
+\affiliation{
+  LIFO - Université Orléans,
+  France
+}
+\affiliation{
+  Université Rennes 1,
+  France%\\
+  % \email{\{Benoit.Boyer, Thomas.Genet\}@irisa.fr}
+}
+\affiliation{
+  INRIA - Rennes,
+  France
+}
+% You can also use 
+% 
+% \institute{}{
+%   Indian Institute of Science\\
+%   Bangalore\\
+%   \email{\{tweedledum,tweedledee,hohum\}@iisc.ernet.in}
+% }  
+% 
+% which will leave more space between author and affiliation
+
+% No \maketitle required
+
+% \begin{abstract}
+% \comments{Un nouvel abstract plus court, et plus lisible ???}
+% \end{abstract}
+
+%DECOMMENTER POUR COMPILER l'ABSTRACT SEUL
+% \end{document}
+
+\section{Introduction}
+\label{sec:introduction}
+\comments{Partie refaite par Axel}
+\section{Definitions}
+\label{sec:definitions}
+\comments{
+  Toutes les definitions à propos de Réécriture, substitutions ($\Q$-subst inclues) et 
+  Automates d'arbres.
+
+  Attention : \\
+  
+  pas de def independante de normalized transitions et epsilon-transition
+  uniquement une def globale pour les automates 
+  suivie du langage d'un automate d'arbres sans format def.
+}
+
+\section{Tree automata completion}
+\label{sec:completion}
+Ici une présentation du principe de la technique de vérif basée sur
+la complétion d'automate d'arbre à la Genet... schéma ?
+et parler des différentes étapes de calcul pour une étape de complétion.
+filtrage, normalisation, application des équations...
+présentation de l'exemple fil conducteur du papier
+et montrer les limitations de la technique en cas d'échec $=>$
+ce qui motive la section suivante...
+
+
+\section{$\RE$-Automaton $+$ contruction}
+\label{sec:automaton}
+\comments{trouver un vrai titre}
+Introduire l'approche choisie :
+une nouvelle race d'automate permettant de distinguer un terme dont on est sûr
+qu'il est atteignable d'un terme qui ne l'est pas, juste en reconnaissant le
+terme...
+On se place dans le cadre de la vérification d'une propriété d'atteignabilité
+où le problème est formé par $\R$, $I^0$ et $E$.
+\begin{itemize}
+\item Def de $\RE$-automate
+\item Exemple (reprise de l'exemple ???) peut-être pas
+  Donner seulement l'intuition qui est derrière juste avec quelques transitions jouet
+
+\item Prop~1 (cf. rta10)
+\item Nouvelle sémantique  + Equivalence avec la sémantique standard !
+(implique de rester dans la même classe de complexité des automates
+meilleures que les automates à contraintes, TAGGED automatas \dots)
+\end{itemize}
+
+Ensuite on arrive dans la partie construction d'un RE-automate en utilisant
+un schéma similaire à complétion Genet.
+
+\begin{itemize}
+\item definition de $\aaex^0$ : limitation dûe à Prop~1 : I doit être finie
+  mais expliquer qu'il sera facilement possible de contourner la limitation
+
+\item construction $\aaex^{i+1}$ à partir de $\aaex^i$
+  \begin{itemize}
+  \item matching + lemme 
+  \item réutilisation de la normalisation definie precedemment + nouveau lemme Prop 1.
+  \item abstraction liée aux équations
+  \item Théroèmes qui assurent la correction de l'approche ! clôture + contre-exemple
+  \end{itemize}
+\end{itemize}
+
+
+
+\comments{Une explication importante à prendre en compte pour expliquer
+  comment choisi-t-on de Màj une $\varepsilon$-transtion, lors de la résolution
+  de la paire critique...}
+
+Lors de la complétion, dans quel cas un $q_1 \rwtag{\phi} q_2$
+devient un $q_1 \rwtag{\phi \vee \phi'} q_2$? J'ai l'impression que notre ordre
+**strict** sur les formules est l'implication **stricte**, i.e 
+$A > B$ ssi $A \notimp B$ et $A \rimp B$ (et on aura $A=B$ ssi $A \Leftrightarrow B$.).
+Par ex, une branche du treilli des formules ($\top$ est en haut et $\bot$ est en bas):
+$\top > A \vee B > A > \bot$
+car $\top  \rimp  A \vee B  \rimp A  \rimp  \bot$ et $\top  \notimp A \vee  B
+\notimp A \notimp \bot$.
+
+Par complétion, on va toujours de la droite vers la gauche, on est strictement
+croissant dans l'ordre $>$. Logique, car on augmente le nombre "chances"  d'avoir
+la transitions $q_1 \rw q_2$. Initialement ça pourrait être $\bot$ même si on ne le
+fait pas en pratique. Puis on augmente le nombre de chemins, jusqu'à atteindre
+éventuellement $\top$: on est sûr de l'avoir. Par complétion on ne fait qu'affablir
+la formule, croître par rapport à $>$. 
+
+Moralité pour remplacer $q_1 \rwtag{\phi} q_2$ par $q_1 \rwtag{\phi \vee \phi'}
+q_2$, il faut que $\phi \vee \phi' > \phi$, c'est à dire:
+\begin{itemize}
+\item $\phi \vee \phi' \rimp \phi$, ça c'est toujours vrai.
+\item $\phi \vee \phi' \notimp \phi$, ça c'est à vérifier à chaque fois.
+\end{itemize}
+
+
+\section{Approximation Refinement}
+\label{sec:refinement}
+
+\comments{Il faut réfléchir à la place que l'on réserve au calcul de l'intersection
+de RE-Automates}
+
+Schéma "à la Bouajjani" qui explique le principe de l'approche à la CEGAR:
+\begin{itemize}
+\item Completion + Etape eventuelle de raffinement ...
+
+\item Dans quel cas l'étape de raffinement est-elle déclenchée???
+
+  \begin{itemize}
+  \item On a calculé $\aaex^{i+1}$
+  \item Un terme de "bad" est reconnu par l'automate : on calule en utilisant le filtrage
+    toutes les formules $\phi$:
+    soit c'est un contre-exemple car il existe $\phi = \top$ (preuve de correction pour le matching alors...)
+    donc le système viole la propriété sinon c'est un contre-exemple 
+    sinon on raffine
+  \item Expliquer que 3 étapes sont nécessaires pour raffiner :
+    \begin{itemize}
+    \item 
+      supprimer toutes les transitions de $\Deps$ telles que
+      toutes les formules deviennent fausses puisque $Eq(q, q') \equiv q \rw q' \in \Deps$
+      si toutes les formules $\phi$ sont fausses alors le terme n'est plus reconnus
+    \item 
+      exliquer le mécanisme pour garder l'information que l'on pouvait inférer
+      par clôture!!! Reprendre l'exemple $f(s(\dots s(a)\dots ))$
+      
+    \item
+      il faut supprimer tous les termes obetnus par réécriture de termes contenus
+      par dans la partie de l'approx que l'on vient de raffiner... 
+      on ne sait plus si ils sont atteignables pour l'instant, 
+      tant que l'on a pas tenter de compléter l'automate obtenu par l'élagage.
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+
+\section{Conclusion}
+\label{sec:conclusion}
+\comments{à discuter\dots}
+
+\bibliographystyle{abbrv}
+%\bibliography{biblio/sabbrev,biblio/eureca,biblio/genet,biblio/mc}
+\bibliography{sabbrev,eureca,genet}%,mc}
+
+\end{document}
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 

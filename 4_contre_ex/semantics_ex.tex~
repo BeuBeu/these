@@ -1,0 +1,64 @@
+\begin{example}
+  \label{ex:semantics}
+  Soit $\A$ un $\RE$-automate reconnaissant dans l'état final $\mathbf{q_f}$
+  le système $(\F, I, \R)$ défini par 
+
+  $I = f(a)$, $\R = \{f(c) \rw g(c),\ a \rw b\}$, et un ensemble d'équations $E = \{ b = c\}$.
+
+  Dans $\A$, l'égalité $b = c$ est symbolisée par les 2 transitions $q_c
+  \rw q_b$ et $q_b \rw q_c$ de $\Deq$, en tenant compte que $b$ et $c$
+  sont respectivement reconnus dans les états $q_b$ et $q_c$.
+  
+  Ainsi du point de vue de l'état $q_c$, la transition $q_b \rw q_c$
+  nous indique que le terme $b$ est obtenu à partir du terme $c$ par égalité.
+  On peut remarquer constater que la transition $q_c \rw q_b$ nous permet 
+  de conclure réciproquement que le terme $c$ est obtenu à partir du terme $b$.
+  % The term $g(b)$ is recognized into $q_g$, thanks to $q_b \rw q_c$ too.
+  % Conversely, we have that $c$ is the approximation of $d$ from state $q_d$.
+
+  Les transitions $q_g \rw q_f$ et $q_b \rw q_a$ denotent des étapes de réécriture.
+  En fait, elles nous permettent de déduire $f(a) \rw^*_\RE g(c)$ et, $a \rw^*_\RE b$.
+  En dépliant la relation $f(a) \rw^*_\RE g(c)$, on obtient la chaîne $f(a) \rw_\R f(b) =_E f(c) \rw_\R g(c)$, 
+  qui utilise l'égalité $b = c$ pour passer de $g(b)$ à $g(c)$, relation que l'on peut 
+  déduire de la transition $q_c \rw q_b$. Ainsi, on étiquette la transition $q_g \rw q_f$
+  avec la formule $Eq(q_c, q_b)$ pour conserver cette information. 
+  En revanche, la transition $q_b \rw q_a$ est étiquetée avec $\top$ ce qui signifie 
+  qu'aucune égalité n'est utilisée pour réécrire $a$ en $b$: de cette transition, on déduit $a \rw^*_\R b$.
+  \begin{center}
+    %\centering
+    \tikz[thick, scale=1]{
+      \node (qf) at (0, 0)   {$\mathbf{q_f}$};
+      \node (qg) at (4, 0)   {$q_g$};
+      \node (f)  at (0,-1.5) {$f(\;q_a\;)$};
+      \node (g)  at (4,-1.5) {$g(\;q_c\;)$};
+      \node (qa) at (0,-2.8) {$q_a$};
+      \node (qb) at (2,-2.8) {$q_b$};
+      \node (qc) at (4,-2.8) {$q_c$};
+      \node (a)  at (0,-4.3) {$a$};
+      \node (b)  at (2,-4.3) {$b$};
+      \node (c)  at (4,-4.3) {$c$};
+      % \Delta
+      \draw [->] (f) edge (qf);
+      \draw [->] (g) edge (qg);
+      \draw [->] (a) edge (qa);
+      \draw [->] (b) edge (qb);
+      \draw [->] (c) edge (qc);
+      % liens de descendance
+      \draw [dashed] (f) edge (qa);
+      \draw [dashed] (g) edge (qc);
+      % \Drw
+      \draw [->, bend right=15] (qg) to node[auto, swap] {\footnotesize$Eq(q_c, q_b)$} (qf);
+      \draw [->, bend right=15] (qb) to node[auto, swap] {\footnotesize$\top$} (qa);
+      % \Deq
+      \draw [->, bend right=15] (qb) to node[auto, swap] {\footnotesize$=$} (qc);
+      \draw [->, bend right=15] (qc) to node[auto, swap] {\footnotesize$=$} (qb);
+    }
+  \end{center}
+  %\caption{Example of $\RE$-automaton}
+\end{example}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% TeX-PDF-mode: t
+%%% End:

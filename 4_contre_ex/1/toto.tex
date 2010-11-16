@@ -1,0 +1,32 @@
+The above model checking procedure requires to decide whether the
+intersection of $Bad$ with $\aaexeq^i$ is empty. In classical theory,
+this would be done by taking the intersection between the two
+automata. Unfortunately, here, $\aaexeq^i$ is a $\RE$-automaton with a
+specific transition relation, which forbids to apply the classical
+intersection operation between automata.
+
+
+However, it is possible to define a specific algorithm which builds
+the set $S$ of reachable states of the product automaton $\aaexeq^i$
+and $Bad$. The set $S$ contains triples of the form $(q,q',\phi)$
+where $q$ is a state of $\aaexeq^i$, $q'$ is a state of $Bad$ and
+$\phi$ is a formula on $\Deq$ transitions of $\aaexeq^i$. For all
+triple $(q,q',\phi)$, the formula $\phi$ holds if and only if the
+intersection between $\Lang(\aaex^i,q)$ and $\Lang(Bad,q')$ is not
+empty. Algorithms and proofs are given in
+Section~\ref{sec:intersection}. For all triple $(q,q',\phi)$, where
+$q$ is final in $\aaexeq^i$, $q'$ is final in $Bad$ and $\phi \models
+\top$, then some of the terms recognized by $q'$ in $Bad$ are
+reachable.  Otherwise, $\phi$ is the formula to invalidate,
+i.e. negate some of its atom so that it becomes $\bot$. Starting from
+this formula $\phi$, the refinement process is performed using the
+technique introduced in the previous section.
+
+
+% Instead, most automata based techniques compute the
+% intersection between $\aaexeq^i$ and $Bad$ and decide its
+% emptiness. This cannot be straightforwardly applied here. First,
+% designing an intersection algorithm is difficult because our two
+% automata do not have a common structure. Second, the emptiness
+% algorithm is very specific since emptiness is constrained by formulas
+% on $\Drw$ transitions of $\aaexeq^i$.

@@ -1,0 +1,30 @@
+\begin{tikzpicture}
+  \pgfdeclareimage[width=0.8cm]{A0}{img/A0}
+  \pgfdeclareimage[width=1.5cm]{A1}{img/A1}
+  \pgfdeclareimage[width=1.8cm]{A2}{img/A2}
+  \pgfdeclareimage[width=1.8cm]{A3}{img/A3}
+  \pgfdeclareimage[width=2cm]{A4}{img/A4}
+
+  \node (a0) at (3, 0) {\pgfuseimage{A0}};\\
+  \node (n0) at (3, 0) {\footnotesize $\aaex^0$};;\\
+  \node (a1) at (6, 0) {\pgfuseimage{A1}};\\
+  \node (n1) at (6, 0) {\footnotesize $\aaex^1$};;\\
+  \node (a2) at (9.5, -.5) {\pgfuseimage{A2}};\\
+  \node (n2) at (9.5, -.45) {\footnotesize $\aaex^k$};;\\
+  \node (bad)at (9.3,-1.7)  {\footnotesize $Bad$};;\\
+  \node [circle, minimum size=2cm] (a) at (9.6, 0) {};\\
+  \node (a3) at (12.5, 0) {\pgfuseimage{A3}};\\
+  \node (n3) at (12.5, -.45) {\footnotesize $\aaex^k$};;\\
+  \node (a4) at (16.5, 0) {\pgfuseimage{A4}};\\
+  \node (n4) at (16.5, -.45) {\footnotesize $\aaex^*$};\\
+  \draw [->] (a0) to node[above] {C + W} (a1);
+  \draw [->, dashed] (a1) to node[above] {C + W} node[below] {\footnotesize $k$ iter.}(a);
+  \draw [->] (a) to node[above] {P} (a3);
+  \draw [->, dashed] (a3) to (a4);
+\end{tikzpicture}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% TeX-PDF-mode: t
+%%% End: 

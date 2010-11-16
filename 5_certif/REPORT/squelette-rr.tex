@@ -1,0 +1,90 @@
+%%
+%% This is file `squelette-rr.tex',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% RR.dtx  (with options: `sample')
+%% ********************************************************************
+%% Copyright (C) 1997-1999 2004 INRIA/APICS
+%% 
+\documentclass[a4paper]{article}
+\usepackage{RR}
+\usepackage{hyperref}
+%%\usepackage{french} % optionnel
+%%\usepackage[frenchb]{babel} % optionnel
+%%
+%% date de publication du rapport
+\RRdate{Septembre 1997}
+%%
+\RRauthor{% les auteurs
+ % Premier auteur, avec une note
+Jos\'e Grimm\thanks{Footnote for first author}%
+  % note partag\'ee (optionnelle)
+  \thanks[sfn]{Shared foot note}%
+ % \and entre chaque auteur s'il y en a plusieurs
+  \and
+Philippe Louarn\thanks{Footnote for second author}%
+ % r\'ef\'erence \`a la note partag\'ee
+\thanksref{sfn}
+}
+%%
+%% Ceci apparait sur chaque page paire.
+\authorhead{Grimm \& Louarn}
+%%
+\RRtitle{Exemple de document\\
+ utilisant le style\\rapport de recherche\\Inria}
+%% English title
+\RRetitle{Example of a document using the RR style file}
+%%
+\titlehead{Example of RR.sty}
+%%
+\RRnote{This is a note}
+\RRnote{This is a second note}
+%%
+\RRresume{Ce document montre comment utiliser le style RR.sty.
+Pour en savoir plus, consulter le fichier RR.dvi ou RR.pdf
+D\'efinissez toujours les commandes avant utilisation.
+}
+\RRabstract{This document is a sample of all commands made available by the
+RR.sty style file. More is explained in the documentation of the package.
+Always define your commands before their use.}
+%%
+\RRmotcle{calcul formel, base de formules,  %mots-cl\'es sans rapport
+protocole, diff\'erentiation automatique, % les uns avec les autres
+g\'en\'eration de code,  mod\'elisation, lien symbolique/num\'erique,
+matrice structur\'ee, r\'esolution de syst\`emes polynomiaux, g\'eom\'etrie effective}
+\RRkeyword{task placement, environment, % keywords (taken from some
+ message passing,  network management,   % random research report)
+ performances}
+%%
+%% \RRprojet{Apics}  % cas d'un seul projet
+\RRprojets{Apics et Op\'era}
+%%
+%% \RRtheme{\THNum} % cas d'un seul theme
+\RRtheme{\THCom \THCog \THSym \THNum \THBio} % cas de 5 themes
+%%
+%% \URLorraine % pour ceux qui sont \`a l'est
+%% \URRennes  % pour ceux qui sont \`a l'ouest
+%% \URRhoneAlpes % pour ceux qui sont dans les montagnes
+%% \URRocq % pour ceux qui sont au centre de la France
+%% \URFuturs % pour ceux qui sont dans le virtuel
+\URSophia % pour ceux qui sont au Sud.
+%%
+\begin{document}
+%%
+\makeRR   % cas d'un rapport de recherche
+%% \makeRT % cas d'un rapport technique.
+%% a partir d'ici, chacun fait comme il le souhaite
+\section{First section}
+Here is some text for the first section, and a label\label{sec1}.
+Uses version \RRfileversion\ of the package.\newpage
+\section{Second section}
+Text for the second section. This is closely related to the text in
+section \ref{sec1} on page \pageref{sec1}. \newpage
+\tableofcontents
+
+\end{document}
+\endinput
+%%
+%% End of file `squelette-rr.tex'.

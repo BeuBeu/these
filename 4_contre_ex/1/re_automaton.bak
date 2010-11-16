@@ -1,0 +1,626 @@
+\section{$\RE$-Automaton $+$ construction}
+\label{sec:automaton}
+\comments{trouver un vrai titre}
+
+We propose to solve the previous problem using $\RE$-automaton, an new extension
+of tree automaton. The principle of the approach is to know when it is sure 
+that a term is reachable just by recognizing the considered term.
+
+Assuming $\F$ a set of ranked symbols and $X$ a set of variables.
+Let $\R$ be a set of rewriting rules, $I$ a set of initial terms, and
+$E$ a set of eqations. We define a $\RE$-automaton as:
+
+\begin{definition}{$\RE$-automaton}
+  A $\RE$-automaton is defined as $\A= \langle \F, \Q, \Q_F, % \Delta_0 \cup 
+  \Delta \cup \Deps \cup \Deq\rangle$, where $\Deq$ is a set of
+  $\varepsilon$-transitions. Transitions of $\Deps$ are now labeled by
+  logical formulas defined with $\land$, $\lor$, over atoms $\bot$,
+  $\top$, and some predicates.  All predicates have the form $Eq(q,
+  q')$ where $q, q' \in \Q$.
+\end{definition}
+
+%A $\RE$-automaton is actually an extension of a $\R$-automaton introduced in 
+% \cite{rule09}.
+
+\comments{Donner ici un exemple de $\RE$-automate et de l'idée d'utilisation
+  des différentes transitions utilisées par l'automate\dots\\
+  Reecrire ce morceau + petits exemple\dots\\
+
+  \begin{example}{A mettre en forme}
+    \begin{itemize}
+    \item $I = f(a)$, $\R = \{f(c) \rw g(c),\ a \rw b\}$, $E = \{ b = c\}$
+
+    \item $\Delta = \{a \rw q_a,\ b \rw q_b,\ c \rw q_c,\ f(q_a) \rw q_f,\ g(q_c) \rw q_g\}$ 
+    \item $\Deps = \{q_b \xrw{\top} q_a,\ q_g \xrw{Eq(q_c, q_b)} q_f\}$
+    \item $\Deq  = \{q_b \rw q_c,\ q_c \rw q_b\}$
+    \end{itemize}
+    Montrer que l'on a une transition $q_c \rw q_b$ un sens de l'égalité de $b = c$
+    en fonction du point de vue $g(q_c)$ ou $f(q_b)$.\\
+    Les transitions epsilon permettent de symboliser des chaînes de réécriture entre termes
+    comme détailler dans \cite{rule09} et \cite{CITATION-GENET-RUSU}:
+    $q_g \rw q_f$ permet de déduire $f(a) \rw^*_\RE g(c)$. En détail cela correspond à 
+    $f(a) \rw_\R f(b) =_E f(c) \rw_\R g(c)$. Pour indiquer que l'on a obtenu $g(c)$ grâce à $b = c$
+    on étiquette la transition de réécriture $q_g \rw q_f$ avec le prédicat $Eq(q_c, q_b)$.
+  \end{example}
+
+}.
+
+  
+\comments{
+  Ce truc-là va devenir une propriété maintenue par l'application des équations dans le $\RE$-automate.
+
+  Let $\rw^=$ be the transitive and reflexive rewriting relation 
+  induced by $\Delta \cup \Deq$. Thus, we have $\forall u\ v \in \TFQ,  u \rw^= q \imp v \rw^= q \imp u =_E v$.
+}
+
+
+Now, we formally define the semantics of a $\RE$-automaton. It is based on a
+new rewriting relation $\xrw{\alpha}_\A$ which is the relation standard
+$\rw_\A$ instrumented.
+
+\begin{description}
+\item $t|_p \rwne_\A q$ then $t \xrw{\top}_\A t[q]_p$
+\item $t|_p = q$ and $q \rw q' \in \Deq$ then $t \xrw{Eq(q, q')}_\A t[q']_p$
+\item $t|_p = q$ and $q \xrw{\phi} q' \in \Deps$ then $t \xrw{\alpha}_\A t[q']_p$ 
+  where $\alpha = \left\{
+    \begin{array}{ll}
+      \alpha_k &\textrm{if } 1 \le k \le n \wedge \phi = \bigvee_1^n \alpha_i \\
+      \top &  \textrm{if } \phi = \top
+    \end{array}\right.
+  $
+\item $u \xrw{\alpha}_\A v$ and $v \xrw{\alpha'}_\A w$ then $u \xrw{\alpha \land \alpha'}_\A w$
+\end{description}
+Here, we consider that the formulas are implicitly simplified using standard logic rules about $\top$, $\bottom$, $\lor$, and $land$.
+
+\comments{
+  montrer que la reconnaître le terme $g(b) \rw q_f$ implique d'utiliser les deux sens de l'égalité nécessaire à la production
+  de la chaîne de réécriture...
+}
+
+
+We define the relation $\rwne_\A$ defining the transitive and reflexive 
+closure of the rewriting relation by transitions of $\Delta$.
+A $\RE$-automaton must always guarantee the following property~:
+
+\begin{property}[$\RE$-automaton and reachability]
+  \label{prop:reachbility}
+  Let $A$ be a $\RE$-automaton, and $q$ one of its states.
+  For all term $v$ such that $v \xrw{phi}_\A q$, there exists $u$ a term such that 
+  $u \rwne_\A q$ and $u \rw^*_\R v$
+\end{property}
+
+
+
+\begin{theorem}{Equivalence between our semantics and standard semantics}
+  \[\xrw{\alpha}_\A \equiv \rw_\A \]
+\end{theorem}
+
+\comments{avantage : on ne change pas la classe de complexité de la représentation..., on est toujours dans le domaine des réguliers}
+
+\comments{On ne va pas indiquer }
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%% RESTE DU PLAN %%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{itemize}
+\item Def de $\RE$-automate
+\item Exemple (reprise de l'exemple ???) peut-être pas
+  Donner seulement l'intuition qui est derrière juste avec quelques transitions jouet
+
+\item Prop~1 (cf. rta10)
+\item Nouvelle sémantique  + Equivalence avec la sémantique standard !
+(implique de rester dans la même classe de complexité des automates
+meilleures que les automates à contraintes, TAGGED automatas \dots)
+\end{itemize}
+
+Ensuite on arrive dans la partie construction d'un RE-automate en utilisant
+un schéma similaire à complétion Genet.
+
+\begin{itemize}
+\item definition de $\aaex^0$ : limitation dûe à Prop~1 : I doit être finie
+  mais expliquer qu'il sera facilement possible de contourner la limitation
+
+\item construction $\aaex^{i+1}$ à partir de $\aaex^i$
+  \begin{itemize}
+  \item matching + lemme 
+  \item réutilisation de la normalisation definie precedemment + nouveau lemme Prop 1.
+  \item abstraction liée aux équations
+  \item Théroèmes qui assurent la correction de l'approche ! clôture + contre-exemple
+  \end{itemize}
+\end{itemize}
+
+
+\comments{Une explication importante à prendre en compte pour expliquer
+  comment choisi-t-on de Màj une $\varepsilon$-transtion, lors de la résolution
+  de la paire critique...}
+
+
+
+
+
+
+Lors de la complétion, dans quel cas un $q_1 \xrw{\phi} q_2$
+devient un $q_1 \xrw{\phi \vee \phi'} q_2$? J'ai l'impression que notre ordre
+**strict** sur les formules est l'implication **stricte**, i.e 
+$A > B$ ssi $A \notimp B$ et $A \rimp B$ (et on aura $A=B$ ssi $A \Leftrightarrow B$.).
+Par ex, une branche du treilli des formules ($\top$ est en haut et $\bot$ est en bas):
+$\top > A \vee B > A > \bot$
+car $\top  \rimp  A \vee B  \rimp A  \rimp  \bot$ et $\top  \notimp A \vee  B
+\notimp A \notimp \bot$.
+
+Par complétion, on va toujours de la droite vers la gauche, on est strictement
+croissant dans l'ordre $>$. Logique, car on augmente le nombre "chances"  d'avoir
+la transitions $q_1 \rw q_2$. Initialement ça pourrait être $\bot$ même si on ne le
+fait pas en pratique. Puis on augmente le nombre de chemins, jusqu'à atteindre
+éventuellement $\top$: on est sûr de l'avoir. Par complétion on ne fait qu'affablir
+la formule, croître par rapport à $>$. 
+
+Moralité pour remplacer $q_1 \xrw{\phi} q_2$ par $q_1 \xrw{\phi \vee \phi'}
+q_2$, il faut que $\phi \vee \phi' > \phi$, c'est à dire:
+\begin{itemize}
+\item $\phi \vee \phi' \rimp \phi$, ça c'est toujours vrai.
+\item $\phi \vee \phi' \notimp \phi$, ça c'est à vérifier à chaque fois.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+For a given set of terms so-called $Bad$ and a given fix-point
+automaton $\A^\star_{\R,E}$ obtained by completion with an automaton
+$\A$, a TRS $\R$ and a set of equations $E$ as inputs, if
+$\Lang{}(\A^\star_{\R,E})\cap Bad = \emptyset$ then this proves that
+$\desc(I)\cap Bad=\emptyset$, and thus that none of the ``bad'' terms
+is reachable. What about the conclusion when the intersection between
+$\Lang{}(\A^\star_{\R,E})$ and $ Bad$ is not empty ?  Since $\A^\star_{\R,E}$ over-approximates the set
+of reachable terms, a non-empty intersection leads to two possibilities:
+either some terms of the intersection are actually reachable by rewriting,
+or each term of the intersection is due to the approximation.
+An analysis with this technique is said to be conclusive iff: either
+one can show that all terms of the set $Bad$ cannot be reached by rewriting from
+$I$, or one can show that some terms of $Bad$ are shown to be actually
+reachable.
+For example, what can we say for the terms $g(f(a),f(a))$ and $g(a,f(a))$ 
+in the automaton obtained in Example \ref{ex:equations}. Actually, nothing can be said since 
+both terms are in the computed over-approximation. 
+
+% Suppose now that couples of states obtained by equation application
+% are not merged but in relation with two $\varepsilon-$transitions. For
+% instance, if $q$ and $q'$ have to be merged together then, we add the
+% transitions $q\f q'$ and $q'\f q$ in a special set $\Deq$ instead.
+Now, suppose that instead of merging each couple of states $(q, q')$
+obtained by an equation application, we add the transitions $q \rw q'$
+and $q' \rw q$ in a set $\Deq$.
+Consequently, the automaton obtained would be the following one:
+$\A=\la\F,\Q,\Q_f,\Delta\cup\Deps\cup\Deq \ra$ where $\F=\{f,g,a\}$,
+$\Q=\{q_0,q_1,q_2,q_3,q_4\}$, $\Q_{f}=\{q_0\}$, $\Delta=\{a\f
+q_1,g(q_1,q_1)\f q_0, f(q_1)\f q_3, g(q_3,q_3)\f q_2
+\}$,
+$\Deps=\{q_2\f q_0\}$ and $\Deq=\{q_1\f q_3, q_3\f q_1\}$. Note that $q_1$ and $q_3$ are not merged
+together anymore. Fig.~\ref{fig:reductionREAutomate} details which kind of
+transitions are used to recognize these two terms. Note that for
+$g(f(a),f(a))$, there exists a reduction using only transitions of $\Delta$ and $\Deps$, 
+contrary to the reduction of $g(a,f(a))$.
+
+\begin{figure}
+\begin{tabular}{cc}
+\begin{minipage}{6cm}  
+\includegraphics[scale=0.8]{./img/reductionTermeExact.pstex}
+\end{minipage}& 
+\begin{minipage}{6cm}  
+\includegraphics[scale=0.8]{./img/reductionTermeApprox.pstex}
+\end{minipage}
+\end{tabular}
+\caption{\label{fig:reductionREAutomate}Reductions of $g(f(a),f(a))$ and $g(a,f(a))$, respectively}
+\end{figure}
+
+
+Unfortunately, claiming that a term is reachable 
+if it is recognized using transitions of $\Delta$ and $\Deps$ only
+is not true in general.
+%just by analysing its reduction and by simulating mergings with
+%$\varepsilon-$transition is not true in general. 
+Indeed, suppose that the TRS of Example \ref{ex:completionStep}
+is extended with the rule $g(a,f(a))\f bad$ where $bad$ is a constant.
+If the completion is applied without merging states
+%as described in the previous section
+returned by equations, the obtained automaton is:
+$\A=\langle\F,\Q,\Q_f,\Delta\cup\Deps\cup\Deq$ where $\F=\{f,g,a,bad\}$,
+$\Q=\{q_0,q_1,q_2,q_3,q_4\}$, $\Q_{f}=\{q_0\}$, $\Delta=\{a\f
+q_1,g(q_1,q_1)\f q_0, f(q_1)\f q_3, g(q_3,q_3)\f q_2,
+bad \f q_4 \}$, $\Deps=\{q_2\f q_0, q_4 \f q_2\}$ 
+and $\Deq=\{q_1\f
+q_3, q_3\f q_1\}$. Clearly, $bad$ can be reduced on $q_0$ without
+using a transition of $\Deq$ but it is actually a term of the
+approximation.  Indeed, $bad$ is produced by the rule $g(a,f(a))\f
+bad$
+and this rule would have never been applied by a reachable term 
+since a such term is of the form $g(f^n(a),f^n(a))$
+$\forall n\geq 0$ as mentioned at the end of the previous section.
+%Nevertheless, 
+%this idea is, in some senses, the cornerstone of our contribution. 
+In this section, we propose an instrumented version of the completion
+algorithm which, not only provides information on rewriting steps but
+also on the equational ones. We have organised this section as follows:
+first we introduce a new kind of automaton: the $\RE$-automaton. Basically,
+this new kind of automaton gives details on the nature of a rewriting step:
+does it concerns terms actually reachable or terms probably of the
+approximation? Second, we detail the sensitive point of our
+contribution, and of the completion itself, which is the matching
+algorithm. As mentioned in Section \ref{sec:automaton}, given a
+rewrite rule $l\f r$ of $\R$, all possible $\Q-$substitution $\sigma$,
+for which there exists a state $q$ such that $l\sigma \rw_\A q$ and
+there is no state $q''$ such that $r\sigma \rw_\A q''$ and $q''\f q \in \Deps$, are
+computed.  This is a matching problem: does $l$ have a solution
+in the given automaton?
+
+With $\RE$-automata and the new matching algorithm, it is now possible
+to answer to the following questions:
+%\begin{itemize}
+%\item
+Is $l\sigma$ a solution corresponding to a set of terms actually reachable? 
+%\item
+If not, then we can answer to the following one: 
+Which are the approximations that have made $\sigma$ be a solution of $l$? 
+%\end{itemize}
+
+Finally, the procedures of normalization and equation application are updated accordingly for achieving our goal: 
+detecting on-the-fly a reachable term from the other if it is possible. 
+
+\subsection{$\RE$-automata}
+
+Given a TRS $\R$ and a set of equations $E$, a $\RE$-automaton can be
+viewed as an extension of a $\R$-automaton presented in Section
+\ref{sec:completion}.
+%Of course, it makes sense to have a such automaton only for a triple like
+%$(\R, I, E)$ over terms of $\TFX$.
+It consists in adding an new kind of $\varepsilon$-transitions to relate terms and their
+approximation. A $\RE$-automaton is defined as $\A= \langle \F, \Q, \Q_F,\Delta \cup \Deps \cup \Deq\rangle$,
+where $\Deq$ is a set of $\varepsilon$-transitions. Transitions of $\Deps$ are now labeled by
+logical formulas defined with $\land$, $\lor$, over atoms $\bot$, $\top$, and some predicates.
+All predicates have the form $Eq(q, q')$ where $q, q' \in \Q$.
+We keep the relation $\rwne_\A$ defining the transitive and reflexive 
+closure of the rewriting relation by transitions of $\Delta$.
+A $\RE$-automaton must always guarantee the following property~:
+%Our completion algorithm will guarantee the two following properties~:
+
+\begin{property}[$\rwne_\A$ deterministic and injective]
+  \label{prop:deterministic}
+  \label{prop:injectivity}
+  If $\Delta$ contains two normalized transitions of the form 
+  $f(q_1, \dots, q_n) \rw q$ and $f(q_1, \dots, q_n) \rw q'$, it means $q = q'$. 
+  This ensures that the rewriting relation $\rwne_\A$ is deterministic.
+  
+  For all state $q$ there is at most one normalized transition $f(q_1, \dots, q_n) \rw q$
+  in $\Delta$. This ensures that if we have $u \rwne_\A q$ and $v \rwne_\A q$ then $u = v$.
+\end{property}
+
+As in the previous section, $\A^0$ the $\RE$-automaton which characterizes initial terms,
+is defined with $\Deq$ and $\Deps$ empty. Since $\rwne_\A$ maps one ground term to one state exactly,
+$I$ the set of initial terms must be finite.
+
+% TODO : Expliquer que ce n'est pas vraiment une limitation et qu'il est possible
+% de revenir a un probleme ou l'ensemble initial est infini...
+
+
+% It is easier to understand how the algorithm
+% works especially in the proofs. But we explain later how to have a $\RE$-automaton
+% form an infinite set of initial terms despite this restriction.
+
+Now, we introduce the semantics of a $\RE$-automaton. It is based on a
+new rewriting relation $\xrw{\alpha}_\A$ which is the relation
+$\rw_\A$ instrumented.  Let us consider $q$, $q'$ two states and $u$,
+$v$ two terms such that $u \rwne_\A q$ and $v \rwne_\A q'$.  Adding an
+$\varepsilon$-transition like $q' \rw q$ to $ \Deq$ means that $v$ is
+in the approximation of $u$ and requires that there exist a
+$\Q-$substitution $\sigma$ and an equation $l=r\in E$ such that $u =
+l\sigma$ and $v = r\sigma$.
+
+Let $\rw^=$ be the transitive and reflexive rewriting relation 
+induced by $\Delta \cup \Deq$. Thus, we have $\forall u\ v \in \TFQ,  u \rw^= q \imp v \rw^= q \imp u =_E v$.
+Using this idea, we define $\stackrel{\alpha}{\f}_\A$ which denotes the rewriting relation for $\TFQ$ defined inductively as:
+\begin{itemize}
+\item $t|_p \rwne_\A q$ then $t \xrw{\top}_\A t[q]_p$
+\item $t|_p = q$ and $q \rw q' \in \Deq$ then $t \xrw{Eq(q, q')}_\A t[q']_p$
+\item $t|_p = q$ and $q \xrw{\phi} q' \in \Deps$ then $t \xrw{\alpha}_\A t[q']_p$ 
+  where $\alpha = \left\{
+    \begin{array}{ll}
+      \alpha_k &\textrm{if } 1 \le k \le n \wedge \phi = \bigvee_1^n \alpha_i \\
+      \top &  \textrm{if } \phi = \top
+    \end{array}\right.
+  $
+\item $u \xrw{\alpha}_\A v$ and $v \xrw{\alpha'}_\A w$ then $u \xrw{\alpha \land \alpha'}_\A w$
+\end{itemize}
+We give an intuition of the semantics of this relation. We consider a
+state $q$ and a term $u \rwne_\A q$. Let $t$ be another term such
+that $t\xrw{\alpha}_\A q$.  The first conclusion is that $t$ is a
+$\R-$descendant of $u$ modulo the equations of $E$.  We can be more
+precise when $\alpha=\top$. Indeed, it means that $u \lrw^*_\R t$ and
+so $t$ is really reachable from $t$ by rewriting.  
+
+% state $q$ and a term $u \rwne_\A q$. When we have a term $t
+% \xrw{\alpha}_\A q$, then we know that $u \lrw^*_{\R_{/E}} t$. 
+% The conjunction $\alpha$ denotes $\varepsilon$-transitions of $\Deq$ used to recognized $u$, 
+% consequence of approximations made using equations 
+% of $E$. When $\alpha = \top$ means $u \lrw^*_\R t$, $t$ is really reachable.
+% Moreover, we need to define the case $\alpha= \bot$ to have a
+% fully well-defined semantics. It is equivalent to $t \not\rw_\A q$ in
+% a standard semantics of tree automaton, but we do not need it in the
+% following. A term $v$ produced can be produced by rewriting a term $u \rw^= q$
+% which is recognized using transition of $\Deq$. Thanks to the semantics
+% of $\Deq$, we know $u$ is in the approximation of a term $t \rwne q$. And finally,
+% we know that $t =_E u \rw v$. Then, we need to report the fact that $v$ is
+% a $\R$-descendant of $t$ thanks to some equation applications denoted by $\alpha$ that allows to
+% recognize the term $u$. Since several terms $u_i \rw^= q$ resulting from different 
+% sequences of equation application (denoted by $\alpha_i$) may be rewritten into the same term $v$, 
+% we need to report them on the same $\varepsilon$-transition of $\Deps$. To represent this
+% different possibilities, we use a disjunction $\bigvee \alpha_i$ which is in DNF.
+
+In the other cases, $\alpha$ describes which combinations of transitions of $\Deq$ makes $t$ 
+being a successor modulo $E$ of $u$. By analysing the reduction of $t$ to $q$, one could 
+conclude either $t=_Eu$ or $t$ is a $\R-$descendant of $u$ modulo the equations of $E$ with at least one 
+rewriting step.
+Let us illustrate this notion with the following example
+
+\begin{example}
+  \label{ex:semantics}
+  Let $\A$ be a $\RE-$automaton such that
+  $\A=\la\F,\Q,\Q_f,\Delta\cup\Deps\cup\Deq\ra$\footnote{Actually,
+    this automaton will be the result of our new completion algorithm
+    applied on the automaton and the set of equations of Example
+    \ref{ex:completionStep} with the TRS $\R=\{g(x,y)\f g(f(x),f(y)), g(a,f(a))\f
+    bad\}$ } where $\F=\{f,g,a,bad\}$, $\Q=\{q_0,q_1,q_2,q_3,q_4\}$,
+  $\Q_{f}=\{q_0\}$, $\Delta=\{a\rw q_1,g(q_1,q_1)\rw q_0,  f(q_1)\rw q_3, g(q_3,q_3)\rw q_2, bad \rw q_4 \}$, $\Deps=\{
+  q_4 \xrw{\phi} q_2, q_2\xrw{\top} q_0\}$
+  with $\phi=Eq(q_3,q_1) \vee Eq(q_1,q_3) \vee (Eq(q_3,q_1) \wedge
+    Eq(q_1,q_3))$ and $\Deq=\{q_1\f q_3, q_3\f q_1\}$.
+    Let us now study the reduction of $bad$ on the state $q_0$. So,
+    $bad \rw q_4 $ is in $\Delta$. At this point,
+    $bad\xrw{\top}_\A q_4$. Next, using the first transition
+    of $\Deps$, one obtains that $bad\xrw{\top}_\A q_4
+    \xrw{\phi} q_2$. According to the definition of
+    $\xrw{\alpha}$, $bad\xrw{\top}_\A q_4
+    \xrw{\phi} q_2$ can be simplified to $bad\xrw{\phi}
+    q_2$. And finally, by applying the $\varepsilon-$transition
+    $q_2\xrw{\top} q_0$, one obtains $b\xrw{\phi}q_0$. The formula $Eq(q_3,q_1) \vee Eq(q_1,q_3) \vee (Eq(q_3,q_1)
+    \wedge Eq(q_1,q_3))$ specifies that the term $bad$ is in the
+    language because of the two $\varepsilon-$transitions $q_1\rw q_3$ and $q_3\rw q_1$. 
+    % As soon as there is one of the two transitions, the formula is then valid.
+  \end{example}
+Some loops may occur during rewriting with $\varepsilon$-transitions. In Example \ref{ex:semantics}, transitions of $\Deq$ 
+define a loop over $q_1$ and $q_3$, and we have an infinity of rewriting paths that corresponds to $f(a) \xrw{\alpha}_\A q_3$.
+But when the loop is done more than one time during $\xrw{\alpha}_\A$, the obtained formula is obviously always equivalent 
+to $\alpha_1$, the formula obtained when loop is done only one time. In the following, we only consider the rewriting relation
+$\xrw{\alpha}_\A$ for which loops can be done one time at most, without loss of generality. Thus, it permits to define
+the set of paths $\{ q \xrw{\alpha} q' \}$ as a finite (and computable) set.
+
+\subsection{Solving the matching problem}
+% ICI : il faut dire que lorsque l'on cherche les paires critiques
+% on fait du filtrage : on cherche l'ensemble des configurations
+% l\sigma qui peuvent avoir besoin d'etre resolues...
+% Mais aussi comme on s'interesse a l'approximation, on veut
+% savoir quelles transitions issues de l'approximation sont
+% utilisees pour reconnaitre le terme l\sigma. Information
+% pourra elle aussi etre reportee pour indiquer sous quelles 
+% conditions le terme r\sigma est il accessible.
+%
+%%%%%% Pour remplacer le paragraphe suivant :
+%
+A new kind of automaton has been defined in the previous section, and
+our goal is to adapt the completion procedure to this kind of automaton
+in order to have information on approximations all along the
+procedure.  To do that, we need to define how to compute a
+$\Q-$substitution for a given rewrite rule and a given
+$\RE-$automaton. Moreover, we need to know under which approximations
+a $\Q-$substitution exists which can be specified with a lovely 
+formula. Our new matching algorithm, presented as a deduction system 
+in Fig.~\ref{fig:matching-alogorithm}, describes how both information 
+can be computed at the same time. It returns a set of pairs associating 
+a logical formula to a $\Q-$substitution. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%We present the way to build a such $\RE$-automaton, using the adapted completion algorithm.
+We first introduce a couple of definitions useful to present the matching
+algorithm.  Let $\id$ be the identity $\Q$-substitution with $dom(\id)=\emptyset$: $\forall t,\; t.\id=t$. 
+We also define the union operator $\plus$ of $\Q$-substitution s.t. $\sigma \plus \sigma' = \sigma \cup \sigma'$
+defined only if$ dom(\sigma) \cap dom(\sigma') = \emptyset.$
+For any substitutions $\sigma_1$, $\sigma_2$ with disjoint domain, we have commutativity, associativity
+and the two properties: $\forall x \in dom(\sigma_1),\quad \sigma_1(x) = (\sigma_1\plus\sigma_2)(x)$ and $\sigma_1 = \sigma_1 \plus id$.
+% \begin{center}
+%   \begin{tabular}{p{2cm}l}
+%     (1) & $\forall x \in dom(\sigma_1),\quad \sigma_1(x) = (\sigma_1\plus\sigma_2)(x)$ \\
+%     (2) & $\sigma_1 =  \sigma_1 \plus id$
+%   \end{tabular}
+% \end{center}
+% Let us refocus on the matching problem we have to face to. As mentioned 
+% previously, we want to compute the $\Q-$substitutions for a given 
+% left-hand side of a rewrite rule as well as the 
+In Fig.~\ref{fig:matching-alogorithm}, we are manipulating sets (denoted by $S$)
+of couples $(\phi,\sigma)$ using the standard set union $\cup$ and a specific product defined as:
+$\bigotimes_1^n S_j = \{ (\top, id) \oplus (\phi_1, \sigma_1) \oplus
+\dots \oplus (\phi_n, \sigma_n) \sep (\phi_j,\sigma_j) \in S_j\}$
+with $(\phi, \sigma) \oplus (\phi', \sigma') = (\phi \land
+\phi',\sigma \plus \sigma')$.
+
+Let us go back on the matching algorithm. We use notation $l \matchi q \vdash S$ to denote that $S$ is
+the set of solutions of the matching problem $l \matchi q$. The construction of $S$ from 
+$l \matchi q$ is described in Fig.~\ref{fig:matching-alogorithm}.
+% an instance of the matching problem.
+% Initially, solving this instance of the matching problem
+% consists in finding all $\Q$-substitution $\sigma$ such that
+% $l\sigma \rw_\A^* q$. But here, we need to characterises in which approximations
+% is the term $l\sigma$ to be recognized in $q$ by $\A$. It means that we have
+% to compute a set of couples constraint and $\Q$-substitution. 
+%To proceed, we propose an algorithm described by the following deduction system:
+
+\begin{figure}[h!]
+  \hspace{-0.03\linewidth}
+  \fbox{
+  \begin{minipage}{0.9\linewidth}
+    \footnotesize
+    \[\textrm{(Var) }
+  \dfrac{}
+  {x \match q \vdash_\A \{(\alpha_k, \{x \mapsto q_k\}) \sep q_k \xrw{\alpha_k}_\A q\}}
+  (x \in \X)
+  \]
+  
+  \[%\hspace{-1.8cm}
+  \textrm{(Delta) }
+  \dfrac{
+    t_1 \match q_1 \vdash_\A S_1
+    \quad \dots \quad
+    t_n \match q_n \vdash_\A S_n
+ %   f(t_1,\dots, t_n) \match f(q_1,\dots, q_n) \vdash_\A S
+  }{f(t_1, \dots, t_n) \matchi q \vdash_\A \bigotimes_1^n S_k
+  }\left(
+    \begin{array}{l}
+      f(q_1, \dots, q_n) \rw q \in \Delta\\
+    \end{array}
+  \right )
+  \]
+
+  \[\textrm{(Epsilon) }
+  \dfrac{ 
+    t \matchi q    \vdash_\A S_0   \quad
+    t \matchi q'_1 \vdash_\A S_1 \quad \dots \quad
+    t \matchi q'_n \vdash_\A S_n
+  }{
+    t \match q \vdash_\A S_0 \cup
+    \bigcup_{k=1}^n \{(\phi \land \alpha_k, \sigma) \sep (\phi, \sigma) \in S_k\}
+  }\left(
+    \begin{array}{l}
+      \{(q_k, \alpha_k) \sep q_k \xrw{\alpha_k} q\}_1^n\\% \land q \not= q_k\}_1^n\\
+      t \notin \X\\
+    \end{array}
+  \right)
+  \]
+\end{minipage}
+}
+\caption{Matching Algorithm}
+\label{fig:matching-alogorithm}
+\end{figure}
+
+The following result ensures that all possible pairs $(\phi,\sigma)$ 
+for a given term $l$ are indeed computed with the proposed matching algorithm.
+\begin{theorem}[Matching Algorithm is complete]
+  \label{thm:MA-complete}
+  Let $A$ be a $\RE-$automaton, $q$ one of its states, $l \in \TFX$ the
+  linear left member of a rewriting rule and $\sigma$ a $\Q$-substitution with 
+  a domain range-restricted to $\vars(l)$. If the set $S$ is solution of the matching problem
+  $l\sigma \match q$, then we have $\forall (\alpha, \sigma),\ l\sigma \xrw{\alpha}_\A q \imp (\alpha, \sigma) \in S$
+\end{theorem}
+% optionel ici
+% \begin{theorem}{Correctness}
+%    Let be $A$ a $\R-$automaton, $q$ one of its states, $l \in \TFX$ the
+%   linear left member of a rewriting rule. If there exists a derivation
+%   for $l\sigma \matchi q$ such that the set $S$ is obtained, then we have
+  
+%   \[\forall (\phi, \sigma),\ l\sigma \rw^\phi_\A q \imp
+%   \exists (\phi', \sigma) \in S \suchthat \phi \validates \phi'\]
+% \end{theorem}
+
+\subsection{Detecting and solving Critical Pairs}
+
+We want to create a $\RE-$automaton $\A'=\langle\F,\Q',\Q_f,\Delta'\cup\Deps'\cup\Deq'\rangle$ from an
+existing one $\A=\langle\F,\Q,\Q_f,\Delta\cup\Deps\cup\Deq\rangle$ by one step of completion. Let us describe our
+new process. Initially, $\A=\A'$.  For each rewrite rule $l\f r$ we compute
+all possible substitutions using the matching algorithm presented in the 
+previous section. More precisely, for each pair $(\alpha, \sigma)$ solution of the matching
+problem $l \match q$ for the $\RE$-automaton $\A$, 
+% ICI il la fin de la phrase ne veut rien dire : a revoir ....
+we have to verify if $l\sigma$ is the root of a critical pair.
+% In other words, if the corresponding $r\sigma$ is already
+% recognized or not by $q$, the state wich caracterizes some reachable terms by rewriting from $u \rwne_\A q$. 
+Instead of just checking $r\sigma \rw_A q$, we study the way that $r\sigma$ is reduced on $q$. 
+%to add $\alpha$ to informations 
+%already collected about approximations used to allow to reach $r\sigma$ from $u$.
+Then, we first check if there exists $q'$ such that $r\sigma \rwne_\A q'$.
+Moreover, if there exists a transition $q'\xrw{\phi} q$ in $\Deps$ then we check if $\phi$ subsumes $\alpha$ and if 
+it is not the case then the transition $q'\xrw{\phi}q$ is substituted by the transition $q'\xrw{\phi\vee\alpha}q$ in
+$\Deps'$.  At this point, we know that there exists $q'$ such that $r\sigma \rwne_\A q'$. Suppose now that there
+does not exist an $\varepsilon-$transition $q'\stackrel{\phi}{\f} q$ in $\Deps$. Then, in this case, we add the transition $q'\stackrel{\alpha}{\f} q$ in
+$\Deps'$.
+
+% If it is the case, a $\varepsilon$-transition $q' \xrw{\phi'} q$ is
+% added to $\Deps$. 
+% produce a $\RE$-automaton $\A'$, since rewritten terms are ordered by $\Deps$. But, there 
+c% may exist a transition $q' \xrw{\phi} q \in \Deps$. In this case, if $\alpha \not\models \phi$ then we set $\phi' = \phi \lor \alpha$ else $\phi' = \phi$. $\phi'$ is
+% simply $\phi$ when $q' \xrw{\phi} q$ does not exists. If $r\sigma \rwne_\A q'$ does not hold, we check if simply if we have
+% $r\sigma \rw_\A q$. It corresponds to $r\sigma$ is currently in $\R_{/E}^*(u)$ and we do not do anything. 
+Finally, if $r\sigma$ is not recognized by $q$ then: 1) a new state
+$q'$ is created and added in $\Q'$, 2) $q'\xrw{\alpha} q$ is
+added to $\Deps'$ and the transitions resulting from the normalization
+of $r\sigma\f q'$ are added to $\Delta'$ as defined in Section
+\ref{sec:completion}.
+
+In the next section, we denote by $\A'=\completion(\A,\R)$ the
+automaton obtained by the process we have just described. We show that $\A'$ the 
+automaton obtained by the new completion algorithm from the $\RE-$automaton $\A$ is also 
+a $\RE-$automaton. In particular, $\Delta'$ satisfies the property~\ref{prop:deterministic}.% and \ref{prop:injectivity}.
+
+
+\begin{lemma}
+  \label{lem:welldefined}
+  If property~\ref{prop:deterministic} % and \ref{prop:injectivity}
+  holds for $\Delta$ then they hold also for $\Delta'$
+  after normalization of any $t \rw q$.
+\end{lemma}
+Now, we show that $\RE$-automaton is correctly completed:
+\begin{theorem}
+  For a given $\RE$-automaton $\A = \la \F, \Q, \Qf, \Delta \cup \Deps
+  \cup \Deq\ra$ obtained after $i$ steps of completion, by completing
+  $\A$ with the rule $l\f r$ at state $q$ we obtain the
+  $\RE$-automaton $\A'$ such that for all ground term $l\sigma
+  \rw_{\A} q$, then we have $r\sigma \rw_{\A'} q$ where $\sigma : \X \f \TF$ is a
+  substitution from variables to $\TF$.
+\end{theorem}
+
+\begin{theorem}\label{th:top}
+  If $\A$ is a $\RE$-automaton obtained by completion, $\A$ respects
+  the property $\forall q\ t,\ t \xrw{\top}_\A q \imp \forall u \rwne_\A q,\ u \f_\R^* t$
+\end{theorem}
+
+
+\subsection{Applying an equation}
+
+An equation $l = r$ can be applied to $q$ and $q'$ two different
+states the $\RE$-automaton $,\A$ if there exists a $\Q$-substitution $\sigma$ such that
+we have $l\sigma \rw^=_\A q$ and $r\sigma \rw^=_\A q'$ where $q \not= q'$. 
+In other words, $\A$ contains two terms $u\f^=_\A l\sigma \f^=_\A q$ and $v\f^=_\A r\sigma \f^=_\A q'$ such that $u =_E v$. 
+The new $\RE$-automaton is obtained by adding the two transitions $q \rw q'$ and $q' \rw q$ to $\Deq$.
+Again, we need to compute the set $S$ of all $\Q$-substitutions $\sigma$ such that we have $l\sigma \rw^=_\A q$. This can be done
+using the matching algorithm presented in Fig.~\ref{fig:matching-alogorithm} above. We just ignore
+the computation of logical formulas. In the rules (Var) and (Epsilon) we have to consider the relation $\rw^=_\A$ instead of $\xrw{\alpha}_\A$
+since we are reasoning on transitions of $\Delta \cup \Deq$. Then, there exists $\sigma \in S$, $q' \in \Q$ such that $r\sigma \rw^= q'$
+with $q' \not\rw^= q$ and $q \not\rw^= q'$. The two last conditions allow to reduce the set of states to the remaining states
+that are not yet related by $\Deq$. For each succeeded equation application, the set of unrelated states decreases:
+it ensures that we can not apply equations of $E$ infinitely.
+
+
+% Utilisation du filtrage sans les sans calculer la contrainte, et sans parcourir les transitions
+% de $\Deps$ on se debarasse de ca :-) On note une telle relation \dotted{\match}
+
+
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

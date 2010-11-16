@@ -1,0 +1,76 @@
+\section{Formalization of Tree Automata}
+\label{sec:automata}
+
+The fact that the checker, to be executed, is directly extracted from the \coq\
+formalization has an important consequence on the tree automata formalization. Since
+the data structures used in the formalization are those that are really used for
+the execution, they need to be formal {\em and} efficient. For tree automata,
+instead of a naive representation, it is thus necessary to use optimized formal
+data structures borrowed from~\cite{RivalGL-TPHOL01}.
+
+\switchlstcoq
+
+In Section~\ref{sec:rewriting}, we have represented variables $\X$ and function
+symbols $\F$ by the type \lstinline!ident!. We do the same for $\Q$. We define a
+tree automaton as a pair $(\Q_F, \Delta)$, where $\Q_F$ is the finite set of
+final states, and $\Delta$ the finite set of normalized transitions like $f(q_1,
+\dots, q_n) \rightarrow q$. In \coq, $\Q_F$ is a simple \lstinline!list ident!
+but $\Delta$ is represented using the \lstinline!FMapPositive! \coq\ library of
+functional mappings, where data are indexed by \lstinline!positive! numbers. In
+the \lstinline!FMapPositive! structure, every transition $f(q_1, \dots, q_n)
+\rightarrow q$ is encoded by a list of states $(q_1, \dots, q_n)$ indexed by $f$
+in a map which is also indexed by $q$ in a second map.  This representation is
+a good solution to deal efficiently, in \coq, with transition sets.
+%
+%
+
+\begin{lstlisting}
+Module Delta : DELTA.
+   (* Transition sets : *)
+   Definition config := list state.
+   
+   Definition t := 
+        FMap.t (FMap.t (list config)).
+   (* ............... *)
+\end{lstlisting}
+
+%
+%
+Now we can define a predicate to characterize the recognized language of a tree
+automaton.  In fact, we are defining the set of ground terms that are reduced to
+a state $q$ by a transition set $\Delta$. This set, which corresponds to
+$\Lang(\A,q)$ if $\Delta$ is the set of transitions of $\A$, can be
+constructed inductively in \coq\ using the single deduction rule:
+
+\begin{prooftree}
+  \AxiomC{$t_1 \in \Lang(\Delta, q_1)$}
+  \AxiomC{\dots\dots}
+  \AxiomC{$t_n \in \Lang(\Delta, q_n)$}
+  \RightLabel{If $f(q_1, \dots, q_n) \rightarrow q \in \Delta$}
+  \TrinaryInfC{$f(t_1,\dots, t_n) \in \Lang(\Delta, q)$}  
+\end{prooftree}
+
+In \coq, we express this statement using the inductive predicate
+\lstinline!IsRec!. A term $t$ is recognized by a tree automaton $(\Q_F,
+\Delta)$, if the predicate {\tt IsRec}~$\Delta$~$q$~$t$ is valid for $q \in
+\Q_F$.
+
+\begin{lstlisting}
+Inductive IsRec (D: Delta.t) : state -> term -> Prop :=
+  Rec_Term : forall f lt q,
+      IsRec' D (Delta.get q f D) lt -> IsRec D q (Fun f lt)
+
+with IsRec' (D: Delta.t) : list config -> list term -> Prop :=
+| Rec_SubTerm : forall lt c lc, IsRec'' D c lt -> IsRec' D (c::lc) lt
+| Rec_SubTerm' : forall lt c lc, IsRec' D lc lt -> IsRec' D (c::lc) lt
+     
+with IsRec'' (D: Delta.t) : config -> list term -> Prop :=
+| Rec_Nil : IsRec'' D nil nil
+| Rec_Cons : forall t q lt lq, IsRec D q t -> IsRec'' D lq lt ->
+       IsRec'' D (q::lq) (t::lt).
+\end{lstlisting}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

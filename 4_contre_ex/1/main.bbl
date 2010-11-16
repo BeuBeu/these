@@ -1,0 +1,140 @@
+\begin{thebibliography}{10}
+
+\bibitem{ALRd05}
+P.~A. Abdulla, A.~Legay, A.~Rezine, and J.~d'Orso.
+\newblock Simulation-based iteration of tree transducers.
+\newblock In {\em TACAS}, volume 3440 of {\em LNCS}, pages 30--40. Springer,
+  2005.
+
+\bibitem{avispa-site}
+{A}vispa -- a tool for {A}utomated {V}alidation of {I}nternet {S}ecurity
+  {P}rotocols.
+\newblock \url{http://www.avispa-project.org}.
+
+\bibitem{BaaderN-book98}
+F.~Baader and T.~Nipkow.
+\newblock {\em Term Rewriting and All That}.
+\newblock Cambridge University Press, 1998.
+
+\bibitem{BCHK08}
+Y.~Boichut, R.~Courbis, P.-C. Heam, and O.~Kouchnarenko.
+\newblock Finer is better: Abstraction refinement for rewriting approximations.
+\newblock In {\em RTA}, LNCS 5117, pages 48--62. Springer, 2008.
+
+\bibitem{BoichutGJL-RTA07}
+Y.~Boichut, T.~Genet, T.~Jensen, and L.~Leroux.
+\newblock Rewriting {A}pproximations for {F}ast {P}rototyping of {S}tatic
+  {A}nalyzers.
+\newblock In {\em RTA}, volume 4533 of {\em LNCS}, pages 48--62. Springer,
+  2007.
+
+\bibitem{BLW03}
+B.~Boigelot, A.~Legay, and P.~Wolper.
+\newblock Iterating transducers in the large (extended abstract).
+\newblock In {\em CAV}, LNCS, pages 223--235. Springer, 2003.
+
+\bibitem{BHRV06a}
+A.~Bouajjani, P.~Habermehl, A.~Rogalewicz, and T.~Vojnar.
+\newblock Abstract regular tree model checking.
+\newblock {\em Electronic Notes in Theoretical Computer Science},
+  149(1):37--48, 2006.
+
+\bibitem{BHRV06b}
+A.~Bouajjani, P.~Habermehl, A.~Rogalewicz, and T.~Vojnar.
+\newblock Abstract regular tree model checking of complex dynamic data
+  structures.
+\newblock In {\em SAS}, volume 4134 of {\em LNCS}, pages 52--70. Springer,
+  2006.
+
+\bibitem{BHV04}
+A.~Bouajjani, P.~Habermehl, and T.~Vojnar.
+\newblock Abstract regular model checking.
+\newblock In {\em CAV}, volume 3114 of {\em LNCS}, pages 372--386. Springer,
+  2004.
+
+\bibitem{BJNT00}
+A.~Bouajjani, B.~Jonsson, M.~Nilsson, and T.~Touili.
+\newblock Regular model checking.
+\newblock In {\em CAV}, volume 1855 of {\em LNCS}, pages 403--418.
+  Springer-Verlag, 2000.
+
+\bibitem{BLW04b}
+A.~Bouajjani, A.~Legay, and P.~Wolper.
+\newblock Handling liveness properties in (omega-)regular model checking.
+\newblock In {\em INFINITY}, volume 138(3) of {\em ENTCS}. Elsevier, 2004.
+
+\bibitem{BoyerGJ-IJCAR08}
+B.~Boyer, T.~Genet, and T.~Jensen.
+\newblock {C}ertifying a {T}ree {A}utomata {C}ompletion {C}hecker.
+\newblock In {\em IJCAR'08}, volume 5195 of {\em LNCS}. Springer, 2008.
+
+\bibitem{DBLP:conf/time/Clarke03}
+E.~M. Clarke.
+\newblock Counterexample-guided abstraction refinement.
+\newblock In {\em TIME}, page~7. IEEE Computer Society, 2003.
+
+\bibitem{TATA}
+H.~Comon, M.~Dauchet, R.~Gilleron, F.~Jacquemard, D.~Lugiez, C.~L\"{o}ding,
+  S.~Tison, and M.~Tommasi.
+\newblock Tree automata techniques and applications.
+\newblock 2008.
+
+\bibitem{FeuilladeGVTT-JAR04}
+G.~Feuillade, T.~Genet, and V.~Viet Triem~Tong.
+\newblock {R}eachability {A}nalysis over {T}erm {R}ewriting {S}ystems.
+\newblock {\em Journal of Automated Reasonning}, 33 (3-4):341--383, 2004.
+
+\bibitem{Genet-RTA98}
+T.~Genet.
+\newblock Decidable approximations of sets of descendants and sets of normal
+  forms.
+\newblock In {\em RTA}, volume 1379 of {\em LNCS}, pages 151--165.
+  Springer-Verlag, 1998.
+
+\bibitem{Genet-Habil}
+T.~Genet.
+\newblock Reachability analysis of rewriting for software verification.
+\newblock Universit\'e de Rennes~1, 2009.
+\newblock Habilitation.
+
+\bibitem{GenetK-CADE00}
+T.~Genet and F.~Klay.
+\newblock {R}ewriting for {C}ryptographic {P}rotocol {V}erification.
+\newblock In {\em Proc.\ 17th CADE Conf., Pittsburgh (Pen., USA)}, volume 1831
+  of {\em LNAI}. Springer-Verlag, 2000.
+
+\bibitem{GenetR-JSC10}
+T.~Genet and R.~Rusu.
+\newblock Equational tree automata completion.
+\newblock {\em JSC}, 45:574--597, 2010.
+
+\bibitem{GenetTTVTT-wits03}
+T.~Genet, Y.-M. Tang-Talpin, and V.~Viet Triem~Tong.
+\newblock {V}erification of {C}opy {P}rotection {C}ryptographic {P}rotocol
+  using {A}pproximations of {T}erm {R}ewriting {S}ystems.
+\newblock In {\em WITS'2003}, 2003.
+
+\bibitem{GilleronTison-FI95}
+R.~Gilleron and S.~Tison.
+\newblock Regular tree languages and rewrite systems.
+\newblock {\em Fundamenta Informaticae}, 24:157--175, 1995.
+
+\bibitem{MeseguerPM-TCS08}
+J.~Meseguer, M.~Palomino, and N.~Mart\'{\i}-Oliet.
+\newblock Equational abstractions.
+\newblock {\em TCS}, 403:239--264, 2008.
+
+\bibitem{Takai-RTA04}
+T.~Takai.
+\newblock {A} {V}erification {T}echnique {U}sing {T}erm {R}ewriting {S}ystems
+  and {A}bstract {I}nterpretation.
+\newblock In {\em RTA}, volume 3091 of {\em LNCS}, pages 119--133. Springer,
+  2004.
+
+\bibitem{WB98}
+P.~Wolper and B.~Boigelot.
+\newblock Verifying systems with infinite but regular state spaces.
+\newblock In {\em CAV}, volume 1427 of {\em LNCS}, pages 88--97.
+  Springer-Verlag, 1998.
+
+\end{thebibliography}

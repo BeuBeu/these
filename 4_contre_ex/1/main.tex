@@ -1,0 +1,136 @@
+\documentclass{fsttcs}
+% Note that \begin{document} comes before title information
+\usepackage[utf8]{inputenc}
+\usepackage[all, curve]{xy}
+\usepackage{amsmath, amssymb,graphicx,upgreek}
+\usepackage{url}
+\usepackage{tikz}
+
+\usepackage{wrapfig}
+\input{macros}
+
+\begin{document}
+
+\title{Fast Equational Abstraction Refinement \\ for Regular Tree Model Checking\\}
+
+% Equational Abstractions and Refinement for Regular Tree Model-Checking
+
+% Automatic Refinement for Equational Abstractions
+
+% Efficient Automatic Refinement for Tree Automata Completion
+
+% Tree Automata Completion with Refinement
+
+% Yet another tree regular model checking approach
+
+% Equations for precise and fast abstraction refinement
+
+% Precise and fast abstraction refinement for tree regular model checking
+
+
+% These are required for headers and for copyright on title page
+\runningtitle{Fast Equational Abstraction Refinement for Regular Tree Model Checking}
+\runningauthors{Boichut, Boyer, Genet, Legay}
+
+% Multiple authors, sharing an affiliation, use  \affiliation{...}
+
+%\author[lab2]{B. Boyer}{BenoÃ®t Boyer}
+%\address[lab2]{IRISA - UniversitÃ© Rennes 1, France}
+%\email{Benoit.Boyer@irisa.fr}  %optional
+
+\author{
+  Y. Boichut\inst{1}%\thanks{Funded by DOT MOT ROT},
+  ,
+  B. Boyer\inst{2}%\thanks{Funded by DOT MOT ROT},
+  ,
+  T. Genet\inst{2}%\thanks{Funded by DOT MOT ROT},
+  and
+  A. Legay\inst{3}%\thanks{Funded by DOT MOT ROT}
+}
+  
+%   S. Mello, R. Shello\thanks{\ldots but no thanks!}}
+
+\affiliation{
+  LIFO - Université Orléans,
+  France
+}
+\affiliation{
+  IRISA - 
+  Université Rennes 1,
+  France%\\
+  % \email{\{Benoit.Boyer, Thomas.Genet\}@irisa.fr}
+}
+\affiliation{
+  INRIA - Rennes,
+  France
+}
+
+% You can also use 
+% 
+% \institute{}{
+%   Indian Institute of Science\\
+%   Bangalore\\
+%   \email{\{tweedledum,tweedledee,hohum\}@iisc.ernet.in}
+% }  
+% 
+% which will leave more space between author and affiliation
+
+% No \maketitle required
+
+\begin{abstract} {\it Tree Regular model checking} is the name of a
+  family of techniques for analyzing infinite-state systems in which
+  states are represented by trees and sets of states by tree
+  automata. From the verification point of view, the central problem
+  is to compute the set of reachable states providing a given
+  transition relation. A main obstacle is that this set is in general
+  not computable in a finite time. In this paper, we propose a new
+  CounterExample Guided Abstraction Refinement technique that can be
+  used to check whether a set of state can be reached from the initial
+  set. Contrary to existing techniques, our approach relies on
+  equational abstraction to ease the definition of approximations and
+  on a specific model of tree automata to avoid heavy backward
+  refinement steps.
+  
+
+\end{abstract}
+%DECOMMENTER POUR COMPILER l'ABSTRACT SEUL
+% \end{document}
+
+\input{introduction}
+
+\input{definitions}
+
+\input{completion}
+
+\input{re_automaton}
+
+\input{re_completion}
+
+\input{refinement}
+
+\section{Conclusion}
+\label{sec:conclusion}
+\input{conclusion}
+
+% \comments{avantage : on ne change pas la classe de complexité de la représentation,
+%   on est toujours dans le domaine des réguliers\dots
+%   (implique de rester dans la même classe de complexité des automates
+%   meilleures que les automates à contraintes, TAGGED automatas \dots)
+% }
+
+\small{
+\bibliographystyle{abbrv}
+%\bibliography{biblio/sabbrev,biblio/eureca,biblio/genet,biblio/mc}
+\bibliography{sabbrev,eureca,genet,additional,thesis}%,mc}}
+\appendix
+
+\newpage
+\input{proofs}
+\input{thm}
+\input{re_intersection}
+\end{document}
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% TeX-PDF-mode: t
+%%% End: 

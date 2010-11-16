@@ -1,0 +1,131 @@
+\section{Definitions}
+\label{sec:definitions}
+% \comments{
+%   Toutes les definitions à propos de Réécriture, substitutions ($\Q$-subst inclues) et 
+%   Automates d'arbres.
+%   Attention : \\
+%   pas de def independante de normalized transitions et epsilon-transition
+%   uniquement une def globale pour les automates 
+%   suivie du langage d'un automate d'arbres sans format def.
+% }
+
+In this section, we introduce some definitions and concepts that will
+be used through the rest of the paper (see
+also\,\cite{BaaderN-book98,TATA,GilleronTison-FI95}). Let $\F$ be a
+finite set of symbols, each associated with an arity function, and let
+$\X$ be a countable set of {\em variables}. $\TFX$ denotes the set of
+{\em terms} and $\TF$ denotes the set of {\em ground terms} (terms
+without variables). The set of variables of a term $t$ is denoted by
+$\var(t)$. A {\em substitution} is a function $\sigma$ from $\X$ into
+$\TFX$, which can be uniquely extended to an endomorphism of $\TFX$. A
+{\em position} $p$ for a term $t$ is a word over $\NN$. The empty
+sequence $\lambda$ denotes the top-most position. The set $\pos(t)$ of
+positions of a term $t$ is inductively defined by $\pos(t)= \{
+\lambda\} $ if $t \in \X$ and $\pos(f(t_1,\dots,t_n)) = \{ \lambda \}
+\cup \{i.p \mid 1 \leq i \leq n \et p \in \pos(t_i) \}$ otherwise.  If
+$p \in \pos(t)$, then $t|_p$ denotes the subterm of $t$ at position
+$p$ and $t[s]_p$ denotes the term obtained by replacement of the
+subterm $t|_p$ at position $p$ by the term $s$.
+
+
+A {\em term rewriting system} (TRS) $\R$ is a set of {\em rewrite
+  rules} $l \rw r$, where $l, r \in \TFX$, $l \not \in \X$, and
+$\var(l) \supseteq \var(r)$.  A rewrite rule $l \rw r$ is {\em
+  left-linear} if each variable of $l$ occurs only once in $l$.  A TRS
+$\R$ is left-linear if every rewrite rule $l \rw r$ of $\R$ is
+left-linear.  The TRS $\R$ induces a rewriting relation $\rw_{\R}$ on
+terms as follows. Let $s, t\in \TFX$ and $l \rw r \in \R$, $s \rw_{\R}
+t$ denotes that there exists a position $p\in\pos(t)$ and a
+substitution $\sigma$ such that $s|_p= l\sigma$ and $r=s[r\sigma]_p$.
+%  $s \rw^p_{\R} t$ denotes that there exists a
+% position $p\in\pos(t)$ and a substitution $\sigma$ such that $s|_p= l\sigma$ and
+% $r=s[r\sigma]_p$. Note that the rewriting position $p$ can generally be omitted,
+% i.e. we generally write $s \rw_{\R} t$. 
+The reflexive transitive closure of $\rw_{\R}$ is denoted by
+$\rw^*_{\R}$ and $s \rw^!_\R t$ denotes that $s\rw^*_\R t$ and $t$ is
+irreducible by $\R$. The set of $\R$-descendants of a set of ground
+terms $I$ is $\desc(I) = \{t \in \TF \sep \exists s \in I \st s
+\rw^*_{\R} t \}$.  An {\em equation set} $E$ is a set of {\em
+  equations} $l = r$, where $l, r \in \TFX$.  For all equation $l = r
+\in \R$ and all substitution $\sigma$ we have $l\sigma =_E r\sigma$.
+The relation $=_E$ is the smallest congruence such that for all
+substitution $\sigma$ we have $l\sigma = r\sigma$. Given a TRS $\R$
+and a set of equations $E$, a term $s\in\TF$ is rewritten modulo $E$
+into $t\in\TF$, denoted $s \rwmod t$, if there exist $s\in\TF'$ and
+$t'\in\TF$ such that $s=_Es'\rw_\R t'=_E t$. Thus, the set of
+$\R$-descendants modulo $E$ of a set of ground terms $I$ is $\descE(I)
+= \{t \in \TF \sep \exists s \in I \st s \rwmod^* t \}.$
+
+We now define tree automata that are used to recognize possibly
+infinite sets of terms. Let $\Q$ be a finite set of symbols with arity
+$0$, called {\em states}, such that $\Q \cap \F= \emptyset$.  $\TFQ$
+is called the set of {\em configurations}. A {\em transition} is a
+rewrite rule $c \f q$, where $c$ is a configuration and $q$ is state.
+A transition is {\em normalized} when $c = f(q_1, \ldots, q_n)$, $f
+\in \F$ whose arity is $n$, and $q_1, \ldots, q_n \in \Q$. A {\em
+  $\varepsilon$-transition} is a transition of the form $q \f q'$
+where $q$ and $q'$ are states.
+
+\begin{definition}[Bottom-up nondeterministic finite tree automaton]
+\label{def:automata}
+A bottom-up nondeterministic finite tree automaton (tree automaton for
+short) over the alphabet $\F$ is a tuple $\A= \langle \F, \Q,
+\Q_F,\Delta \rangle$, where $\Q_F \subseteq \Q$, $\Delta$ is a set of
+normalized transitions and $\varepsilon$-transitions.
+\end{definition}
+
+\noindent
+The transitive and reflexive {\em rewriting relation} on $\TFQ$
+induced by all the transitions of $\A$ is denoted by $\f_{\A}^*$. The
+tree language recognized by $\A$ in a state $q$ is $\Lang{}(\A,q) =
+\{t \in \TF \sep t \rw^*_\A q \}$. The language recognized by $\A$ is
+$\Lang{}(\A) = \bigcup_{q \in \Q_F} \Lang{}(\A, q)$. 
+
+% Let $\TFX$ be a
+% set of terms represented by an automaton $A$, we use $\R(A)$ to denote
+% the automaton that represents the terms that can be obtained from
+% $\TFX$ by applying $\R$.
+
+
+
+  %A tree language is regular if and only if it can be recognized by a tree automaton.
+  %We say that $t$ is a {\em canonical term} of the state $q$, if $t \f^!_\A q$.
+
+% \begin{example}
+%    Let $\A$ be the tree automaton $\langle \F, \Q, \Q_F, \Delta \rangle$ such that $\F=\{f,g,a,b\}$, $\Q= \{q_0, q_1, q_2\}$, $\Q_F=\{q_0\}$,
+%    $\Delta= \{f(q_0)
+%    \rw q_0, g(q_1) \rw q_0, a \rw q_1, b \rw q_2 \}$ and $\Delta_{\epsilon}=\{q_2 \rw q_1 \}$. In $\Delta$, transitions are
+%    {\em normalized}. A transition of the form $f(g(q_1)) \f q_0$ is not normalized. The term $g(a)$
+%    is a term of $\TFQ$ (and of $\TF$) and can be rewritten by $\Delta$ in the following way:
+%    $g(a) \rwne_\A g(q_1)
+%    \rwne_\A q_0$. Hence $g(a)$ is a canonical term of $q_1$. Note also that $b \rw_\A q_2 \rw_\A q_1$.
+%    Hence, $\Lang{}(\A, q_1)=
+%    \{a, b\}$ and $\Lang{}(\A)=\Lang{}(\A, 
+%    q_0) = \{g(a), g(b),f(g(a)), f(f(g(b))),\ldots\}=\{f^*(g([a|b]))\}$.
+%   \end{example}
+
+
+
+
+%%% C'est peut �tre correct sans cette def inutile ??? !!!
+%%% => compacite + determinisme de la normalisation...
+
+% \begin{property}[$\f^!$ deterministic]
+%   \label{prop:deterministic}
+%   If $\Delta$ contains two normalized transitions of the form 
+%   $f(q_1, \dots, q_n) \rw q$ and $f(q_1, \dots, q_n) \rw q'$, it means $q = q'$. 
+%   This ensures that the rewriting relation $\f^!$ is deterministic.
+% \end{property}
+
+
+
+%%%%% FIN R-AUTOMATON : LA SUITE AILLEURS
+
+
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

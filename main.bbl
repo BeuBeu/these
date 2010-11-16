@@ -1,0 +1,275 @@
+\begin{thebibliography}{10}
+
+\bibitem{ALRd05}
+P.~A. Abdulla, A.~Legay, A.~Rezine, and J.~d'Orso.
+\newblock Simulation-based iteration of tree transducers.
+\newblock In {\em TACAS}, volume 3440 of {\em LNCS}, pages 30--40. Springer,
+  2005.
+
+\bibitem{Agda}
+Agda.
+\newblock Chalmers {U}niversity of {T}echnology.
+\newblock \url{http://unit.aist.go.jp/cvs/Agda/}.
+
+\bibitem{BaaderN-book98}
+F.~Baader and T.~Nipkow.
+\newblock {\em Term Rewriting and All That}.
+\newblock Cambridge University Press, 1998.
+
+\bibitem{BallandBGM-AMAST08}
+E.~Balland, Y.~Boichut, T.~Genet, and P.-E. Moreau.
+\newblock Towards an {E}fficient {I}mplementation of {T}ree {A}utomata
+  {C}ompletion.
+\newblock In {\em AMAST'08}, volume 5140 of {\em LNCS}. Springer, 2008.
+
+\bibitem{Copster}
+N.~Barr\'{e}, F.~Besson, T.~Genet, L.~Hubert, and L.~Le~Roux.
+\newblock Copster homepage, 2009.
+\newblock \url{http://www.irisa.fr/celtique/genet/copster}.
+
+\bibitem{BCHK08}
+Y.~Boichut, R.~Courbis, P.-C. Heam, and O.~Kouchnarenko.
+\newblock Finer is better: Abstraction refinement for rewriting approximations.
+\newblock In {\em RTA}, LNCS 5117, pages 48--62. Springer, 2008.
+
+\bibitem{BoichutGJL-RTA07}
+Y.~Boichut, T.~Genet, T.~Jensen, and L.~Leroux.
+\newblock Rewriting {A}pproximations for {F}ast {P}rototyping of {S}tatic
+  {A}nalyzers.
+\newblock In {\em RTA}, volume 4533 of {\em LNCS}, pages 48--62. Springer,
+  2007.
+
+\bibitem{BLW03}
+B.~Boigelot, A.~Legay, and P.~Wolper.
+\newblock Iterating transducers in the large (extended abstract).
+\newblock In {\em CAV}, LNCS, pages 223--235. Springer, 2003.
+
+\bibitem{BouajjaniHRV-Infinity06}
+A.~Bouajjani, P.~Habermehl, A.~Rogalewicz, and T.~Vojnar.
+\newblock {A}bstract {R}egular {T}ree {M}odel {C}hecking.
+\newblock In {\em Infinity'05}, volume 149(1), pages 37--48, 2006.
+
+\bibitem{BouajjaniHRV-SAS06}
+A.~Bouajjani, P.~Habermehl, A.~Rogalewicz, and T.~Vojnar.
+\newblock {A}bstract {R}egular {T}ree {M}odel {C}hecking of {C}omplex {D}ynamic
+  {D}ata {S}tructures.
+\newblock In {\em SAS'06}, volume 4134, pages 52--70. Springer, 2006.
+
+\bibitem{DBLP:conf/cav/BouajjaniHV04}
+A.~Bouajjani, P.~Habermehl, and T.~Vojnar.
+\newblock Abstract regular model checking.
+\newblock In R.~Alur and D.~Peled, editors, {\em CAV}, volume 3114 of {\em
+  Lecture Notes in Computer Science}, pages 372--386. Springer, 2004.
+
+\bibitem{BJNT00}
+A.~Bouajjani, B.~Jonsson, M.~Nilsson, and T.~Touili.
+\newblock Regular model checking.
+\newblock In {\em CAV}, volume 1855 of {\em LNCS}, pages 403--418.
+  Springer-Verlag, 2000.
+
+\bibitem{BoyerG-RULE09}
+B.~Boyer and T.~Genet.
+\newblock Verifying {T}emporal {R}egular properties of {A}bstractions of {T}erm
+  {R}ewriting {S}ystems.
+\newblock In {\em {P}roc. of RULE'09}. EPTCS, 2009.
+
+\bibitem{BoyerGJ-IJCAR08}
+B.~Boyer, T.~Genet, and T.~Jensen.
+\newblock {C}ertifying a {T}ree {A}utomata {C}ompletion {C}hecker.
+\newblock In {\em IJCAR'08}, volume 5195 of {\em LNCS}. Springer, 2008.
+
+\bibitem{Brainerd-IC69}
+W.~S. Brainerd.
+\newblock Tree generating regular systems.
+\newblock 14:217--231, 1969.
+
+\bibitem{Buchi}
+J.~B{\"u}chi.
+\newblock On a decision method in restricted second order arithmetic.
+\newblock In {\em International Congress on Logic, Methodoly and philosophy of
+  Science}, pages 1--11. Stanford University Press, 1960.
+
+\bibitem{DBLP:conf/time/Clarke03}
+E.~M. Clarke.
+\newblock Counterexample-{G}uided {A}bstraction {R}efinement.
+\newblock In {\em TIME}, page~7. IEEE {C}omputer {S}ociety, 2003.
+
+\bibitem{TATA}
+H.~Comon, M.~Dauchet, R.~Gilleron, F.~Jacquemard, D.~Lugiez, C.~L\"{o}ding,
+  S.~Tison, and M.~Tommasi.
+\newblock Tree automata techniques and applications.
+\newblock 2008.
+
+\bibitem{Coq}
+The coq proof assistant.
+\newblock Inria.
+\newblock \url{http://coq.inria.fr/}.
+
+\bibitem{coq-stdlib}
+The {C}oq {S}tandard {L}ibrary.
+\newblock Inria.
+\newblock \url{http://www.lix.polytechnique.fr/coq/stdlib/}.
+
+\bibitem{CoquideDauchetGV-FCT89}
+J.~Coquid\'e, M.~Dauchet, R.~Gilleron, and S.~V\'agv\"olgyi.
+\newblock Bottom-up tree pushdown automata and rewrite systems.
+\newblock volume 488, pages 287--298, 1991.
+
+\bibitem{CousotC-POPL77}
+P.~Cousot and R.~Cousot.
+\newblock Abstract interpretation: A unified lattice model for static analysis
+  of programs by construction or approximation of fixpoints.
+\newblock In {\em POPL}, pages 238--252, 1977.
+
+\bibitem{DauchetTison-LICS90}
+M.~Dauchet and S.~Tison.
+\newblock The theory of ground rewrite systems is decidable.
+\newblock pages 242--248, June 1990.
+
+\bibitem{DOWEK-LANG}
+G.~Dowek.
+\newblock Le langage math{\'e}matique et les langages de programmation, juin
+  1997.
+
+\bibitem{MC-Book}
+O.~G. Edmund M.~Clarke and D.~A. Peled.
+\newblock {\em Model Checking}.
+\newblock MIT Press, 2000.
+
+\bibitem{FeuilladeGVTT-JAR04}
+G.~Feuillade, T.~Genet, and V.~Viet Triem~Tong.
+\newblock {R}eachability {A}nalysis over {T}erm {R}ewriting {S}ystems.
+\newblock {\em Journal of Automated Reasonning}, 33 (3-4):341--383, 2004.
+
+\bibitem{FRAMAC}
+Frama-{C} homepage.
+\newblock Inria Cea.
+\newblock \url{http://frama-c.com/}.
+
+\bibitem{GallagherR-LPAR08}
+J.~Gallagher and M.~Rosendahl.
+\newblock Approximating term rewriting systems: a horn clause specification and
+  its implementation.
+\newblock In {\em LPAR'08}, volume 5330. Springer, 2008.
+
+\bibitem{Genet-RR97b}
+T.~Genet.
+\newblock Decidable approximations of sets of descendants and sets of normal
+  forms (extended version).
+\newblock Technical Report RR-3325, 1997.
+
+\bibitem{Genet-RTA98}
+T.~Genet.
+\newblock Decidable approximations of sets of descendants and sets of normal
+  forms.
+\newblock volume 1379, pages 151--165, 1998.
+
+\bibitem{Genet-Habil}
+T.~Genet.
+\newblock Reachability analysis of rewriting for software verification.
+\newblock Universit\'e de Rennes~1, 2009.
+\newblock Habilitation.
+
+\bibitem{GenetK-CADE00}
+T.~Genet and F.~Klay.
+\newblock {R}ewriting for {C}ryptographic {P}rotocol {V}erification.
+\newblock volume 1831, 2000.
+
+\bibitem{GenetR-JSC10}
+T.~Genet and R.~Rusu.
+\newblock Equational tree automata completion.
+\newblock {\em JSC}, 45:574--597, 2010.
+
+\bibitem{timbuk}
+T.~Genet and V.~Viet Triem~Tong.
+\newblock {T}imbuk -- a {T}ree {A}utomata {L}ibrary.
+\newblock IRISA / Universit\'e de Rennes 1, 2001.
+\newblock \url{http://www.irisa.fr/celtique/genet/timbuk/}.
+
+\bibitem{DBLP:conf/pstv/GerthPVW95}
+R.~Gerth, D.~Peled, M.~Y. Vardi, and P.~Wolper.
+\newblock Simple on-the-fly automatic verification of linear temporal logic.
+\newblock In P.~Dembinski and M.~Sredniawa, editors, {\em PSTV}, volume~38 of
+  {\em IFIP Conference Proceedings}, pages 3--18. Chapman {\&} Hall, 1995.
+
+\bibitem{GilleronTison-FI95}
+R.~Gilleron and S.~Tison.
+\newblock Regular tree languages and rewrite systems.
+\newblock 24:157--175, 1995.
+
+\bibitem{ASTERIX}
+R.~Goscinny and A.~Uderzo.
+\newblock Le {B}ouclier arverne, 1968.
+
+\bibitem{HUET-78}
+D.~Huet, G{\'e}rard~Lankford.
+\newblock On the uniform halting problem for term rewriting systems.
+\newblock Technical report, IRIA, Mars 1978.
+
+\bibitem{Isa}
+The proof assistant isabelle.
+\newblock http://www.cl.cam.ac.uk/research/hvg/Isabelle/.
+
+\bibitem{Jacquemard-RTA96}
+F.~Jacquemard.
+\newblock Decidable approximations of term rewriting systems.
+\newblock pages 362--376, 1996.
+
+\bibitem{KEY}
+The {K}e{Y} project.
+\newblock \url{http://www.key-project.org}.
+
+\bibitem{TA-isabelle2010}
+P.~Lammich.
+\newblock {T}ree {A}utomata in {I}sabelle.
+\newblock \url{http://afp.sourceforge.net/entries/Tree-Automata.shtml}.
+
+\bibitem{OCAML}
+X.~Leroy, D.~Doligez, J.~Garrigue, D.~R\'emy, and J.~Vouillon.
+\newblock The {O}bjective {C}aml system release 3.00 -- {D}ocumentation and
+  user's manual, 2000.
+\newblock {\small \texttt{http://caml.inria.fr/ocaml/htmlman/}}.
+
+\bibitem{MeseguerPM-TCS08}
+J.~Meseguer, M.~Palomino, and N.~Mart\'{\i}-Oliet.
+\newblock Equational abstractions.
+\newblock {\em TCS}, 403:239--264, 2008.
+
+\bibitem{RAVAJ}
+Rewriting and approximations for java applications verification.
+\newblock http://www.irisa.fr/celtique/genet/RAVAJ/.
+
+\bibitem{Rety-LPAR99}
+P.~R\'ety.
+\newblock {R}egular {S}ets of {D}escendants for {C}onstructor-based {R}ewrite
+  {S}ystems.
+\newblock volume 1705, 1999.
+
+\bibitem{RivalGL-TPHOL01}
+X.~Rival and J.~Goubault-Larrecq.
+\newblock Experiments with finite tree automata in coq.
+\newblock In {\em Proc. of TPHOL'01}, LNCS. Springer, 2001.
+
+\bibitem{Salomaa88}
+K.~Salomaa.
+\newblock Deterministic {T}ree {P}ushdown {A}utomata and {M}onadic {T}ree
+  {R}ewriting {S}ystems.
+\newblock {\em J.~Comput. Syst. Sci.}, 37:367--394, 1988.
+
+\bibitem{Takai-RTA04}
+T.~Takai.
+\newblock {A} {V}erification {T}echnique {U}sing {T}erm {R}ewriting {S}ystems
+  and {A}bstract {I}nterpretation.
+\newblock In {\em RTA}, volume 3091, pages 119--133. Springer, 2004.
+
+\bibitem{TOM}
+{Tom Homepage}.
+\newblock \url{http://tom.loria.fr}.
+
+\bibitem{WB98}
+P.~Wolper and B.~Boigelot.
+\newblock Verifying systems with infinite but regular state spaces.
+\newblock In {\em CAV}, volume 1427 of {\em LNCS}, pages 88--97.
+  Springer-Verlag, 1998.
+
+\end{thebibliography}

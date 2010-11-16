@@ -1,0 +1,151 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%Ces macros sont toutes utilisees par le document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%Insertion de commentaires dans le PDF
+\newcommand{\comments}[1]{\paragraph{Commentaire~: }#1\newline}
+
+%Model Checking
+
+\newcommand{\K}{\mathit K}
+\newcommand{\M}{\mathit M}
+\newcommand{\trans}{\Delta_\varepsilon^{\leftarrow}}
+\newcommand{\Ap}{\mathcal A_p}
+\newcommand{\validates}{\models}
+\newcommand{\nxt}{\mathbf X}
+\newcommand{\fut}{\mathbf F}
+\newcommand{\gbl}{\mathbf G}
+\newcommand{\unt}{\mathbf U}
+\newcommand{\rel}{\mathbf R}
+
+
+%Math
+\newcommand{\Nat}{\mathbb N}
+\newcommand{\Natmod}{\Nat[\ ]}
+\newcommand{\equ}{\; \Longleftrightarrow \;}
+
+
+%quick
+\newcommand{\la}{\langle}
+\newcommand{\ra}{\rangle}
+\newcommand{\eps}{\varepsilon}
+
+\newcommand{\et}{\mbox{ and }}
+\newcommand{\st}{\mbox{ s.t. }}
+\newcommand{\oute}{\mbox{ or }}
+\newcommand{\ou}{\; \vee \;}
+
+\newcommand{\spf}{\;\; \Longrightarrow \;\;}
+\newcommand{\dbf}{\;\; \Longleftrightarrow \;\;}
+\newcommand{\imp}{\; \Longrightarrow \;}
+\newcommand{\sep}{\; | \;}
+\newcommand{\dsep}{\; || \;}
+
+
+%TRS
+\newcommand{\Q}{\mathit Q}
+\newfont{\amstoto}{msbm10}
+\newcommand{\NN}{\mbox{\amstoto\char'116}}
+\newcommand{\ZZ}{\mbox{\amstoto\char'132}}
+\newcommand{\arity}{ar}
+\newcommand{\Sub}{{\cal S}}
+%\newcommand{\F}{\mathcal{F}}
+\newcommand{\Y}{{\cal Y}}
+%\newcommand{\C}{{\cal C}}
+\newcommand{\D}{{\cal D}}
+\newcommand{\TF}{{\cal T(F)}}
+\newcommand{\TFX}{{\cal T(F, X)}}
+\newcommand{\TFQ}{{\cal T(F \cup \Q)}}
+\newcommand{\TFQp}{{\cal T(F \cup \Q')}}
+\newcommand{\TFQX}{{\cal T(F \cup \Q, X)}}
+\newcommand{\TFXQ}{{\cal T(F, X \times \Q)}}
+\newcommand{\TC}{{\cal T(C)}}
+\newcommand{\Qf}{\Q_F}
+\newcommand{\aut}{\langle \F, \Q, \Qf, \Delta \rangle} 
+%\newcommand{\B}{{\cal B}}
+\newcommand{\ordlexico}{\prec}
+\newcommand{\bottom}{\perp}
+%\newcommand{\match}{\unlhd}
+
+\newcommand{\var}{{\cal V}ar}
+\newcommand{\pos}{{\cal P}os}
+\newcommand{\R}{\mathcal R}
+\newcommand{\desc}{\R^*}
+\newcommand{\T}{\mathcal T}
+\newcommand{\X}{\mathcal X}
+\newcommand{\vars}{\mathcal V}
+\newcommand{\rw}{\rightarrow}
+\newcommand{\trw}{\rightarrow^{\lambda}}
+\newcommand{\lrw}{\longrightarrow}
+\newcommand{\nrw}{\nrightarrow}
+\newcommand{\arw}{\dashrightarrow}
+\newcommand{\rwe}{\rightarrow^\varepsilon}
+\newcommand{\rwne}{\rightarrow^{\not\varepsilon}}
+
+
+%substitutions
+\newcommand{\plus}{\sqcup}
+\newcommand{\bigplus}{\bigsqcup}
+\newcommand{\id}{id}
+
+%completion
+\newcommand{\match}[2]{#1 \unlhd #2}
+\newcommand{\matchi}[2]{#1 \lhd #2}
+\newcommand{\Deps}{\Delta_{\varepsilon}}
+\newcommand{\norm}{\downarrow}
+
+                          
+%Tree Automata
+\newcommand{\A}{\mathit A}
+\newcommand{\B}{\mathit B}
+\newcommand{\C}{\mathit C}
+\newcommand{\F}{\mathcal F}
+\newcommand{\Pred}{\mathcal P}
+\newcommand{\sub}{\Subset}
+\newcommand{\Lang}[1]{\mathcal{L}_{#1}}
+\newcommand{\f}{\rw}
+\newcommand{\aaex}{{\it A}_{\R}}
+\newcommand{\automaton}[3]{\la #1, #2, #3 \ra}
+
+
+%%Mots clefs :
+\newcommand{\kw}[1]{\mathtt{#1}}
+\newcommand{\parts}[1]{\mathcal{P}(#1)}
+
+
+\newcommand{\bydef}{\stackrel{\triangle}{=}}
+\newcommand{\mapswith}[1]{\stackrel{#1}{\longrightarrow}}
+
+%\newcommand{\none}{\kw{none}}
+\newcommand{\true}{\mathbbm{t}rue}
+\newcommand{\false}{\mathbbm{f}alse}
+\newcommand{\sun}{\textsc{Sun Microsystem\ }}
+\newcommand{\java}{\textsc{Java\ }}
+\newcommand{\midp}{\textsc{Java MIDP\ }}
+\newcommand{\lande}{\textsc{Lande\ }}
+\newcommand{\danger}{\textsc{\textbf{Danger !}}\normalsize}
+\newcommand{\coq}{{\it Coq}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\reff}[1]{[\textsc{Fig}. \ref{#1}]}
+\newcommand{\refs}[1]{[sec. \ref{#1}]}
+\newcommand{\refa}[1]{[cf. \ref{#1} p. \pageref{#1}]}
+
+%Macros pour construire une regle d'inference
+\newcommand{\instr}[1]{instruction_P(m, pc) = \kw{#1}}
+\newcommand{\hs}[1]{\langle #1 \rangle}
+\newcommand{\infer}[3]
+{\dfrac{\instr{#1}}{\hs{#2}::sf \to_{#1}\hs{#3}::sf}}
+
+% #2 = side-conditions : 
+\newcommand{\inferi}[5]
+{\dfrac{\instr{#1} \quad\ #2 }{#3::sf, \rho \to_{#1} #4::sf, #5}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

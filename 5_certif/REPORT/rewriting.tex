@@ -1,0 +1,126 @@
+\section{Formalization of Term Rewriting Systems}
+\label{sec:rewriting}
+
+The aim of this part is to formalize in \coq: terms, term rewriting systems,
+reachable terms and the reachability problem itself.  Firstly we use the
+positive integers provided by the \coq's standard library to define symbol sets
+like variables ($\X$) or function symbols ($\F$). We rename \lstinline!positive! into
+\lstinline!ident! to be more explicit. Then, we define term set $\TFX$ using inductive
+types:
+
+\switchlstcoq
+%A discuter....
+%Definition F := positive.
+%Definition X := positive.
+\begin{lstlisting}
+Definition ident := positive.
+
+Inductive term : Set :=
+| Fun : ident -> list term -> term
+| Var : ident -> term.
+\end{lstlisting}
+
+\versionlongue{
+Now, the term $f(x, a)$ will be written \lstinline!Fun 0 (Var 0::(Fun 1 nil)::nil)!  assuming that we have the corresponding mapping between between
+symbols, variables and positive integers $f \mapsto 0$, $a \mapsto 1$ and $x
+\mapsto 0$ for example.  Note that it is possible to attach the value $0$
+to $f$ and $x$, since the \lstinline!term!'s constructors \lstinline!Fun! and
+\lstinline!Var! allows to differentiate between variable and function symbols.
+}
+
+\versionlongue{
+\paragraph{Remarks:}
+\begin{itemize}
+\item
+  Since equality is decidable, we can easily define term equality as a
+  decidable relation. Afterward, this is very useful to define functions
+  where term comparison is required.
+\item
+  A bad point for \coq\ is the induction principle
+  \lstinline!term_rect! automatically generated which is too weak.
+  To prove properties in the following, we need a more efficient theorem
+  named \lstinline!term_rect'!. This is required to be able to prove
+  most of the theorems on terms.
+\end{itemize}
+}
+
+A rewrite rule $l \rw r$ is represented by a pair of terms with a
+well-definition proof, i.e. a \coq\ proof that the set of variables of $r$ is a
+subset of the set of variables of $l$. The function
+\lstinline!Fv : term -> list ident! builds the set of variables for a term. 
+% In \coq, it becomes:
+\begin{lstlisting}
+Inductive rule : Set :=
+| Rule (l r : term)(H : subseteq (Fv r) (Fv l)) : rule.
+\end{lstlisting}
+
+In the following, \lstinline!list rule! type represents a
+TRS. In \coq\ we use \lstinline!(t @ sigma)!  to denote the term resulting of
+the application of a substitution \lstinline!sigma! to each variable that occurs
+in a term \lstinline!t!. 
+
+\begin{lstlisting}
+Definition substitution := ident -> option term.
+\end{lstlisting}
+
+In \coq, the rewriting relation \emph{"$u$ is rewritten in $v$ by $l
+  \rightarrow r$"},
+commonly defined by $\exists \sigma \
+s.t.\ u|_p = l\sigma \ \land \ v = u [ r\sigma ]_p$, is split into
+two predicates:
+\begin{itemize}
+\item The first one defines the rewriting of a term at the topmost position. In
+  fact, the set of term pairs $(t, t')$ which are rewritten at the top most by
+  the rule can be seen as the set of term pairs $(l\sigma, r\sigma)$ for any
+  substitution $\sigma$.
+
+\item 
+  The second one just defines inductively the rewriting relation at any
+  position of a term $t$ by a rule $l \rightarrow r$, by the topmost
+  rewriting of any subterm of $t$ by $l \rightarrow r$.
+\end{itemize}
+
+\begin{lstlisting}
+(* Topmost rewriting : *)
+Inductive TRew (x : rule) : term -> term -> Prop :=
+| R_Rew :
+  forall s l r (H : subseteq (Fv r) (Fv l)),
+    x = Rule l r H -> TRew x (l @ s) (r @ s).
+\end{lstlisting}
+
+
+\begin{lstlisting}
+(* Rewrite at any position of term *)
+Inductive Rew (r : rule) : term -> term -> Prop :=
+| Rew1 : forall t t', 
+    TRew r t t' -> Rew r t t'
+| Rew2 : forall f l l',
+    Rargs r l l' -> Rew r (Fun f l) (Fun f l')
+\end{lstlisting}
+
+\begin{lstlisting}
+with Rargs (r : rule):list term->list term->Prop:=
+| Ra1 : forall t t' l,
+    Rew r t t' -> Rargs r (t::l) (t'::l)
+| Ra2 : forall t l l',
+    Rargs r l l' -> Rargs r (t::l) (t::l').
+\end{lstlisting}
+
+
+\versioncourte{Similarly, using an inductive definition it is possible to
+  define the \lstinline!Rew! predicate for rewriting at any position.  } Then we
+have to define $\rw^*_{\R}$. In \coq, we prefer to see it as the predicate
+\lstinline{Reachable R u} that characterizes the set of reachable terms from
+$u$ by $\rightarrow^*_\R$.
+
+\begin{lstlisting}
+Inductive Reachable(R : list rule)(t : term) : term -> Prop:=
+| R_refl : Reachable R t t
+| R_trans : forall u v r, Reachable R t u -> In r R -> Rew r u v -> 
+    Reachable R t v.
+\end{lstlisting}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

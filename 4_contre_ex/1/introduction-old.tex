@@ -1,0 +1,154 @@
+
+\section{Introduction}
+\label{sec:introduction}
+
+At the heart of all the techniques that have been proposed for
+exploring infinite state spaces, is a symbolic representation that can
+finitely represent infinite sets of states. In early work on the
+subject, this representation was domain specific, for example linear
+constraints for sets of real vectors. For several years now, the idea
+that a generic finite-automaton based representation could be used in
+many settings has gained ground, starting with systems manipulating
+queues and integers (see \cite{WB98} for a survey), then moving to
+parametric systems~\cite{KMMPS97}, and, more recently, reaching systems
+using real variables~\cite{BJW01}.
+
+Beyond the necessary symbolic representation, there is also a need to
+``accelerate'' the search through the state space in order to reach,
+in a finite amount of time, states at unbounded depths. In
+acceleration techniques, the move has again been from the specific to
+the generic, the latter approach being often referred to as regular
+model checking.  The advantages of using a generic technique are of
+course that there is only one method to implement independently of the
+domain considered, that multidomain situations can potentially be
+handled transparently, and that the scope of the technique can include
+cases not handled by specific approaches. Beyond these concrete
+arguments, one should not forget the elegance of the generic approach,
+which can be viewed as an indication of its potential, thus justifying
+a thorough investigation.
+
+Most of existing results on regular model checking assume that states
+are represented by words and set of states by finite-state
+automata\,\cite{BLW03,BJNT00}. There are many interesting
+infinite-state systems whose sets of reachable states cannot be
+encoded by regular sets of words. This is either because the behavior
+of the system cannot be captured by a regular representation
+\cite{FP01}, or because the topology of the system is not suited to be
+expressed with a word-based representation. A solution to the latter
+problem is to extend the applicability of the regular model checking
+approach beyond words.
+
+In this paper, we assume that states of the system are represented by
+trees and set of states by tree automata. In this context, the
+transition relation of the system is naturally represented by a set of
+rewriting rules. It is well-known that this {\em tree regular model
+  checking framework} is expressive enough to describe communication
+protocols\,\cite{} as well as a wide range of cryptographic protocols
+and JAVA applications\,\cite{}.
+
+In {\em tree regular model checking}, the main objective is to compute
+an automaton representing the set of states of the system. As we are
+dealing with infinite-state systems, the problem remains undecidable
+and only partial solutions can be proposed. Among theses solutions, we
+find the predicate abstraction methodology which was promoted by
+Bouajjani et al.\,\cite{BHRV06a,BHRV06b}. The idea behind abstract
+tree regular model checking consists in computing the successive
+automata that obtained after successive applications of the rewriting
+relation and then use techniques coming from the predicate abstraction
+area in order to over-approximate the set of reachable states. If the
+property holds on the abstraction, then it also holds on the concrete
+system. If a counter-example is found on the abstraction, then one can
+check if it is also a counter-example to the real system. If not, this
+spurious counter-example must be used to refine the
+abstraction. Bouajjani's algorithm, which may not terminate, proceeds
+by successive abstraction/refinement until a decision can be
+taken. 
+
+Independently, Genet et al. proposed {\em completion} that is another
+technique to compute an over-approximation of the set of reachable
+states. The main difference with the work of Bouajjani is that
+completion techniques uses equations to compute the
+abstraction. Equations can be more expressive than predicate
+abstraction and hence produce a more accurate abstraction. Contrary to
+the work of \cite{BHRV06a,BHRV06b}, completion techniques have been
+applied to very complex case studies such as the verification of
+(industrial) cryptographic
+protocols~\cite{GenetK-CADE00,GenetTTVTT-wits03,avispa} and Java
+bytecode applications~\cite{BoichutGJL-RTA07}. Unfortunately,
+completion techniques do not embed any notion of counter-example based
+refinement.
+
+The objective of this paper is to overcome the above mentioned problem
+and propose a CounterExample Guided Abstraction Refinement procedure
+for completion algorithms.  \comments{ca n'est pas le premier travail
+  du genre: boichut,courbis etc... mais c'est vachement mieux parce
+  que? reprendre argumentaire (court) de RTA, Yohan?}  Our
+contribution is in two steps. First, we propose {\em $\RE$-automaton},
+that is a new extension model of tree automata. More precisely, a
+$\RE$-automaton keeps trace of the equations and rewriting rules
+applied to the initial automaton. The automaton can be used to decide
+whether a term $t$ (or a set of terms) is reachable from the set of
+initial states. If the procedure concludes positively, then the term
+is indeed reachable. If the procedure concludes negatively, then one
+has to refine the $\RE$-automaton and restart the process. Our second
+contribution is to propose a procedure that refines a $\RE$-automaton
+in an efficient manner. Our approach is naturally more efficient than
+the one of Bouajjani et al. as it does not require to store the
+intermediary computation steps and apply a reverse of the transition
+relation to conclude whether the term is reachable or not.
+
+
+
+% The verification of infinite state systems often relies on finite state automata
+% to finitely represent the set of states.  When states of a system are more
+% accurately represented by trees rather than words, {\em tree automata} can be
+% used to finitely represent the infinite set of tree structured states. In this
+% case the transition relation between states is usually defined as a tree
+% transducer. The regular tree model-checking problem has been intensively studied
+% like in~\cite{AbdullaJMd-CAV02,AbdullaLDR-JLAP06}. It consists in showing that a
+% set of states can (or cannot) be reached by applying the transition relation on
+% a set of initial states.  To deal with systems having a non regular behavior,
+% this framework has been extended in~\cite{BouajjaniHRV-ENTCS06}, so as to deal
+% with regular abstractions of non regular infinite systems. In this case, since
+% an over-approximation of the system behavior is considered, only unreachability
+% of states can be proven.
+
+% In parallel, the tree automata completion
+% technique~\cite{genet-RTA98,FeuilladeGVTT-JAR04} has been proposed. It also
+% tackles the verification of infinite state systems using tree automata. However,
+% the transition relation is defined using term rewriting systems. Term rewriting
+% systems offer a more concise way to define transitions between states and, as a
+% result, scales up more easily than tree transducer based techniques. For
+% instance, tree automata completion has been used for the verification of
+% (industrial) cryptographic
+% protocols~\cite{GenetK-CADE00,GenetTTVTT-wits03,avispa} and Java bytecode
+% applications~\cite{BoichutGJL-RTA07}. Another interesting point of this
+% technique is that abstractions are defined using equations~\cite{GenetR-JSC10},
+% %whose expressivity is stronger than predicate abstractions
+% %of~\cite{BouajjaniHRV-ENTCS06}. Equations used in completion 
+% relying on the equational abstraction framework of~\cite{MeseguerPM-TCS08}.
+% %with fewer restrictions though.
+% Using equations yields abstractions whose expressivity is very different from
+% those produced by predicate abstractions of~\cite{BouajjaniHRV-ENTCS06}.
+
+
+% On the opposite, with regards to transducer-based techniques, tree automata
+% completion has severals weaknesses. When dealing with abstractions, if the
+% completion claims that a term is reachable, it is not possible to know if
+% the term is actually reachable or if it has been found because of a too coarse
+% abstraction. This problem is solved by most of the abstract model-checking
+% techniques, like~\cite{BouajjaniHRV-ENTCS06} in the case of tree transducers.
+
+% The first objective of this paper is to equip the tree automata completion
+% algorithm with counter-example generation. The aim is here to discriminate, in
+% the tree automata, between reachable terms and terms of the abstraction while
+% preserving the efficiency of the completion algorithm. When completion stops
+% because of a too coarse abstraction, the second objective is to automatically
+% refine the abstraction. Here, we aim at taking advantage of the expressivity of
+% equations so as to have terminating refinements where predicate abstraction
+% of~\cite{BouajjaniHRV-ENTCS06} diverges. 
+
+% Finally, though it will not be discussed in this paper, 
+% the objective is to automatically verify Java programs re-using the framework 
+% of~\cite{BoichutGJL-RTA07} and the Copster~\cite{copster} tool which compiles
+% Java bytecode programs into term rewriting systems.

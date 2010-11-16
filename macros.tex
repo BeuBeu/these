@@ -1,0 +1,247 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%Ces macros sont toutes utilisees par le document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+% merging of states 
+% la commande est deja definie dans le package xypic 
+% utilise pour la figure de la paire critique...
+% je l'ai remplace de maniere temporaire par \kw{merge}
+
+% \newcommand{\merge}{Merge}
+% suggestion de remplacement ?
+% \newcommand{\merges}{Merge}
+
+
+%Insertion de commentaires dans le PDF
+%\newcommand{\comments}[1]{\paragraph{\bf Commentaire~: }{\color{blue}#1\newline}}
+
+%%Mots clefs :
+\newcommand{\kw}[1]{\mathtt{#1}}
+\newcommand{\parts}[1]{\mathcal{P}(#1)}
+
+\newcommand{\bydef}{\stackrel{\triangle}{=}}
+\newcommand{\mapswith}[1]{\stackrel{#1}{\longrightarrow}}
+
+\newcommand{\coq}{\textsf{Coq}}
+\newcommand{\timbuk}{\textsf{Timbuk}}
+\newcommand{\ocaml}{\textsf{OCaml}}
+\newcommand{\tom}{\textsf{Tom}}
+\newcommand{\scala}{\textsf{Scala}}
+
+
+%%% A VOIR SI JE GARDE OU PAS
+\def \N {\mathbb{N}}
+%\def \norm {Norm}
+\newcommand{\merge}{Merge}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\nr}{N}
+\newcommand{\ddom}{\mathcal{D}om}
+\newcommand{\dom}{\mathcal{D}om}
+
+%Model Checking
+
+\newcommand{\K}{\mathit K}
+\newcommand{\M}{\mathit M}
+\newcommand{\trans}{\Delta_\varepsilon^{\leftarrow}}
+\newcommand{\Ap}{\mathcal A_p}
+\newcommand{\validates}{\models}
+\newcommand{\nxt}{\mathbf X}
+\newcommand{\fut}{\mathbf F}
+\newcommand{\gbl}{\mathbf G}
+\newcommand{\unt}{\mathbf U}
+\newcommand{\rel}{\mathbf R}
+
+
+%Maths
+\newcommand{\suchthat}{\textrm{ s.t. }}
+\newcommand{\Nat}{\mathbb N}
+\newcommand{\Natmod}{\Nat[\ ]}
+\newfont{\amstoto}{msbm10}
+%\newcommand{\NN}{\mbox{\amstoto\char'116}}
+\newcommand{\NN}{\N^*}
+\newcommand{\ZZ}{\mbox{\amstoto\char'132}}
+
+%Logic
+\newcommand{\equ}{\; \Longleftrightarrow \;}
+%\newcommand{\validates}{\models}
+
+%Shortcuts
+\newcommand{\tn}{T}
+\newcommand{\la}{\langle}
+\newcommand{\ra}{\rangle}
+\newcommand{\eps}{\varepsilon}
+
+\newcommand{\iem}{\text{ième}}
+\newcommand{\er}{\text{er}}
+\newcommand{\et}{\mbox{ et }}
+\newcommand{\st}{\mbox{ t.q. }}
+\newcommand{\oute}{\mbox{ ou }}
+\newcommand{\ou}{\; \vee \;}
+
+\newcommand{\spf}{\;\; \Longrightarrow \;\;}
+\newcommand{\dbf}{\;\; \Longleftrightarrow \;\;}
+\newcommand{\imp}{\; \Longrightarrow \;}
+\newcommand{\rimp}{\; \Longleftarrow \;}
+\newcommand{\notimp}{\; \mathrel{\not\hspace*{-1mm}\Longrightarrow} \;}
+\newcommand{\sep}{\; | \;}
+\newcommand{\dsep}{\; || \;}
+
+
+%Term Rewriting Systems
+%
+\newcommand{\Q}{\mathit Q}
+\newcommand{\Qf}{\Q_F}
+\newcommand{\arity}{ar}
+%\newcommand{\Sub}{{\cal S}}
+\newcommand{\F}{\mathcal{F}}
+%\newcommand{\Y}{{\cal Y}}
+%\newcommand{\C}{{\cal C}}
+\newcommand{\D}{{\cal D}}
+\newcommand{\TF}{\mathcal{T(F)}}
+\newcommand{\TFX}{\mathcal{T(F, X)}}
+\newcommand{\TFQ}{\mathcal{ T(F \cup \Q)}}
+\newcommand{\TFQp}{\mathcal{ T(F \cup \Q')}}
+\newcommand{\TFQX}{\mathcal{ T(F \cup \Q, X)}}
+\newcommand{\TFXQ}{\mathcal{ T(F, X \times \Q)}}
+\newcommand{\TC}{\mathcal{ T(C)}}
+\newcommand{\aut}{\langle \F, \Q, \Qf, \Delta \rangle} 
+%\newcommand{\B}{\mathcal{ B}}
+\newcommand{\ordlexico}{\prec}
+\newcommand{\bottom}{\perp}
+%\newcommand{\match}{\unlhd}
+
+\newcommand{\var}{\mathcal{ V}ar}
+\newcommand{\pos}{\mathcal{ P}os}
+\newcommand{\R}{\mathcal R}
+\newcommand{\RE}{{\R_{/E}}}
+\newcommand{\Rep}{\R ep}
+\newcommand{\desc}{\R^*}
+\newcommand{\descE}{\RE^*}
+\newcommand{\T}{\mathcal T}
+\newcommand{\X}{\mathcal X}
+\newcommand{\vars}{\mathcal V}
+\newcommand{\rw}{\rightarrow}
+\newcommand{\trw}{\rightarrow^{\lambda}}
+\newcommand{\lrw}{\longrightarrow}
+\newcommand{\xrw}{\xrightarrow}
+\newcommand{\rwegal}{\rw^=}
+
+\newcommand{\nrw}{\nrightarrow}
+\newcommand{\arw}{\dashrightarrow}
+%\newcommand{\rwne}[1]{\rw^*_{#1}}
+\newcommand{\rwne}{\rw^{\not\varepsilon}}
+\newcommand{\rwned}{\rwne{\Delta}}
+\newcommand{\rweq}{\rw^=}
+%\newcommand{\rwtag}[1]{\stackrel{#1}{\rw}}
+\newcommand{\rwc}{\twoheadrightarrow}
+%\newcommand{\rwneq}{\rw^{\not =}}
+%\newcommand{\rwe}{\f^\varepsilon}
+\newcommand{\rwmod}{\rw_{\R/E}}
+
+
+%substitutions
+\newcommand{\plus}{\sqcup}
+\newcommand{\bigplus}{\bigsqcup}
+\newcommand{\id}{id}
+
+%completion
+\newcommand{\match}{\unlhd}
+\newcommand{\matchi}{\lhd}
+\newcommand{\matchb}{\dot{\unlhd}}
+\newcommand{\matchbi}{\dot{\lhd}}
+\newcommand{\Deps}{\upvarepsilon}
+\newcommand{\Drw}{\upvarepsilon_{\R}}
+\newcommand{\Deq}{\upvarepsilon_{=}}
+%\newcommand{\Deps}{\upvarepsilon}
+%\newcommand{\norm}{\downarrow}
+\newcommand{\norm}{\kw{Norm}}
+\newcommand{\slice}{\kw{Slice}}
+\newcommand{\compl}{\kw{C}}
+\newcommand{\widen}{\kw{W}}
+\newcommand{\prune}{\kw{P}}
+
+\newcommand{\simp}{\leadsto}
+                          
+%Tree Automata
+\newcommand{\A}{\mathit A}
+\newcommand{\B}{\mathit B}
+\newcommand{\C}{\mathit C}
+%\newcommand{\F}{\mathcal F}
+\newcommand{\Pred}{\mathcal P}
+\newcommand{\sub}{\Subset}
+\newcommand{\Lang}{\mathcal{L}}
+\newcommand{\f}{\rw}
+\newcommand{\aaex}{{\mathit A}_{\R}}
+\newcommand{\aaexeq}{{\mathit A}_{\R,E}}
+\newcommand{\aapprox}{\A^*_{\R,E}}
+\newcommand{\automaton}[3]{\la #1, #2, #3 \ra}
+
+
+\newcommand{\rwA}{\rw_\A}
+\newcommand{\rwR}{\rw_\R}
+\newcommand{\rwB}{\rw_\B}
+
+
+%\newcommand{\none}{\kw{none}}
+\newcommand{\true}{\mathit{true}}
+\newcommand{\false}{\mathit{false}}
+\newcommand{\ifte}{\mathit{if}}
+
+% \newcommand{\completion}{\kw{next}}
+% \newcommand{\refinedCompletion}{\kw{completion}}
+% \newcommand{\equations}{\kw{applyEquations }}
+% \newcommand{\refinement}{\kw{refinement}}
+% \newcommand{\update}{\kw{updateAndClean}}
+% \newcommand{\automatonCleaning}{\kw{ automatonCleaning}}
+
+% \newcommand{\badApproximations}{\kw{badApprox }}
+% \newcommand{\badTerms}{\kw{Bad }}
+% \newcommand{\moduloTerms}{\kw{moduloTerms }}
+% \newcommand{\transToDelete}{\kw{transToDelete }}
+% \newcommand{\reachableTerms}{\kw{reachableTerms }}
+% \newcommand{\reachableStates}{\kw{reachableStates }}
+% \newcommand{\states}{\kw{statesIn }}
+
+
+
+
+%\newcommand{\sun}{\textsc{Sun Microsystem\ }}
+%\newcommand{\java}{\textsc{Java\ }}
+%\newcommand{\midp}{\textsc{Java MIDP\ }}
+%\newcommand{\lande}{\textsc{Lande\ }}
+%\newcommand{\danger}{\textsc{\textbf{Danger !}}\normalsize}
+%\newcommand{\coq}{{\textit Coq}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\reff}[1]{[\textsc{Fig}. \ref{#1}]}
+\newcommand{\refs}[1]{[sec. \ref{#1}]}
+\newcommand{\refa}[1]{[cf. \ref{#1} p. \pageref{#1}]}
+
+%Macros pour construire une regle d'inference small-step semantics
+\newcommand{\instr}[1]{instruction_P(m, pc) = \kw{#1}}
+\newcommand{\hs}[1]{\langle #1 \rangle}
+\newcommand{\infer}[3]
+{\dfrac{\instr{#1}}{\hs{#2}::sf \to_{#1}\hs{#3}::sf}}
+
+% #2 = side-conditions : 
+\newcommand{\inferi}[5]
+{\dfrac{\instr{#1} \quad\ #2 }{#3::sf, \rho \to_{#1} #4::sf, #5}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\newtheorem{property}{Property}
+%\newenvironment{property}{\theoremlike{Property}}{\par\medskip}
+%\newtheorem{algorithm}[subsection]{Algorithm}
+%\newtheorem{example}{Example}
+%\newenvironment{example}{\theoremlike{Example}}{\par\medskip}
+
+\newcounter{savetheorem}
+
+%%% Local Variables: 
+%%% coding: utf-8
+%%% mode: latex
+%%% TeX-master: "main"
+%%% TeX-PDF-mode: t
+%%% ispell-local-dictionary: "french"
+%%% End: 

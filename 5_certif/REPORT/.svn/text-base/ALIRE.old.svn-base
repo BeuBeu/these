@@ -1,0 +1,69 @@
+Ce répertoire contient les fichiers nécessaires aux styles LaTeX
+et maquettes FrameMaker pour réaliser un rapport de recherche Inria.
+
+Les fichiers ont été testés avec les versions des logiciels en service
+à l'Inria Rennes le 08 septembre 1997 : 
+ - MlTeX (2.01), C Version 3.1415 (C version 6.1)
+ - LaTeX2e <1995/12/01> patch level 1
+ - FrameMaker version 5 (xm5.0.1P1j).
+Il est probable, voire certain, qu'ils necessitent une adaptation 
+sur les autres sites Inria.
+
+
+AUTEUR : Philippe LOUARN - IRISA/INRIA Rennes - louarn@irisa.fr pour
+======== la plupart des fichiers.
+
+VERSION : 3.3 du 8 septembre 1997
+========
+Cette version a reçu un accord de principe de l'UCIS, mais pas de la
+direction de l'Inria. Elle est donc ammener à évoluer.
+Merci de me faire connaître toute critique/suggestion/remarque/...
+
+COPYRIGHT :
+===========
+... il n'y en a pas... 
+
+CONTENU :
+========
+ALIRE			ce fichier
+NOUVEAUTE		les dernières modifs
+Logo-INRIA-Rennes.epsi  Logo INRIA avec déclinaison régionale (Rennes)
+Logo-INRIA-Sophia.epsi  idem        (Sophia)
+Logo-INRIA-Rhones-Alpes.epsi   idem (Grenoble)
+Logo-INRIA-Rocq.epsi	idem        (Rocquencourt)
+Logo-INRIA-Lorraine.epsi idem       (Nancy/Metz)
+Logo-INRIA-couleur.epsi Logo INRIA couleur
+Logo-INRIA-picto.epsi   Logo INRIA pictogramme seul
+Logo-INRIA.epsi         Logo INRIA n&b
+Logo-IRISA.epsi		Logo IRISA couleur
+RR-e                    Maquette Frame pour les RR en anglais
+RR-f                       "       "    "      "      français
+RT-e                       "       "    "    les RT en anglais
+RT-f                       "       "    "      "      français
+RR.sty                  Style LaTeX
+RRA4.sty                Style LaTeX pour page A4
+rap-rech.ps     	Fichier PS de couverture des rapports de recherche
+rap-tech.ps		  "               "      des rapports techniques
+rap-rech.epsi           Fichier EPSI de couverture des rapports de recherche
+rap-tech.epsi             "                 "      des rapports techniques
+saisie-rr.ps            Doc de saisie des RR
+saisie-rr.tex              "      "      "   (source LaTeX)
+squelette-rr.tex	Squelette mininum d'un RR LaTeX
+exemple			répertoire contenant un exemple de RR 
+
+INSTALATION :
+=============
+Déposer les styles LaTeX sans le répertoire de styles 
+(normalement /usr/local/lib/texmf/tex/local)
+
+Mettre les fichiers .ps et .epsi dans un repertoire accessible par LaTeX
+(par exemple : /usr/local/lib/texmf/tex/ps)
+
+Les maquettes Frame sont à mettre dans le repertoire de maquettes locales
+($FMHOME/<mon_répertoire_local>)
+
+Déposer les fichiers de consignes de saisie dans un répertoire accesible
+à tous (à Rennes : /usr/local/doc), ainsi que squelette-rr.tex
+
+
+                                                         Ph. Louarn 

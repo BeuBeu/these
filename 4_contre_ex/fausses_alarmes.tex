@@ -1,0 +1,63 @@
+%\usepackage{tikz}
+
+\begin{center}
+  \tikz[thick]{
+    \node (approx) at (0, 0)   [draw, rectangle, minimum height=5cm, minimum width=9cm, fill=blue, opacity=.6] {};
+    \node (system) at (-.3, 0) [draw, ellipse,   minimum height=4cm, minimum width=7.5cm, rotate=-15, fill=yellow] {};
+    \node (prop)   at (5, 0)   [draw, ellipse,   minimum height=4cm, minimum width=6cm, fill=red, opacity=.75, rotate=15] {};
+  }
+    %\node (l) at (-.8, .8) [] {$l\sigma$};
+
+    % } 
+ %\usetikzlibrary{shapes}
+    % \begin{scope}%options[]
+  %    \clip [rotate=-45] (0,0) ellipse (1.5cm and 0.9cm);
+  %    \fill [red, opacity=0.35] (-1, 1) circle (0.7cm);
+  %  \end{scope}
+  %  }
+
+%     \begin{scope}%options[]
+%       \clip [rotate=-45] (0,0) ellipse (1.5cm and 0.9cm);
+%       \fill [red, opacity=0.35] (-1, 1) circle (0.7cm);
+%     \end{scope}
+    
+
+    %\node (l) at (-.8, .8) [] {$l\sigma$};
+    %\begin{scope}
+    %  \clip [rotate=-45] (0,0) ellipse (1.5cm and 0.9cm);
+    %  \fill [red, opacity=0.35] (1, -1) circle (0.7cm);
+    %\end{scope}
+    %\node (r1) at (.8, -.8) [] {$r\sigma$};
+    %\draw [->] (l) to [out=-20,in=110](r1) node[pos=0.9, left] {\small $\R$};
+  % }
+   
+
+\end{center}
+
+  % \vline
+%   \begin{column}{6cm}
+%     \begin{center}
+%       % Critical Pair 
+%       \tikz[node distance=2cm, thick]{
+%         \node (l) {$l\sigma$};
+%         \node (q) [below of=l]{$q$};
+%         \node [right of=l, text=White] {$r\sigma$};
+%         \draw [color=Red, ->] (l) -- (q) node[pos=0.9, right]{\small $*$} node[pos=0.9, left] {\small $\resB$};
+%         \uncover<2->{
+%           \node (r) [right of=l] {$r\sigma$};
+%           \draw [->, dashed] (l) -- (r) node[pos=0.9, below]{\small $\TRS$};}
+%         \uncover<3->{
+%           \draw [->] (l) -- (r) node[pos=0.9, below]{\small $\TRS$};
+%           \draw [->] (r) to[out=-90, in=0] (q) node[pos=0.9, below]{\small $\resB$} node[pos=0.9, above]{\small $*$};
+%         }
+%       }
+%     \end{center}
+%   \end{column}
+
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End: 

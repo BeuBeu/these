@@ -1,0 +1,81 @@
+% \section{The need for a certified checker in \coq}
+%\label{sec:intro_checker}
+\switchlstcoq 
+
+\section{A result checker for tree automata completion}
+\label{section:objectives}
+%This part has to describe precisely the contribution of the paper.
+
+\archive{The main question about \timbuk\ results is \emph{can we trust them?}
+If the tree automata completion outputs an incorrect fixpoint
+automaton, the analysis may validate an unsafe program.  Moreover,
+\timbuk\ is a complex tool. It contains more than 11000 lines
+of Ocaml. Thus it is difficult to be sure that \timbuk\ is bug free".
+We can only rely on testing w.r.t. a base of test cases to remove as many
+bugs as possible.
+}
+
+By moving the certification problem from the completion algorithm to
+the checker, the certification problem consists in proving the following
+\coq\ theorem:
+\begin{lstlisting}
+Theorem sound_checker :
+      forall A A' R, checker A R A' = true -> ApproxReachable A R A'.
+\end{lstlisting}
+where \lstinline!ApproxReachable! is a \coq\ predicate that describes
+the Soundness Property: \emph{$\Lang(A')$ contains all terms reachable
+  by rewriting terms of $\Lang(A)$ with $\R$}, i.e. $\Lang(\A')
+\supseteq \desc(\Lang(\A))$. 
+To state formally this predicate in \coq, we need to
+give a \coq\ axiomatization of Term Rewriting Systems and of Tree Automata. It is
+given in Section~\ref{sec:rewriting}.
+Given two automata $\A$, $\A'$ and a TRS $\R$ the checker 
+verifies that $\Lang(\A')\supseteq \R^*(\Lang(\A))$ or
+(\lstinline!ApproxReachable A R A'!) in \coq. To perform this, we need to check the two
+following properties:
+
+\begin{itemize}
+\item \lstinline!Included!: inclusion of initial set in the fixpoint: $\Lang(\A) \subseteq \Lang(\A')$.
+
+\item \lstinline!IsClosed!: $\A'$ is closed by rewriting with $\R$: For all $l \rightarrow
+  r \in \R$ and all $t \in \Lang(\A')$, if $t$ is rewritten in $t'$ by the rule
+  $l \rightarrow r$ then $t' \in \Lang(\A')$. 
+% Trop detaillé pour la partie objectives...
+% To prove this property, we need
+%   verify that for each substitution $\sigma:\X \mapsto \Q$ and state $q$ of
+%   $\A'$, if $l\sigma \rw_{\A'}^* q$ then we have $r\sigma \rw_{\A'}^* q$,
+%     i.e. prove that the critical pair $(l\sigma \rightarrow q,\ l\sigma
+%     \rightarrow r\sigma)$ is joinable.
+\end{itemize}
+For each item, we provide a \coq\ function and its correctness theorem: function
+{\tt inclusion} is dedicated to inclusion checking and function {\tt closure}
+checks if a tree automaton is closed by rewriting.  We also give the theorem
+used to deduce \lstinline!ApproxReachable A R A'! from \lstinline!Included A A'! and \lstinline!IsClosed R A'!:
+\begin{lstlisting}
+Theorem inclusion_sound:
+      forall A A', inclusion A A' = true -> Included A A'.
+
+Theorem closure_sound:
+      forall R A', closure R A' = true -> IsClosed R A'.
+
+Theorem Included_IsClosed_ApproxReachable:
+      forall A A' R, Included A A' -> IsClosed R A' -> ApproxReachable A R A'.
+\end{lstlisting}
+
+
+Note that, in this paper we focus on the proof of $\Lang(\A')\supseteq
+\R^*(\Lang(\A))$.  However, to prove the unreachability property, the emptiness
+of the intersection between $\Lang(\A')$ and the bad term set has also to be
+verified. Since the formalization in \coq\ of the intersection and emptiness
+decision are close to their standard definition~\cite{TATA}, and since they have
+already been covered by~\cite{RivalGL-TPHOL01}, they are not be detailed in this
+paper.
+
+
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

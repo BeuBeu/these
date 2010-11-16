@@ -1,0 +1,415 @@
+\section{On solving the reachability using $\RE$-automaton}
+\label{sec:recompletion}
+
+%%We assume that we have a reachability problem composed a set of
+%%initial terms $I$, a set of rules $\R$, a set of undesirable terms
+%%$Bad$. We consider the approximation defined gby a set of equations
+%%$E$. To build a $\RE$-automatxon, we instantiate the framework of the
+%%completion presented in section \ref{sec:completion} by defining functions $C$
+%%for the completion step and $W$ for the widening step.
+
+
+In this section, we extend the completion and widening principles
+introduced in Section~\ref{sec:completion} to $\RE-$automata. We
+consider an initial set $I$ that can be represented by a tree
+automaton, and transition relation represented by a set of rewriting
+rules $\R$. We compute successive approximations $\aaexeq^i$ from
+$\aaexeq^0$ using $\aaexeq^{i+1}=W(C(\aaexeq^i))$. We define
+$\aaexeq^0 = \la \F, \Q^0, \Q_F, \Delta^0\ra$ that the language of
+$\aaexeq^0$ is the terms in $I$. Observe that $\aaexeq^0$ is
+well-defined as the sets $\Drw^0$ or $\Deq^0$ are empty. We now detail
+the completion and widening steps i.e. $C$ and $W$.
+
+% In this section, we extend completion and widening steps of Section
+% \ref{sec:completion} to $\RE-$automata. Given an automaton $A$ that
+% represents an initial set $I$, and transition relation represented by
+% a set of rewriting rules $\R$, we compute successive approximations 
+% $\aaexeq^i$ from $\aaexeq^0$ the $\RE$-automata version of $A$, i.e.,
+% $\aaexeq^{i+1}=\widen(\compl(\aaexeq^i))$. We define $\aaexeq^0 = \la \F, \Q^0,
+% \Q_F, \Delta^0\ra$ such that the language of $\aaexeq^0$ is the terms
+% in $I$. Observe that $\aaexeq^0$ is well-defined as the sets $\Drw^0$
+% or $\Deq^0$ are empty. We now detail the completion and widening
+% steps i.e. $\compl$ and $\widen$.
+
+\vspace{-.6cm}
+\paragraph{The completion step $\compl$.}
+Consider a $\RE$-automaton $\aaexeq^i = \la \F, \Q^i, \Q_f, \Delta^i \cup \Drw^i
+\cup \Deq^i \ra$, the completion steps consists in computing an automaton
+$\compl(\aaexeq^i)$ that is obtained from $\aaexeq^i$ by applying $\R$. As
+already explained in Section \ref{sec:completion}, this is done by finding and
+resolving all critical pairs.  A {\em critical pair} for a $\RE$-automaton is a
+triple $\la r\sigma, \alpha, q\ra$ such that $l\sigma \rw r\sigma$, $l\sigma
+\xrw{\alpha}_{\aaexeq^i} q$ and there is no formula $\alpha'$ such that $r\sigma
+\xrw{\alpha'}_{\aaexeq^i} q$. Resolution of such a critical pair consists of
+adding to $\compl(\aaexeq^i)$ the transitions to obtain $r\sigma
+\xrw{\alpha}_{\compl(\aaexeq^{i})} q$. This is followed by a normalization step
+where $\Q_{new}$ is a set of new states s.t. $\Q_{new} \cap =\emptyset$.
+
+% More precisely, we add transitions
+% $\norm(r\sigma,\Delta^i\setminus\Delta^0)$ (see Definition
+% \ref{def:normalization}) to $\Delta^i$. Actually, the set of
+% transitions $\Delta^i\setminus\Delta^0$ is deterministic and thus,
+% after the normalization of $r\sigma$, there exists a state $q'$ with
+% $r\sigma \xrw{\top}_{\compl(\aaexeq^{i})} q'$. Consequently, it remains to
+% add the transition $q'\xrw{\alpha} q$ to $\Drw^{i}$. The whole process
+% leads to the $\RE-$automaton $\compl(\aaexeq^i)$. This is formally defined as
+% follows.
+
+
+
+%%The transtion $r\sigma
+%%\xrw{\top}_{\aaexeq^{i+1}} q'$ is actually build by adding normalized
+%%transitions to $\Delta^{i+1}$ thanks to the {\em normalisation} of the
+%%definition~\ref{def:normalization}.
+
+\begin{definition}[Normalization]
+  \label{def:normalization}
+  The normalization is done in two mutually inductive steps
+  parametrized by the configuration $c$ to recognize, and by the set
+  of transitions $\Delta$ to extend.
+  \[
+  \left\{
+    \begin{array}{lr}
+      \norm(c , \Delta) = \slice(d, \Delta) & c \rw^!_\Delta d\textrm{, and }c,\ d \in \TFQ\\
+      \slice(q,\Delta) = \Delta & q \in Q\\
+      \slice(f(q_1,\dots, q_n), \Delta) = \Delta \cup \{f(q_1,\dots, q_n) \rw q\} & q_i \in \Q\textrm{ and }q \in \Q_{new}\\
+      \slice(f(t_1,\dots, t_n), \Delta) = \norm(f(t_1,\dots, t_n), \slice(t_i, \Delta)) & t_i \in \TFQ \setminus \Q\\
+    \end{array}
+  \right.
+  \]
+\end{definition}
+
+\noindent
+We thus add transitions such that there exists a state $q'$ with
+$r\sigma \xrw{\top}_{\aaexeq^{i+1}} q'$ and $q'\xrw{\alpha} q \in
+\Drw^{i+1}$. 
+
+We are now ready to define the resolution of a critical pair $p=\la
+r\sigma, \alpha, q\ra$. 
+
+\begin{definition}[Resolution of a critical pair]
+\label{def:resolution_cp}
+Given a $\RE$-automaton $\A=\la \F, \Q, \Q_f, \Delta\cup \Drw\cup \Deq\ra$ and a critical
+pair $p=\la r\sigma, \alpha, q \ra$, the {\em resolution} of $p$ on $\A$ is the
+$\RE$-automaton $\A'=\la \F, \Q', \Q_f, \Delta'\cup \Drw'\cup \Deq \ra$ where
+\begin{itemize}
+\item $\Delta'= \Delta \cup \norm(r\sigma,\Delta\setminus \Delta^0)$
+\item $\Drw'= \Drw \cup \{q' \xrw{\alpha} q\}$ where $q'$ is the state such that $r\sigma
+  \rw^!_{\Delta'\setminus \Delta_0} q'$
+\item $\Q'$ is the union of $\Q$ and the set of states occurring in $\Delta'$
+\end{itemize}
+\end{definition}
+
+Note that $\Delta_0$, the set of transitions of $\aaex^0$, is never
+used for normalization of all $r\sigma$. This is needed to preserve
+the well-defidness of $\A'$.  The $\RE$-automaton $\compl(\aaexeq^i)$
+is obtained by recursively applying the above resolution principle to
+all critical pairs $p$ of the set of critical pairs between $\R$ and
+$\aaexeq^i$. The set of all critical pairs is obtained by solving {\em
+  matching problems} $l \match q$ for all rewrite rule $l \rw r\in \R$
+and all state $q\in\aaexeq^i$.  Solving the matching problem $l \match
+q$ consists of computing $S$ that is the set of all couples $(\alpha,
+\sigma)$ such that $\alpha$ is a formula, $\sigma$ is a substitution
+of $\X \mapsto \Q^i$, and $l\sigma \xrw{\alpha} q$. Each configuration
+$l\sigma$ corresponds to a subset of terms of $\Lang(\aaexeq^i, q)$
+that can be rewritten by $l \rw r$. The terms characterized by
+$l\sigma$ are defined as $l\sigma\sigma'$ where $\sigma': \Q \mapsto
+\TF$ is a substitution, which maps each state $q$ to a term
+$\sigma'(q) \in \Lang(\aaexeq^i,
+q)$. Definition~\ref{def:matching-algorithm} introduces the matching
+algorithm to compute the set $S$, which is denoted by the statement $l
+\match q \vdash_{\aaexeq^i} S$. Note that when $S$ is empty, there is
+no term to rewrite by $l \rw r$.
+
+\begin{definition}[Matching Algorithm]\\
+  \label{def:matching-algorithm}
+  Assuming the matching problem $l \match q$ for a $\RE$-automaton $\aaexeq^i$.
+  $S$ is the solution of the matching problem, if there exists a derivation
+  of the statement $l \match q \vdash_{\aaexeq^i} S$ using the rules:
+  {\footnotesize
+    \vspace{-.2cm}
+    \[\textrm{(Var) }
+    \dfrac{}
+    {x \match q \vdash_\A \{(\alpha_k, \{x \mapsto q_k\}) \sep q_k \xrw{\alpha_k}_\A q\}}
+    (x \in \X)
+    \]
+    \vspace{-.1cm}
+    \[\textrm{(Delta) }
+    \dfrac{
+      t_1 \match q_1 \vdash_\A S_1
+      \quad \dots \quad
+      t_n \match q_n \vdash_\A S_n
+      % f(t_1,\dots, t_n) \match f(q_1,\dots, q_n) \vdash_\A S
+    }{f(t_1, \dots, t_n) \matchi q \vdash_\A \bigotimes_1^n S_k
+    }\left(
+      \begin{array}{l}
+        f(q_1, \dots, q_n) \rw q \in \Delta\\
+      \end{array}
+    \right )
+    \footnote{
+      {\footnotesize using $\bigotimes_1^n S_j = \{ (\top, id) \oplus (\phi_1,
+        \sigma_1) \oplus \dots \oplus (\phi_n, \sigma_n) \sep
+        (\phi_j,\sigma_j) \in S_j\}$}, and $(\phi, \sigma) \oplus (\phi',
+      \sigma') = (\phi \land \phi',\sigma \cup \sigma')$.}
+    \]
+    \vspace{-.2cm}
+    \[\textrm{(Epsilon) }
+    \dfrac{ 
+      t \matchi q    \vdash_\A S_0   \quad
+      t \matchi q'_1 \vdash_\A S_1 \quad \dots \quad
+      t \matchi q'_n \vdash_\A S_n
+    }{
+      t \match q \vdash_\A S_0 \cup
+      \bigcup_{k=1}^n \{(\phi \land \alpha_k, \sigma) \sep (\phi, \sigma) \in S_k\}
+    }\left(
+      \begin{array}{l}
+        \{(q_k, \alpha_k) \sep q_k \xrw{\alpha_k} q\}_1^n\\% \land q \not= q_k\}_1^n\\
+        t \notin \X\\
+      \end{array}
+    \right)
+    \]
+  }
+\end{definition}
+\vspace{-.4cm}
+
+Observe that, by definition, the matching problem considers possibly
+infinite runs of the form $l\sigma \xrw{\alpha} q$. Indeed,
+transitions in $\Drw^i \cup \Deq^i$ can produce loops.  In the
+matching algorithm, we exclude such runs. This is done
+to keep a finite set of rewriting path, which is computable in a
+finite amount of time. It is worth mentioning that removing loops does
+not remove any important information. Consider the automaton $\A$ of
+Example~\ref{ex:semantics}. We observe that $f(b) \xrw{Eq(q_b, q_c)
+  \land Eq(q_c, q_b)}_\A q_f$ uses the loop $f(b) =_E f(c) =_E
+f(b)$. This loop can be removed as $f(a) \rw_\R^* f(b)$ can be
+obtained by $f(b) \xrw{\top}_\A q_f$, which does not contain any
+loops.
+
+%%We now state the important property of our construction.
+ 
+\begin{property}%[Matching Algorithm is complete]
+  \label{prop:matching-complete}
+  Let $\A$ be a $\RE-$automaton, $q$ one of its states, $l \in \TFX$
+  the linear left member of a rewriting rule and a substitution $\sigma : \X
+  \mapsto \Q$ whose domain is range-restricted to $\vars(l)$. Assuming that $S$
+  is the solution of the matching 
+  problem $l\sigma \match q$, for all $(\alpha, \sigma)$ such that
+  $l\sigma \xrw{\alpha}_\A q$, a loop free run, then we have $(\alpha,
+  \sigma) \in S$.
+\end{property}
+
+
+After computing $S$ for $l \match q$, we identify its elements that
+correspond to critical pairs. By definition of $S$, we know that there
+exists a transition $l\sigma \xrw{\alpha}_{\aaexeq^i} q$ for $(\alpha,
+\sigma) \in S$. If there exists a transition $r\sigma
+\xrw{\alpha'}_{\aaexeq^i} q$, then $r\sigma$ has already been added to
+$\aaexeq^i$.  It is thus sufficient to deduce that all terms
+$l\sigma\sigma'$ of the set represented by the configuration $l\sigma$
+are rewritten into terms $r\sigma\sigma'$ represented by the
+configuration $r\sigma$.  In the case where there exists no transition
+$r\sigma \xrw{\alpha'}_{\aaexeq^i} q$, then $\la r\sigma, \alpha',
+q\ra$ is a critical pair to solve on $\aaexeq^i$.  The following
+theorem shows that our methodology is complete.
+
+\begin{theorem}
+  \label{thm:C}
+  If $\aaexeq^i$ is well-defined then so is $\compl(\aaexeq^i)$, 
+  and $\forall q \in \Q^i$, $\forall t \in
+  \Lang(\aaexeq^i, q)$, $\forall t \in\TF$, $t \rw_\R t' \imp t' \in
+  \Lang(\compl(\aaexeq^{i}), q)$.
+\end{theorem}
+
+\begin{example}
+  \label{ex:C}
+  Let $\R=\{f(x) \rw f(s(s(x)))\}$ and $\aaexeq^0=\langle \F, \Q,
+  \Q_F, \Delta^0\rangle$ be a tree automaton such that $\Q_F=\{q_0\}$
+  and $\Delta^0=\{ a \rw q_1, f(q_1) \rw q_0\}$.  Following Definition
+  \ref{def:matching-algorithm}, the solution $S$ of the matching
+  problem $f(x)\match q_0 $ is $S=\{(\sigma,\phi)\}$ with
+  $\sigma=\{x\rw q_1\}$ and $\phi=\top$.  Hence, $\la f(s(s(q_1))),
+  \top, q_0\ra$ is the only critical pair to solve, since
+  $f(s(s(q_1)))\not\xrw{\top}_{\aaexeq^0} q_0$.  So,
+  $\compl(\aaexeq^0) $ is a $\RE-$automaton such that
+  $\compl(\aaexeq^0)= \la\F, \Q^1, \Q_F, \Delta^1\cup \Drw^1 \cup
+  \Deq^0 \ra$ with:
+  \begin{description}
+  \item $\Delta^1=\norm(f(s(s(q_1))),\emptyset) \cup \Delta^0= \{s(q_1)\rw q_2,s(q_2)\rw q_3, f(q_3)\rw q_4\}\cup \Delta^0$, 
+  \item $\Drw^1=\{q_4 \xrw{\top} q_0\}$, since $f(s(s(q_1)))\rw^!_{\Delta^1\setminus\Delta^0} q_4$, 
+  \item $\Deq^0=\emptyset$ and $\Q^1=\{q_0,q_1,q_2,q_3,q_4\}$.
+  \end{description}
+\end{example}
+Observe that if $\compl(\aaexeq^i)=\aaexeq^i$, then we have reached a fixpoint.
+\vspace{-.6cm}
+\paragraph{The Widening  $\widen$.}
+Consider a $\RE$-automaton $A = \la \F, \Q, \Q_f, \Delta \cup \Drw
+\cup \Deq \ra$, the widening operation consists in computing a
+$\RE$-automaton $\widen(A)$ that is obtained from $A$ by using the set
+of equations $E$.
+
+\begin{tabular}{lc}
+  \hspace{-1.1cm}
+  \begin{minipage}{.75\linewidth}
+    For each equation $l = r$ in $E$, we consider all pair
+    $(q, q')$ of distinct states of $\Q^i$ such that there exists a
+    substitution $\sigma$ to have the following diagram.
+    Observe that $\rw^=_{A}$ is the transitive and reflexive
+    rewriting relation induced by $\Delta \cup \Deq$.  
+  \end{minipage}&
+  \begin{minipage}{.25\linewidth}
+    $\xymatrix{
+      l\sigma \ar@{=}[r]_{E}\ar[d]^{=}_{A} & r\sigma \ar[d]^{A}_{=}\\
+      q & q'
+    }$
+  \end{minipage}
+\end{tabular}
+
+Intuitively, if we have $u \rw^=_{A} q$, then we know that there
+exists a term $t$ of $Rep(q)$ such that $t =_E u$. The automaton
+$\widen(A)$ is $\la \F, \Q, \Q_f, \Delta \cup \Drw \cup \Deq' \ra$,
+where $\Deq'$ is obtained by adding the transitions $q \rw q'$ and $q'
+\rw q$ to $\Deq$, for each pair $(q, q')$. We also keep $\Deq'$ {\em
+  closed by transitivity}, but only for pair of distinct states.
+Roughly, the transitive closure of $\Deq'$ corresponds to propagate
+explicitly terms that are equivalent by $=_E$.  As show in
+section~\ref{sec:refinement}, this aspect is important to refine with
+accuracy. Note that $\widen$ terminates since the number of states of
+$\A$ is finite and the number of transitions to be added to $\Deq'$ is
+finite.
+
+\begin{theorem}
+  \label{thm:W}
+  Assuming that $A$ is well-defined, we have $A $ syntactically included in 
+  $ \widen(A)$, and $\widen(A)$ is well-defined.
+\end{theorem}
+
+\begin{example}
+  \label{ex:W}
+  Consider the $\RE$-automaton $\compl(\aaexeq^0)$ in Example~\ref{ex:C}.\\
+  \begin{tabular}{lc}
+    \hspace{-.3cm}
+    \begin{minipage}{.75\linewidth}
+      We compute $\aaexeq^1 = \widen(\compl(\aaexeq^0))$ using the equation
+      $s(s(x))=s(x)$.  We have $\sigma=\{x \mapsto q_1\}$ and the
+      following diagram.  Then, we obtain $\aaexeq^1 = \la \F, \Q^1,
+      \Q_f, \Delta^1 \cup \Drw^1 \cup \Deq^1\ra$, where $\Deq^1= \Deq^0 \cup \{
+      q_3 \rw q_2,\ q_2 \rw q_3\}$ and $\Deq^0=\emptyset$.  Observe that $\aaexeq^1$ is a
+      fixpoint: $\compl(\aaexeq^1) = \aaexeq^1$.
+    \end{minipage}&
+    \begin{minipage}{.25\linewidth}
+      $\xymatrix{
+        s(s(q_1)) \ar@{=}[r]_{E}\ar[d]^{=}_{\compl(\aaexeq^0)} & s(q_1) \ar[d]^{\compl(\aaexeq^0)}_{=}\\
+        q_3 & q_2
+      }$
+    \end{minipage}
+  \end{tabular}
+\end{example}
+
+
+
+% \begin{example}
+%   Let $\A$ be a $\RE$-automaton such that $\Delta=\{f(q_1,q_2) \rw q_0, a \rw
+%   q_1, a \rw q_2, g(q_1) \rw q_3\}$, $\Drw=\emptyset$ and $\Deq=\emptyset$.
+% \begin{itemize}
+%   \item If $E=\{g(x)=a\}$, we have $\sigma=\{x \mapsto q_1\}$ and 
+% \[\xymatrix{
+% g(q_1) \ar@{=}[r]_{E}\ar[d]_{=} & a \ar[d]^{=}\\
+% q_3 & q_2
+% }
+% \]
+% Hence, $\A \simp_E \A'$ where $\A'$ is similar to $\A$ except that $\Deq$
+% becomes $\{q_2 \rw q_3, q_3 \rw q_2\}$. 
+% % Note that a
+% % similar situation could have been found between $g(q_1) \rwAnestar q_3$ and $a
+% % \rwAnestar q_1$. We will see in the following that the order used to achieve
+% % widening steps does not matter.
+%   \item If $E=\{f(x,x)=g(x)\}$ then  there is no substitution $\sigma$ such that $f(x,x)\sigma=f(q_1,q_2)$:  the automaton is unchanged.
+% \end{itemize}
+% \end{example}
+
+
+% Consider a $\RE$-automaton $\aaexeq^i = \la \F, \Q^i, \Q_f, \Delta^i
+% \cup \Drw^i \cup \Deq^i \ra$, the widening consists in computing a
+% $\RE$-automaton $\widen(\aaexeq^i)$ that is obtained from $\aaexeq^i$ by
+% using $E$. 
+% \begin{tabular}{lc}
+%   \hspace{-.3cm}
+%   \begin{minipage}{.75\linewidth}
+%     For each equation $l = r$ in $E$, we consider all pair
+%     $(q, q')$ of distinct states of $\Q^i$ such that there exists a
+%     substitution $\sigma$ to have the following diagram.
+%     Observe that $\rw^=_{\aaexeq^i}$ is the transitive and reflexive
+%     rewriting relation induced by $\Delta^i \cup \Deq^i$.  
+%   \end{minipage}&
+%   \begin{minipage}{.25\linewidth}
+%     $\xymatrix{
+%       l\sigma \ar@{=}[r]_{E}\ar[d]^{=}_{\aaexeq^i} & r\sigma \ar[d]^{\aaexeq^i}_{=}\\
+%       q & q'
+%     }$
+%   \end{minipage}
+% \end{tabular}
+
+% Intuitively, if we have $u \rw^=_{\aaexeq^i} q$, then we know that there exists a term
+% $t$ of $Rep(q)$ such that $t =_E u$.
+% We obtain $\Deq^{i+1}$ by adding the transitions $q \rw q'$ and $q'
+% \rw q$ to $\Deq^i$, for each pair $(q, q')$. We also keep $\Deq^{i+1}$
+% {\em closed by transitivity}, but only for pair of distinct states.
+% Roughly, the transitive closure of $\Deq^{i+1}$ corresponds to
+% propagate explicitly terms that are equivalent by $=_E$.  As show in
+% section~\ref{sec:refinement}, this aspect is important to refine with
+% accuracy.  Finally, we have $\widen(\aaexeq^i) = \la \F, \Q^i, \Q_f,
+% \Delta^i \cup \Drw^i \cup \Deq^{i+1} \ra$.
+
+% \begin{theorem}
+%   \label{thm:W}
+%   Assuming that $\aaexeq^i$ is well-defined, we have $\aaexeq^{i} \subseteq \widen(\aaexeq^i)$, and $\widen(\aaexeq^i)$ is well-defined.
+% \end{theorem}
+
+% \begin{example}
+%   \label{ex:W}
+%   Consider the $\RE$-automaton $\aaexeq^1$ in Example~\ref{ex:C}.\\
+%   \begin{tabular}{lc}
+%     \hspace{-.3cm}
+%     \begin{minipage}{.75\linewidth}
+%       We compute $\aaexeq^2 = \widen(\aaexeq^1)$ using the equation
+%       $s(s(x))=s(x)$.  We have $\sigma=\{x \mapsto q_1\}$ and the following diagram.
+%       Then, we obtain $\aaexeq^2 = \la \F, \Q^1, \Q_f, \Delta^1 \cup \Drw^1 \cup \Deq^2\ra$, where $\Deq^2=\{ q_3 \rw q_2,\ q_2 \rw q_3\}$.
+%       Observe that $\aaexeq^2$ is a fixpoint: $\compl(\aaexeq^2) = \aaexeq^2$.
+%     \end{minipage}&
+%     \begin{minipage}{.25\linewidth}
+%       $\xymatrix{
+%         s(s(q_1)) \ar@{=}[r]_{E}\ar[d]^{=}_{\aaexeq^1} & s(q_1) \ar[d]^{\aaexeq^1}_{=}\\
+%         q_3 & q_2
+%       }$
+%     \end{minipage}
+%   \end{tabular}
+% \end{example}
+
+
+
+% \begin{example}
+%   Let $\A$ be a $\RE$-automaton such that $\Delta=\{f(q_1,q_2) \rw q_0, a \rw
+%   q_1, a \rw q_2, g(q_1) \rw q_3\}$, $\Drw=\emptyset$ and $\Deq=\emptyset$.
+% \begin{itemize}
+%   \item If $E=\{g(x)=a\}$, we have $\sigma=\{x \mapsto q_1\}$ and 
+% \[\xymatrix{
+% g(q_1) \ar@{=}[r]_{E}\ar[d]_{=} & a \ar[d]^{=}\\
+% q_3 & q_2
+% }
+% \]
+% Hence, $\A \simp_E \A'$ where $\A'$ is similar to $\A$ except that $\Deq$
+% becomes $\{q_2 \rw q_3, q_3 \rw q_2\}$. 
+% % Note that a
+% % similar situation could have been found between $g(q_1) \rwAnestar q_3$ and $a
+% % \rwAnestar q_1$. We will see in the following that the order used to achieve
+% % widening steps does not matter.
+%   \item If $E=\{f(x,x)=g(x)\}$ then  there is no substitution $\sigma$ such that $f(x,x)\sigma=f(q_1,q_2)$:  the automaton is unchanged.
+% \end{itemize}
+% \end{example}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-PDF-mode: t
+%%% TeX-master: "main"
+%%% End: 

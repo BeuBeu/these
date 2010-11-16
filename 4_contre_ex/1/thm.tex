@@ -1,0 +1,498 @@
+\section{Proofs about matching}
+\begin{theorem}[Matching Algorithm is complete]
+  \label{thm:matching-complete}
+  Let $A$ be a $\RE-$automaton, $q$ one of its states, $l \in \TFX$ the
+  linear left member of a rewriting rule and $\sigma$ a $\Q$-substitution with 
+  a domain range-restricted to $\vars(l)$. If the set $S$ is solution of the matching problem
+  $l\sigma \match q$, then we have $\forall (\alpha, \sigma),\ l\sigma \xrw{\alpha}_\A q \Longleftrightarrow (\alpha, \sigma) \in S$
+\end{theorem}
+
+\begin{proof}
+  Assuming $\F$ a set of symbols, $\X$ a set of variable and
+  $\Q$ a set of states. We define $A = \la \F, \Q, \Q_f, \Delta \cup \Drw \cup \Deq\ra$;
+  $l \in \TFX$ and $q \in \Q$; $\sigma : \var(l) \rw \Q$ and $\alpha = \bigwedge_1^n Eq(q_k,q'_k)$ such that $l\sigma \xrw{\alpha}_\A q$.
+
+  \medskip
+  \noindent
+  The proof is done by induction on the term $l$.
+
+  \medskip
+  \noindent
+  {\bf Base case}: $l$ is a variable.
+
+  In this case, $\sigma$ must be a $\Q$-substitution of the form $\sigma =\{ l \mapsto q' \}$.
+  Using this observation and the hypothesis, we have $q' \xrw{\alpha}_\A q$.
+  The matching problem $l \match q$ is solved using Rule (Var).
+  This means that $S = \{(\alpha_k, \{l \mapsto q_k\}) \sep q_k \xrw{\alpha_k}_\A q\}$.
+  By definition of $S$ we see that $S$ contains ($\alpha, \sigma$).
+
+  \medskip
+  \noindent
+  {\bf Induction} :
+  Assume now $l$ is a linear term of the form $f(t_1,\dots, t_n)$.
+
+  We are going to decompose $f(t_1,\dots, t_n)\sigma \xrw{\alpha}_\A q$ into sequences of transitions.
+  First observe that, by splitting $\sigma$ into $\sigma_1$ \dots $\sigma_n$, we have that $f(t_1,\dots, t_n)\sigma$ 
+  is equal to $f(t_1\sigma_1, \dots,t_n\sigma_n)$.
+  Assume $\sigma = \sigma_1 \sqcup \dots \sqcup \sigma_n$ with $dom(\sigma_i) = \vars(t_i)$ 
+  and $\forall x \in dom(\sigma_i),\ \sigma_i(x) = \sigma(x)$.
+  Since $l$ is linear, each variable in $X$ occurs at most one time in $l$.
+  This means that the sets $\vars(t_i)$ are disjoints and so are the domains of the $\sigma_i$.
+  This ensures that $\sigma$ is well-defined.
+
+
+  %%%%%%%%%%%%% PAS DU TOUT CLAIR ICI LA DECOMPOSITION
+  Now, we study the decomposition of $f(t_1\sigma_1,\dots, t_n\sigma_n) \xrw{\alpha}_\A q$ to show that transitions of $\A$ used
+  to recognized the term $f(t_1\sigma_1,\dots, t_n\sigma_n)$ are considered by the corresponding steps of the matching algorithm.
+
+  We observe that the term $f(t_1\sigma_1,\dots, t_n\sigma_n)$ is recognized in state $q$. Indeed, we have $f(q_1,\dots, q_n) \rw q' \in \Delta$, and each subterm
+  $t_i\sigma_i$ is recognized in state $q_i$ such that $t_i\sigma_i \xrw{\alpha_i} q_i$. 
+  %%%% ICI %%%%%%%%%%%% Correction pas lisible
+  Composing recognizing of each subterm, we obtain the following sequence:
+  \[
+  f(t_1,\dots, t_n) \xrw{\alpha_1} f(q_1, t_2, \dots, t_n) \xrw{\bigwedge_1^2 \alpha_i} f(q_1, q_2, t_3, \dots, t_n) \xrw{\bigwedge_1^3 \alpha_i} 
+  \dots \xrw{\bigwedge_1^n\alpha_i} f(q_1,\dots, q_n) \xrw{\bigwedge_1^n \alpha_i \land \top} q'\]
+  There are two cases to consider : (1) $q=q'$ and (2) $q \not = q'$.
+  %
+  (1) If $q=q'$, the decomposition is complete and $f(t_1\sigma_1,\dots, t_n\sigma_n) \xrw{\alpha}_\A q$ with $\alpha = \bigwedge_1^n \alpha_i$.
+  \[f(t_1\sigma_1,\dots, t_n\sigma_n) \xrw{\bigwedge_{i = 1}^n \alpha_i} f(q_1,\dots,q_n) \xrw{\bigwedge_{i = 1}^n \alpha_i} q\]
+  %
+  (2) $q \not = q'$: $f(t_1\sigma_1,\dots, t_n\sigma_n) \xrw{\alpha}_\A q$ holds only if we have a transition $q' \xrw{\alpha'} q$
+  such that $\alpha = \bigwedge_1^n \alpha_i \land \alpha'$.
+  \[f(t_1\sigma_1,\dots, t_n\sigma_n) \xrw{\bigwedge_{i = 1}^n \alpha_i} f(q_1,\dots,q_n) \xrw{\top} q' \xrw{\alpha'} q\]
+  % \suchthat \alpha \equ \bigwedge_{i = 1}^n \alpha_i \land \alpha'\]
+  % Now, we reorganize transitions used for $f(t_1\sigma_1,\dots, t_n\sigma_n) \xrw{\alpha}_\A q$ to obtain the sequences $t_i\sigma_i \xrw{\alpha_i}_\A q_i$.
+%   followed by the sequence $f(q_1,\dots,q_n) \xrw{\alpha'}_\A q$ such that $\alpha = \bigwedge_1^n\alpha_i \land \alpha'$. 
+%   This last sequence is composed by a transition $f(q_1,\dots,q_n) \rw q \in \Delta$ eventually followed by the sequence $q' \xrw{\alpha'} q$
+%   if $q \not = q'$. We have the decompostion:
+%   % $ $ f(t_1, \dots, t_n)\sigma = 
+%   $$f(t_1\sigma_1,\dots, t_n\sigma_n) \xrw{\bigwedge_{i = 1}^n \alpha_i} f(q_1,\dots,q_n) \xrw{\top} q' \xrw{\alpha'} q
+%   \suchthat \alpha \equ \bigwedge_{i = 1}^n \alpha_i \land \alpha'$$
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  By induction, we know that for each sequence $t_i\sigma_i
+  \xrw{\alpha_i} q_i$, the matching problem is solved {\it i.e.}
+  $t_i \match q_i \vdash S_i$ with $S_i$ contains $(\alpha_i, \sigma_i)$.
+  Rule (Delta) is applied to all premises $t_i \match q_i \vdash_\A S_i$ for the transition $f(q_1,\dots,q_n) \rw q' \in \Delta$.  From
+  this, we obtain a set $S' = \bigotimes^n_1 S_i$.  By unfolding the definition of $\bigotimes$, we have $S = \{(\top, id) \oplus (a^1,
+  s^1) \oplus \dots (a^n, s^n) \sep (a^i, s^i) \in S_i \}$. Since each $S_i$ contains $(\alpha_i, \sigma_i)$, $S'$ contains $(\top, id)
+  \oplus (\alpha_1, \sigma_1) \oplus \dots (\alpha_n, \sigma_n)$ which is, by definition of $\oplus$ equal to $(\bigwedge_1^n \alpha_i,\ \sigma)$.
+  % $ which is equal to
+  % $(\top \land \alpha \land \dots \land \alpha_n, id \sqcup \sigma_1 \sqcup \dots \sqcup \sigma_n)$ or simply $(\bigwedge_1^n \alpha_i,\ \sigma)$. 
+  Thus, we obtain a intermediate statement $f(t_1, \dots, t_n) \matchi q' \vdash_\A S'$ such that $f(t_1, \dots, t_n)\sigma \xrw{\bigwedge_1^n \alpha_i} q'$,
+  where $(\bigwedge_1^n \alpha_i, \sigma) \in S'$.
+
+  This statement must correspond to one of the premises of Rule (Epsilon) to produce the expected statement $f(t_1,\dots, t_n) \match q \vdash_\A S$.
+  There are two cases to consider :$q=q'$ and $q \not = q'$.
+
+  If $f(q_1,\dots,q_n) \rw q' \in \Delta$ is the last transition used to have $f(t_1, \dots, t_n)\sigma \xrw{\alpha}_\A q$ then
+  we have $\alpha = \bigwedge_1^n \alpha_i$ and we are in the case $q = q'$: this case corresponds to the premiss $0$ of
+  Rule (Epsilon) and $S' = S_0$. By definition of Rule (Epsilon), $S'$ is included in $S$. This means that $(\alpha, \sigma) \in S$.
+
+  If we have $q \not= q'$, then it remains a sequence of transitions $q' \xrw{\alpha'} q$ to have $f(t_1, \dots, t_n)\sigma \xrw{\alpha}_\A q$.
+  The couple $(\alpha', q')$ is in the set $\{ (q_k, \alpha_k) \sep q_k \xrw{\alpha_k} q\}$.%_1^m$.
+  This means that the statement $f(t_1,\dots, t_n) \match q \vdash_\A S'$ is one the remaining premisses. % $1$ to $m$.
+  By definition of Rule (Epsilon), $S$ contains all couple $(a \land \alpha', s)$ where $(a, s) \in S'$. 
+  In particular, $S$ contains $(\bigwedge_1^n \alpha_i \land \alpha', \sigma)$ which concludes the proof.
+\end{proof}
+
+\section{Proofs about normalization}
+
+To normalize, we assume that $\Delta$, the second argument of $\norm$, is determinist. 
+It means that if $\Delta$ contains two normalized transitions of the form 
+$f(q_1, \dots, q_n) \rw q$ and $f(q_1, \dots, q_n) \rw q'$, then we have $q = q'$. 
+It ensures that there exists a normal form for any term which is rewritten by $\Delta$.
+It is required by the first step of $\norm$.
+
+Note that all proofs about $\norm$ are done using the measure $\mu : \TFQ \rw \Nat$ that counts the number of occurences of
+symbols in $\F$ of a configuration. Example : $\mu(f(q_1, g(q_2), a)) = 3$.
+We define it inductively by $\mu(q) = 0$ if $q \in \Q$, and $\mu(f(t_1,\dots, t_n)) = 1 + \sum_1^n \mu(t_i)$.
+   
+
+
+\begin{lemma}[Existence of a representative]
+\label{lem:norm_determinism}
+Assume that $\aaexeq$ is a $\RE$-automaton obtained after $k$ steps of completion
+from $\aaexeq^0$. Let $c$ be a configuration. 
+If $\Delta' = \norm(c, \Delta \setminus \Delta^0)$, then there exists a state $q$ such that $c \rw^!_{\Delta'} q$.
+\end{lemma}
+
+\begin{proof}\\
+  Assuming $\F$ a set of symbols, and $\Q$ a set of states. 
+  We define $\aaexeq = \la \F, \Q, \Q_f, \Delta \cup \Drw \cup \Deq\ra$; $c \in \TFQ$.
+  Assume that $\Delta^1 = \Delta \setminus \Delta^0$ is determinist.
+
+  The first step $\norm(t, \Delta^1)$ consists in rewriting $c$ by
+  $\Delta^1$ in its normal form $d$
+   
+  The second step $\slice(d, \Delta^1)$ returns $\Delta^2$ such that
+  there exists a unique state $q$ such that $d \rw^!_{\Delta^2} q$.
+
+  The proof is one by induction on the decreasing of $\mu(d)$.
+  We consider the 3 cases of $\slice(d, \Delta^1)$
+   
+  \begin{enumerate}
+
+   \item $\slice(q, \Delta^1) = \Delta^1$. It means that $d$ is the state $q$. There exists a unique state ,which is $q$, such that $d \rw^!_{\Delta^1} q$.
+
+   \item $\slice(f(q_1, \dots, q_n), \Delta^1) = \Delta^1 \cup \{ f(q_1, \dots, q_n) \rw q \sep q \in \Q_{new}\}$. 
+     Each $q_i$ is a state. The configuration $f(q_1, \dots, q_n)$ can be used as the left-member of a normalised
+     ground transition. We build the new transition  $f(q_1, \dots, q_n) \rw q$ using a new state $q$. Adding a such
+     transition to $\Delta^1$ preserves determinism. We know that it is impossible to rewrite more $d = f(q_1, \dots, q_n)$ 
+     using transitions of $\Delta^1$ : the new transition $f(q_1, \dots, q_n) \rw q$ is the unique way to rewrite $d$.
+     We deduce that $\Delta^2 = \Delta^1 \cup \{ f(q_1, \dots, q_n) \rw q \sep q \in \Q_{new}\}$ is deterministic, and $d \rw^!_{\Delta^2} q$.
+
+   \item $\slice(f(t_1, \dots, t_n), \Delta^1) = \norm(f(t_1,\dots, t_n), \slice(t_i, \Delta^1)\ )$, $t_i \in \TFQ \setminus \Q$.
+     Here, we have the direct subterm $t_i$ of $d$ which is not a state. We deduce $\mu(t_i) < \mu(d)$ from the definition of $\mu$.
+     By induction, $\Delta$ is extended by $\slice(t_i, \Delta^1)$ to obtain $\Delta^2$ for which there exists a state $q$ 
+     such that $t_i \rw^!_{\Delta^2} q$.  Using this new set $\Delta^2$, we unfold $\norm(f(t_1,\dots, t_n), \Delta^2)$ which consists in rewriting 
+     $f(t_1, \dots, t_n)$ using $\Delta^2$. We obtain a new configuration $f(t'_1, \dots, t'_n)$ where we know at less 
+     $t_i'$ is equal to $q$ since the direct subterm $t_i$ can be rewritten in $q$ using $\Delta^2$. Note that if some subterms of $t_i$
+     are also subterms of some other $t_j$, it will also be rewritten by $\Delta^2$ in $t'_j$ until we reach the normal form.
+     Each step of rewriting by $\Delta^2$ necessarly replaces a symbol of $\F$ by a state of $\Q$ by definition of a normalised transition.
+     This remark allows to prove that $\mu(f(t_1,\dots,t_n) > \mu(f(t'_1,\dots,t'_n)$.
+     For the direct subterm $t_i$, we know $\mu(t_i) > 0$ ($t_i$ is not a state), and $\mu(t'_i) = 0$ ($t'_i$ is the state $q$).
+     For all other direct subterm $t_j$ with $j <> i$ we deduce $\mu(t_j) \ge \mu(t'_j)$ from $t_j \rw^!_{\Delta^2} t'_j$ using $\Delta^2$.
+     We have $\mu(f(t_1,\dots,t_n) > \mu(f(t'_1,\dots,t'_n)$ by definition of $\mu$, and $f(t'_1,\dots,t'_n)$ is rewritten as most
+     as possible by the deterministic $\Delta^2$. Then, we use again the induction hypothesis to deduce that $\Delta' = \slice(f(t'_1,\dots,t'_n), \Delta^2)$
+     extends $\Delta^2$ in order to have a unique state $q$ such that $f(t'_1,\dots,t'_n) \rw^!_{\Delta^3} q$.
+     By transivity, we have $d \rw^!_{\Delta'} q$ using the deterministic set $\Delta'$ for $d$ which is equal to $f(t_1, \dots, t_n)$.
+
+   \end{enumerate}
+   Finally, we proved that $\Delta' = \slice(d, \Delta^1)$ extends $\Delta^1$ preserving its determinism such that there exists a state
+   $q$ for which $d \rw^!_{\Delta'} q$. We also know that $c \rw^!_{\Delta'} d$. We can conclude that $\Delta' = \norm(c, \Delta^1)$
+   is determinist, and there exists a state $q$ such that $c \rw^!_{\Delta'} q$.
+ \end{proof}
+
+ Let $\A = \la \F, \Q, \Q_f, \Delta \cup \Drw \cup \Deq \ra$ be a $\RE$-automaton, and $c \in \TFQ$ a
+ configuration of $\A$.
+ We prove that the $\Delta^1 = \Delta \setminus \Delta^0$ is injective {\em i.e.} for all $c,\ d \in \TFQ$,
+ if we have $c \rw^*_{\Delta^1} q$ and $c \rw^*_{\Delta^1} q$, then $c = d$. From this property, we deduce
+ that if we have $\Delta^2 = \norm(r\sigma, \Delta^1)$ all term $t$ such that $t \rw^*_{\Delta^2 \cup \Delta} q$,
+ then we deduce that $t = r\sigma'$ where $\sigma' : \X \rw \TF$. It is important to ensure that there is no more
+ term added than terms defined as $t$, when a critical pair is solved.
+ added 
+ 
+ \begin{lemma}[Normalisation and injectivity]
+   If $\Delta^1$ is injective, then so is $\norm(c \sep \Delta^1)$.
+ \end{lemma}
+ 
+ \begin{proof}
+   Assuming $\F$ a set of symbols, and $\Q$ a set of states. We define: $A = \la \F, \Q, \Q_f, \Delta \cup \Drw \cup \Deq\ra$;
+   $c \in \TFQ$, and $\Delta^1 = \Delta \setminus \Delta^0$.
+   
+   The injectivity of $\Delta^2 = \norm(c, \Delta^1)$ holds, if there there is only one transition per state in $\Delta^1$.
+   When function $\slice$ creates new transition, it uses a new state.
+   Assuming that $\Delta^1$ has only one transition per state, so has $\Delta^2$.
+   This is enougth to ensure the injectivity of $\Delta^2$.
+   Note that all initial $\RE$-automaton $\aaexeq^0$ ensures this property, since the set of transitions used 
+   by function $\norm$ is empty : $\Delta^0 \setminus \Delta^0$.
+   
+\end{proof}
+
+
+\section{Using $\RE$-automata completion for exact computation of reachable terms}
+\label{sec:exact}
+The $\RE$-completion can be used for regular model-checking for most of the
+known classes of $\R$ for which $\desc(\Lang(\A))$ is regular. On those classes,
+completion always stops on a $\RE$-automaton $\aaex^*$ with an empty set $\Deq$. As
+a result, all the terms recognized by $\aaex^*$ are reachable and all triples
+$(q,q',\phi)\in S$ are such that $\phi=\top$.
+
+\begin{theorem}[Exact computation with completion]
+\label{thm:regular}
+  If $E=\emptyset$ and $\R$ is
+  ground~\cite{pDauchetTison-LICS90,pBrainerd-IC69}, right-linear and
+  monadic~\cite{pSalomaa88}, linear and
+  semi-monadic~\cite{pCoquideDauchetGV-FCT89}, linear and inversely
+  growing~\cite{pJacquemard-RTA96}, constructor~\cite{pRety-LPAR99} or linear generalized finite path
+  overlapping~\cite{Takai-RTA04}, then completion of a tree automaton $\A$
+  terminates on $\A_{\R,\emptyset}^*$ and $\Lang(\A_{\R,\emptyset}^*)=\desc(\Lang(\A))$.
+\end{theorem}
+
+\begin{proof}
+  When $E=\emptyset$, the completion algorithm does not produce any transitions
+  for the $\Deq$ set and, thus, every transition of $\Drw$ is
+  labelled by $\top$. In other words, in this case, $\RE$-completion produces a usual
+  tree automaton instead of a $\RE$-automaton. As a result, when $E=\emptyset$,
+  the algorithm proposed in this paper totally coincides with the one
+  of~\cite{GenetR-JSC10} dealing with tree automata. In~\cite{Genet-Habil}, it
+  has been shown that the algorithm of~\cite{GenetR-JSC10} terminates with
+  $E=\emptyset$ for the above classes (Theorem~114). Furthermore, Theorem~45 and
+  Theorem~49 of~\cite{GenetR-JSC10} guarantee that, in this case,
+  $A_{\R,\emptyset}$ is such that $\Lang(\A_{\R,\emptyset}^*)=\desc(\Lang(\A))$.
+\end{proof}
+
+
+\renewcommand{\bibname}{Additional References}
+\begin{thebibliography}{10}
+
+\bibitem[25]{pBrainerd-IC69}
+W.~S. Brainerd.
+\newblock Tree generating regular systems.
+\newblock {\em Information and Control}, 14:217--231, 1969.
+
+\bibitem[26]{pCoquideDauchetGV-FCT89}
+J.~Coquid\'e, M.~Dauchet, R.~Gilleron, and S.~V\'agv\"olgyi.
+\newblock Bottom-up tree pushdown automata and rewrite systems.
+\newblock In R.~V. Book, editor, {\em Proc.\ 4th RTA Conf., Como (Italy)},
+  volume 488 of {\em LNCS}, pages 287--298. Springer-Verlag, 1991.
+
+\bibitem[27]{pDauchetTison-LICS90}
+M.~Dauchet and S.~Tison.
+\newblock The theory of ground rewrite systems is decidable.
+\newblock In {\em Proc.\ 5th LICS Symp., Philadelphia (Pa., USA)}, pages
+  242--248, June 1990.
+
+\bibitem[28]{pGilleronTison-FI95}
+R.~Gilleron and S.~Tison.
+\newblock Regular tree languages and rewrite systems.
+\newblock {\em Fundamenta Informaticae}, 24:157--175, 1995.
+
+\bibitem[29]{pJacquemard-RTA96}
+F.~Jacquemard.
+\newblock Decidable approximations of term rewriting systems.
+\newblock In H.~Ganzinger, editor, {\em Proc.\ 7th RTA Conf., New Brunswick
+  (New Jersey, USA)}, pages 362--376. Springer-Verlag, 1996.
+
+\bibitem[30]{pRety-LPAR99}
+P.~R\'ety.
+\newblock {R}egular {S}ets of {D}escendants for {C}onstructor-based {R}ewrite
+  {S}ystems.
+\newblock In {\em Proc.\ 6th LPAR Conf., Tbilisi (Georgia)}, volume 1705 of
+  {\em LNAI}. Springer-Verlag, 1999.
+
+\bibitem[31]{pSalomaa88}
+K.~Salomaa.
+\newblock Deterministic {T}ree {P}ushdown {A}utomata and {M}onadic {T}ree
+  {R}ewriting {S}ystems.
+\newblock {\em J. of Computer and System Sciences}, 37:367--394, 1988.
+\end{thebibliography}
+
+
+\section{Algorithms and proofs for emptiness decision of intersection}
+
+\label{sec:intersection}
+We define a specific algorithm building the set $S$ of reachable states for the
+product automaton for $\RE$-automaton $\A$ and automaton $\B$ where each product
+state is labelled by a formula on states of $\A$. We first define an order $>$
+on formulas.
+
+\begin{definition}
+Given $\phi_1$ and $\phi_2$ two formulas, $\phi_1 > \phi_2$ iff $\phi_2 \models
+\phi_1$ and $\phi_1 \not \models \phi_2$.
+\end{definition}
+
+
+\begin{definition}[Reachable states of the product of a $\RE$-automaton and a
+  tree automaton]
+  \label{def:reachable-states}
+  Let $\A =\langle \F, \Q^\A,\Q^\A_f,\Delta^\A, \Drw, \Deq \rangle$ be a
+  $\RE$-automaton and $\B=\langle \F, \Q^\B,\Q^\B_f,\Delta^\B \rangle$ be an
+  epsilon-free tree automaton. The set $S$ of reachable states of $\A\times \B$ is the set of triples
+  $(q,q',\phi)$ where $q\in\Q^A,q'\in\Q^\B$ and $\phi$ is a formula. Starting from the set $\Q^A
+  \times \Q^\B \times \{ \bot\}$, the value of $S$ can be computed using the following two
+  deduction rules : 
+
+\medskip
+\noindent
+{\footnotesize
+\centerline{\begin{tabular}{c|c}
+  $\displaystyle\frac
+  {\{(q_1,q'_1, \phi_1), \ldots, (q_n,q'_n,\phi_n)\} \cup \{(q,q',\phi)\} \cup P}
+  {\{(q_1,q'_1,\phi_1), \ldots, (q_n,q'_n,\phi_n)\} \cup \{(q,q',\phi \vee \bigwedge_{i=1}^n \phi_i)\}
+    \cup P}$ &  
+  $\displaystyle\frac   
+  {\{(q_1,q,\phi_1), (q_2,q,\phi_2)\} \cup P}
+  {\{(q_1,q,\phi_1), (q_2,q,(\phi_1 \wedge \phi) \vee \phi_2)\} \cup P}$\\
+  & \\
+  \begin{tabular}{c}
+    if $f(q_1, \ldots, q_n) \rw q \in \Delta^\A$  \\ 
+    and $f(q'_1, \ldots, q'_n) \rw q' \in \Delta^\B$  \\ 
+    and $(\phi \vee \bigwedge_{i=1}^n \phi_i) > \phi$ 
+  \end{tabular}
+  &
+  \begin{tabular}{lc|l}
+    if $q_1 \xrw{\phi} q_2 \in \Drw$ &or& if $q_1 \rw q_2 \in \Deq$ \\
+    and $((\phi_1 \wedge \phi) \vee \phi_2) > \phi_2$ && and $\phi=Eq(q_1,q_2)$ \\
+     && and $((\phi_1 \wedge \phi) \vee \phi_2) > \phi_2$ 
+\end{tabular}
+\end{tabular}}}
+
+\end{definition}
+
+With regards to the reachability problem, this definition, provides a
+way to distinguish between real counterexamples and terms which can be rejected
+using abstraction refinement. 
+Indeed, for all triple $(q,q',\phi)\in S$ with $q$ final in $\A$ and $q'$ final
+in $\B$, if $\phi \models \top$
+then some of the terms recognized by $q'$ in $\B$ are reachable. 
+Otherwise, $\phi$ is the formula to invalidate, i.e. negate some of
+its atom so that it becomes $\bot$.
+
+\begin{lemma}[Emptiness decision of the product of a $\RE$-automaton and a
+  tree automaton]
+  Let $\A$ be a $\RE$-automaton and $\B$ a tree automaton. Let $S$ be the set of
+  reachable states of $\A\times \B$ defined according to
+  definition~\ref{def:reachable-states}. For all final state $q$ of $\A$, all
+  final state $q'$ of $\B$, all formulas $\phi_S\neq\bot$, $\phi\neq \bot$ and
+  all term $t\in\TF$, we have $t\xrw{\phi}^*_\A q$ and $t \rw_\B^* q'$
+  (i.e. $\Lang(\A)\cap \Lang(\B) \neq \emptyset$) if and only if there exists a
+  triple $(q,q',\phi_S)\in S$ such that $\phi \models \phi_S$. 
+\end{lemma}
+
+\begin{proof}
+  Let $\A =\langle \F, \Q^\A,\Q^\A_f,\Delta^\A, \Drw, \Deq \rangle$
+  be the $\RE$-automaton and $\B=\langle \F, \Q^\B,\Q^\B_f,\Delta^\B \rangle$ be
+  the tree automaton.  
+%We use definition~\ref{def:xrw_alpha} for the recognized language
+%$\Lang(\A,q)=\{t\in \TF \sep t \xrw{\phi}_\A^* q \mbox{ and $\phi$ 
+%    satisfiable}\}$. 
+%  We prove that $(q,q',\phi_S)\in S$ if 
+%  and only if %$\Lang(\A,q) \cap \Lang(\B,q') \neq \emptyset$.
+%  there exists a term $t\in\TF$ such that $t\xrw{\phi}^*_\A q$, $t
+%  \rw_\B^* q'$ and $\phi\models \phi_S$.
+We prove a stronger property on all states $q$ of $\A$ and $q'$ of $\B$ (and not
+only for final states).
+First, we prove the 'only if' part. Let us assume that 
+%$\Lang(\A,q) \cap \Lang(\B,q') \neq \emptyset$, hence that 
+there exists a term $t\in\TF$ such that $t\xrw{\phi}^*_\A q$, $t \rw_\B^* q'$.
+%and $\phi$ satisfiable. 
+By induction on the height of $t$ we have:
+
+
+\begin{itemize}
+\item If $t$ is a constant, since $\B$ is an epsilon-free tree automaton, the
+  only way to have $t \rw^*_\B q'$ is to have $t \rw q' \in \B$. With regards to
+  $\A$, by definition~\ref{def:xrw_alpha}, $t\xrw{\phi}^*_\A q$ means that
+  there exists states $q_0,q_1, \ldots, q_n$ and formulas $\phi_1,\ldots,
+  \phi_n$ such that $t \rw_{\Delta_\A} q_0 \xrw{\phi_1} q_1 \xrw{\phi_2}
+  \ldots q_n$ with $q=q_n$ and $\phi=\phi_1\wedge \ldots \wedge
+  \phi_n$.% is satisfiable.
+  Transitions $q_i \xrw{\phi_i} q_{i+1}$ are either transitions of $\Drw$ or
+  transitions of $\Deq$ with $\phi_i=\top$.  Because of transitions $t \rw q_0
+  \in \Delta_\A$ and $t \rw q' \in \Delta_\B$, using the first case of
+  definition~\ref{def:reachable-states}, we get that $(q_0,q',\top) \in
+  S$. Similarly, using the second case of the definition, we obtain that there
+  exists formulas $\phi'_i$ with $i=1\ldots n$ such that $(q_1,q', \phi_1\vee
+  \phi'_1), (q_2,q',(\phi_1\wedge\phi_2)\vee \phi'_2),\ldots (q_n,q', (\phi_1
+  \wedge \ldots \wedge \phi_n)\vee \phi'_n)$ belong to $S$. Finally, since
+  $q_n=q$ and $\phi=\phi_1\wedge \ldots \wedge \phi_n$, we that
+  $(q,q',\phi\vee\phi_n') \in S$. Furthermore, we trivially have that $\phi_S=
+  \phi\vee \phi_n'$ and $\phi \models \phi_S$. % since $\phi$ is
+                                % satisfiable, so is $\phi \vee \phi'$.
+
+\item Assume that for all term of height lesser or equal to $n\in\NN$, the
+  property is true. Let us prove that it is also true for a term $f(t_1, \ldots,
+  t_n)$ with $t_1, \ldots, t_n$ of height lesser or equal to $n$. Since $f(t_1,
+  \ldots, t_n) \rw^*_\B q'$ and $\B$ is an epsilon free tree automaton, we
+  obtain that $\exists q'_1,\ldots,q'_n\in\Q^\B$ such that $\forall i=1\ldots n:
+  t_i \rw^*_\B q'_i$ and $f(q'_1,\ldots,q'_n) \rw q' \in \Delta_\B$. With
+  regards to $\A$,
+  by definition~\ref{def:xrw_alpha}, $f(t_1, \ldots, t_n)
+  \xrw{\phi}^*_\A q$ means that there exists states $q_0,q_1, \ldots,
+  q_m,q''_1,\ldots,q''_n$ and formulas $\phi_1,\ldots, \phi_m, \phi'_1, \ldots,
+  \phi'_n$ such that $\forall i=1\ldots n: t_i \xrw{\phi'_i}^*_\A q''_i$,
+  $f(q''_1,\ldots, q''_n) \rw_{\Delta_\A} q_0$ and $q_0 \xrw{\phi_1} q_1
+  \xrw{\phi_2} \ldots q_n$, $q=q_n$. Furthermore, we obtain that $\phi=
+  \bigwedge_{i=1}^{n} \phi'_i \wedge \bigwedge_{i=1}^{m} \phi_i$. % is
+                                % satisfiable. 
+  Since terms $t_i$ are of height lesser or equal to $n$, $\forall
+  i=1\ldots n: t_i \rw^*_\B q_i$ and $\forall i=1 \ldots n: t_i \xrw{\phi'_i}_\A^*
+  q''_i$, we can apply the induction hypothesis and obtain that $\forall
+  i=1\ldots n: (q_i, q''_i, \phi''_i) \in S$ with $\phi'_i \models \phi''_i$. % and $\phi'_i$ satisfiable.  
+  Besides to this, using case~1 of definition~\ref{def:xrw_alpha} on
+  $f(q_1,\ldots,q_n) \rw q' \in \Delta_\B$, $f(q''_1,\ldots,q''_n) \rw q_0 \in
+  \Delta_\A$, and $\forall i=1\ldots n: (q_i, q''_i, \phi''_i) \in S$, we obtain
+  that there exists a formula $\phi'$ such that $(q_0,q', (\bigwedge_{i=1}^n
+  \phi''_i) \vee \phi')\in S$. Then, like in the base case, since $q_0
+  \xrw{\phi_1} q_1 \xrw{\phi_2} \ldots q_n$, $q=q_n$, we can deduce that
+  there exists a formula $\phi''$ such that $(q,q',(\bigwedge_{i=1}^n \phi''_i
+  \wedge \bigwedge_{i=1}^{m} \phi_i) \vee \phi'')\in S$. Let $\phi_S= (\bigwedge_{i=1}^n \phi''_i
+  \wedge \bigwedge_{i=1}^{m} \phi_i) \vee \phi''$. Since we know from above that
+  $\phi=\bigwedge_{i=1}^n \phi'_i \wedge \bigwedge_{i=1}^{m} \phi_i$ and
+  $\forall i=1\ldots n: \phi'_i \models \phi''_i$, we obtain that % is satisfiable, so is 
+  $\phi \models \phi_S$.
+\end{itemize}
+
+
+\medskip
+Second, we prove the 'if' part: if $(q,q',\phi_S)\in S$ and $\phi_S \neq \bot$
+then there exists a term $t$ and a formula $\phi \neq \bot$ such that $\phi \models \phi_S$,
+% and $S$ satisfiable,
+$t\xrw{\phi}^*_\A q$ and $t \rw_\B^* q'$. We make a proof by induction
+on the number of applications of the two rules of
+definition~\ref{def:reachable-states}, necessary to prove that $(q,q',\phi_S)$ in $S$.
+
+\begin{itemize}
+\item If the number of steps is $0$ then, since the computation of $S$ starts
+  from the set $\Q^\A \times \Q^\B \times \bot$, then all $(q,q',\phi_S)$
+  are such that $\phi_S=\bot$, which is a contradiction.
+
+
+\item We assume that the property is true for any triple $(q,q',\phi_S)$ which can
+  be deducted by $n$ or less applications of the rules of
+  definition~\ref{def:reachable-states}. Now, we consider the case of a triple
+  $(q,q',\phi_S)$ that is deduced at the $n+1$-th step of application of the
+  deduction rules.
+  \begin{itemize}
+  \item If the first rule is concerned, this means that there exists triples
+    $(q_1,q'_1, \phi_1),\ldots,(q_n,q'_n,\phi_n)$ and $(q,q',\phi)$ in $S$
+    deduced before $n+1$-th step, as well as transitions $f(q_1,\ldots,q_n)\rw q
+    \in \Delta_\A$ and $f(q'_1,\ldots,q'_n)\rw q' \in \Delta_\B$. Furthermore,
+    we know that $\phi_S=\phi \vee \bigwedge_{i=1}^n \phi_i$.
+    % and by hypothesis $\rho$ is satisfiable. 
+    If $\phi\neq \bot$ then, since $(q,q',\phi)$ was shown to belong to $S$
+    before $n+1$-th step, we can apply the induction hypothesis and directly
+    obtain that there exists a term $t$ and a formula $\phi'$ such that $\phi'
+    \models \phi$, $t \xrw{\phi'}^*_\A q$ and $t \rwB^* q'$. Note that $\phi'
+    \models \phi$ implies $\phi' \models \phi_S$.
+    Otherwise, if $\phi=\bot$, then % $\bigwedge_{i=1}^n \phi_i$ is then 
+    we can apply the induction hypothesis on triples $(q_i,q'_i,\phi_i)$,
+    $i=1\ldots n$ and obtain that $\forall i=1\ldots n:\exists \phi_i':\exists
+    t_i \in\TF: \phi'_i \models \phi_i$, $t_i \xrw{\phi_i'}_\A^* q_i$ and $t_i
+    \rwB^* q'_i$. Finally, 
+    because of the two transitions $f(q_1,\ldots,q_n)\rw q \in \Delta_\A$ and
+    $f(q'_1,\ldots,q'_n)\rw q' \in \Delta_\B$, we get that $f(t_1,\ldots,t_n)
+    \xrw{\phi'}_\A^* f(q_1,\ldots,q_n) \rwA^* q$ with
+    $\phi'=\bigwedge_{i=1}^n \phi'_i$ on one side and $f(t_1,\ldots,t_n) 
+    \rwB f(q'_1,\ldots,q'_n) \rwB^* q$ on the other side. Furthermore,
+    since $\forall i=1\ldots n: \phi'_i \models \phi_i$, we have
+    $\bigwedge_{i=1}^n \phi'_i \models \bigwedge_{i=1}^n \phi_i$. Recall that
+    $\phi'= \bigwedge_{i=1}^n \phi'_i$ and $\phi_S= \phi\vee \bigwedge_{i=1}^n
+    \phi_i$. Hence, $\phi' \models \phi_S$.
+  \item If the second rule is concerned, this means that there exists triples
+    $(q_1,q',\phi_1)$ and $(q,q',\phi_2)$ in $S$ deduced before the $n+1$-th
+    step. Furthermore, we know that $\phi_S=(\phi_1 \wedge \phi) \vee \phi_2$.
+    Like above, if $\phi_2 \neq \bot$ then we can apply induction hypothesis on
+    $(q,q',\phi_2)$ and trivially get the result. Otherwise, if $\phi_2=\bot$
+    then we can use induction hypothesis on the triple $(q_1,q',\phi_1)$ and
+    obtain that there exists a formula $\phi_1'$ and a term $t_1$ such that 
+    $t_1\xrw{\phi_1'}_\A^* q_1$, $t_1 \rwB^* q'$ and $\phi_1' \models \phi_1$.
+    Then, by case on the epsilon transition used for the deduction on $S$, we
+    prove that $t_1 \xrw{\phi_1'\wedge \phi}_\A^* q$:
+
+    \begin{itemize}
+    \item Assume that $q_1 \xrw{\phi} q \in \Drw$. Then, by
+      definition~\ref{def:xrw_alpha}, we obtain that $t_1 \xrw{\phi'_1
+        \wedge \phi}_\A^* q$. Furthermore, since $\phi'_1 \models \phi_1$, we have
+      that $\phi'_1 \wedge \phi \models \phi_1 \wedge \phi$ and, finally, that 
+      $\phi'_1 \wedge \phi \models \phi_S$.
+
+    \item Assume that $q_1 \rw q \in \Deq$. By
+      definition~\ref{def:xrw_alpha}, we obtain that $t \xrw{\phi_1 \lor Eq(q_1, q)}_\A^* q$.
+      Finally, like above, we can deduce that
+      $\phi'_1 \wedge Eq(q_1,q) \models \phi_1 \wedge Eq(q_1,q)$ and thus $\phi'_1 \wedge
+      Eq(q_1,q) \models \phi_S$.
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{proof}
+\end{document}
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% TeX-PDF-mode: t
+%%% End: 

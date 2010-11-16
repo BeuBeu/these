@@ -1,0 +1,100 @@
+\section{Preliminaries}
+\label{sec:preliminaries}
+
+Comprehensive surveys can be found in~\cite{BaaderN-book98} for
+rewriting, and in~\cite{TATA,GilleronTison-FI95} for tree automata
+and tree language theory.
+
+Let $\F$ be a finite set of symbols, each associated with an arity function, and
+let $\X$ be a countable set of variables. $\TFX$ denotes the set of terms, and
+$\TF$ denotes the set of ground terms (terms without variables). The set of
+variables of a term $t$ is denoted by $\var(t)$. A substitution is a function
+$\sigma$ from $\X$ into $\TFX$, which can be extended uniquely to an
+endomorphism of $\TFX$. A position $p$ for a term $t$ is a word over $\NN$. The
+empty sequence $\epsilon$ denotes the top-most position. The set $\pos(t)$ of
+positions of a term $t$ is inductively defined by:
+\begin{itemize}
+\item $\pos(t)= \{ \epsilon\} $ if $t \in \X$
+\item $\pos(f(t_1,\dots,t_n)) = \{ \epsilon \} \cup \{i.p \mid 1 \leq i \leq n
+  \et p \in \pos(t_i) \}$
+\end{itemize}
+If $p \in \pos(t)$, then $t|_p$ denotes the subterm of $t$ at position $p$ and
+$t[s]_p$ denotes the term obtained by replacement of the subterm $t|_p$ at
+position $p$ by the term $s$. A term rewriting system $\R$ is a set of {\em
+  rewrite rules} $l \rw r$, where $l, r \in \TFX$, $l \not \in \X$, and $\var(l)
+\supseteq \var(r)$. A rewrite rule $l \rw r$ is {\em left-linear} if each
+variable of $l$ (resp. $r$) occurs only once in $l$.  A TRS $\R$ is left-linear
+if every rewrite rule $l \rw r$ of $\R$ is left-linear).  The TRS $\R$ induces a
+rewriting relation $\rw_{\R}$ on terms whose reflexive transitive closure is
+denoted by $\rw^{\star}_{\R}$. The set of $\R$-descendants of a set of ground
+terms $E$ is $\desc(E) = \{t \in \TF \sep \exists s \in E \st s \rw^{\star}_{\R}
+t \}$.
+
+The {\em verification technique} defined
+in~\cite{Genet-RTA98,FeuilladeGVTT-JAR04} is based on $\desc(E)$.  Note that
+$\desc(E)$ is possibly infinite: $\R$ may not terminate and/or $E$ may be
+infinite. The set $\desc(E)$ is generally not
+computable~\cite{GilleronTison-FI95}. However, it is possible to
+over-approximate it~\cite{Genet-RTA98,FeuilladeGVTT-JAR04,Takai-RTA04} using
+tree automata, i.e. a finite representation of infinite (regular) sets of terms.
+In this verification setting, the TRS $\R$ represents the system to verify, sets
+of terms $E$ and $Bad$ represent respectively the set of initial configurations
+and the set of ``bad'' configurations that should not be reached.  Then, using
+tree automata completion, we construct a tree automaton $\B$ whose language
+$\Lang(\B)$ is such that $\Lang(\B) \supseteq \desc(E)$. Then if $\Lang(\B)\cap
+Bad = \emptyset$ then this proves that $\desc(E)\cap Bad=\emptyset$, and thus
+that none of the ``bad'' configurations is reachable. We now define tree
+automata.
+
+Let $\Q$ be a finite set of symbols, with arity $0$, called {\em states} such
+that $\Q \cap \F= \emptyset$.  $\TFQ$ is called the set of {\em configurations}.
+\begin{definition}[Transition and normalized transition]
+  \label{def:normalized}
+  A {\em transition} is a rewrite rule $c \f q$, where $c$ is a configuration
+  i.e. $c \in \TFQ$ and $q \in \Q$. A {\em normalized transition} is a
+  transition $c \f q$ where $c = f(q_1, \ldots, q_n)$, $f \in \F$ whose arity is
+  $n$, and $q_1, \ldots, q_n \in \Q$.
+\end{definition}
+
+% An epsilon transition is a transition of the form $q \f q'$ where $q$ and $q'$
+% are states. Any set of transition $\Delta \cup \{q \f q'\}$ can be
+% equivalently replaced by $\Delta \cup \{c \f q' \sep c \f q \in \Delta \}$.
+
+\begin{definition}[Bottom-up nondeterministic finite tree automaton]
+  A bottom-up nondeterministic finite tree automaton (tree automaton for short)
+  is a quadruple $\A= \langle \F, \Q, \Q_F,\Delta \rangle$, where $\Q_F
+  \subseteq \Q$ and $\Delta$ is a set of normalized transitions.
+\end{definition}
+
+The {\em rewriting relation} on $\TFQ$ induced by the transitions of $\A$ (the
+set $\Delta$) is denoted by $\f_{\Delta}$.  When $\Delta$ is clear from the
+context, $\f_{\Delta}$ will also be denoted by $\f_{\A}$.
+% Similarly, by notation abuse, we will often note $q \in \A$ and $t\f q \in \A$
+% respectively for $q \in \Q$ and $t \f q \in \Delta$.
+
+\begin{definition}[Recognized language]
+  The tree language recognized by $\A$ in a state $q$ is $\Lang(\A,q) = \{t \in
+  \TF \sep t \f^{\star}_{\A} q \}$.  The language recognized by $\A$ is
+  $\Lang(\A) = \bigcup_{q \in \Q_F} \Lang(\A, q)$. A tree language is regular if
+  and only if it can be recognized by a tree automaton.
+  % A state $q$ is a {\em dead state} if $\Lang(\A, q)= \emptyset$.
+\end{definition}
+
+
+ \begin{example}
+   Let $\A$ be the tree automaton $\langle \F, \Q, \Q_F, \Delta \rangle$ such
+   that $\F=\{f,g,a\}$, $\Q= \{q_0, q_1\}$, $\Q_F=\{q_0\}$ and $\Delta= \{f(q_0)
+   \f q_0, g(q_1) \f q_0, a \f q_1 \}$. In $\Delta$ transitions are {\em
+     normalized}. A transition of the form $f(g(q_1)) \f q_0$ is not
+   normalized. The term $g(a)$ is a term of $\TFQ$ (and of $\TF$) and can be
+   rewritten by $\Delta$ in the following way: $g(a) \f_{\Delta} g(q_1)
+   \f_{\Delta} q_0$. Note that $\Lang(\A, q_1)= \{a\}$ and $\Lang(\A)=\Lang(\A,
+   q_0) = \{g(a),f(g(a)), f(f(g(a))),\ldots\}=\{f^{\star}(g(a))\}$.
+   % Note also that $\Lang(\A, q_2)=\emptyset$ since no term of $\TF$ rewrites to
+%   % $q_2$, hence $q_2$ is a dead state.
+ \end{example}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

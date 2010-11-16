@@ -1,0 +1,111 @@
+This is BibTeX, Version 0.99c (TeX Live 2009)
+The top-level auxiliary file: main.aux
+A level-1 auxiliary file: 1_intro/1_intro.aux
+A level-1 auxiliary file: 2_prerequis/2_prerequis.aux
+A level-1 auxiliary file: 4_contre_ex/4_contre_ex.aux
+A level-1 auxiliary file: 3_proptemp/3_proptemp.aux
+A level-1 auxiliary file: 5_certif/5_certif.aux
+The style file: abbrv.bst
+A level-1 auxiliary file: resume/resume.aux
+Database file #1: biblio/eureca.bib
+Warning--string name "fi" is undefined
+--line 31437 of file biblio/eureca.bib
+Warning--string name "lics5" is undefined
+--line 31506 of file biblio/eureca.bib
+Warning--string name "rta4" is undefined
+--line 31516 of file biblio/eureca.bib
+Warning--string name "sv" is undefined
+--line 31519 of file biblio/eureca.bib
+Warning--string name "lncs" is undefined
+--line 31520 of file biblio/eureca.bib
+Warning--string name "rta7" is undefined
+--line 32270 of file biblio/eureca.bib
+Warning--string name "sv" is undefined
+--line 32273 of file biblio/eureca.bib
+Warning--string name "inria" is undefined
+--line 33013 of file biblio/eureca.bib
+Warning--string name "rta9" is undefined
+--line 33025 of file biblio/eureca.bib
+Warning--string name "sv" is undefined
+--line 33026 of file biblio/eureca.bib
+Warning--string name "lncs" is undefined
+--line 33027 of file biblio/eureca.bib
+Warning--string name "infc" is undefined
+--line 33178 of file biblio/eureca.bib
+Database file #2: biblio/genet.bib
+Warning--string name "lncs" is undefined
+--line 1221 of file biblio/genet.bib
+Warning--string name "entcs" is undefined
+--line 1235 of file biblio/genet.bib
+Warning--string name "lncs" is undefined
+--line 1339 of file biblio/genet.bib
+Warning--string name "lpar6" is undefined
+--line 1818 of file biblio/genet.bib
+Warning--string name "sv" is undefined
+--line 1819 of file biblio/genet.bib
+Warning--string name "lnai" is undefined
+--line 1820 of file biblio/genet.bib
+Warning--string name "inria" is undefined
+--line 1852 of file biblio/genet.bib
+Warning--string name "cade17" is undefined
+--line 1860 of file biblio/genet.bib
+Warning--string name "sv" is undefined
+--line 1861 of file biblio/genet.bib
+Warning--string name "lnai" is undefined
+--line 1862 of file biblio/genet.bib
+Database file #3: biblio/sabbrev.bib
+Database file #4: biblio/beubeu.bib
+Database file #5: biblio/thesis.bib.bib
+Warning--empty journal in Brainerd-IC69
+Warning--empty note in TATA
+Warning--empty booktitle in CoquideDauchetGV-FCT89
+Warning--empty booktitle in DauchetTison-LICS90
+Warning--empty institution in Genet-RR97b
+Warning--empty booktitle in Genet-RTA98
+Warning--empty booktitle in Genet-Habil
+Warning--empty booktitle in GenetK-CADE00
+Warning--empty journal in GilleronTison-FI95
+Warning--empty booktitle in Jacquemard-RTA96
+Warning--empty booktitle in Rety-LPAR99
+You've used 51 entries,
+            2118 wiz_defined-function locations,
+            1150 strings with 16964 characters,
+and the built_in function-call counts, 16668 in all, are:
+= -- 1613
+> -- 680
+< -- 35
++ -- 277
+- -- 220
+* -- 999
+:= -- 2555
+add.period$ -- 166
+call.type$ -- 51
+change.case$ -- 268
+chr.to.int$ -- 0
+cite$ -- 62
+duplicate$ -- 712
+empty$ -- 1477
+format.name$ -- 220
+if$ -- 3730
+int.to.chr$ -- 0
+int.to.str$ -- 51
+missing$ -- 36
+newline$ -- 254
+num.names$ -- 90
+pop$ -- 393
+preamble$ -- 1
+purify$ -- 218
+quote$ -- 0
+skip$ -- 548
+stack$ -- 0
+substring$ -- 807
+swap$ -- 226
+text.length$ -- 35
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 200
+warning$ -- 11
+while$ -- 133
+width$ -- 53
+write$ -- 547
+(There were 33 warnings)

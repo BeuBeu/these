@@ -1,0 +1,47 @@
+\section{Benchmarks}
+\label{sec:benchmarks}
+
+From the \coq\ formal specification, we have extracted an Ocaml checker
+implementation. In the following table, we have collected several benchmarks.
+For each test, we
+give the size of the two tree automata (initial $\A^0$ and completed $\A_\R^*$)
+as number of transitions/number of states.  For each TRS $\R$ we give the number
+of rules.  The 'CS' column gives the number of completion steps necessary to
+complete $\A^0$ into $\A^*_{\R}$ and 'CT' gives the completion time.  The 'CKT'
+column gives the time for the checker to certify the $\A^*_{\R}$ and the 'CKM'
+gives the memory usage. The important thing to observe here is that, the
+completion time is very long (sometimes more than 24 hours), the {\em checking}
+of the corresponding automaton is always fast (a matter of seconds).
+
+The four tests are Java programs translated into term rewriting systems using
+the technique detailed in~\cite{BoichutGJL-RTA07}. All of them are completed
+using \timbuk\ except the example {\tt List2.java} which has been completed using a completion
+tool under development by Yohan Boichut and Emilie Balland.  This shows that the
+completed automaton produced by a new and fully optimzed tool is also accepted
+by our checker.  The {\tt List1.java} and {\tt List2.java} corresponds to the
+same Java program but with slightly different encoding into TRS and
+approximations. The {\tt Ex\_poly.java} is the example given
+in~\cite{BoichutGJL-RTA07} and the {\tt Bad\_Fixp} is the same problem as {\tt
+  Ex\_poly.java} except that the completed automaton $\A^*_{\R}$ has been
+intentionally corrupted. Thus, this is thus not a valid fixpoint and rejected by
+the checker.
+
+\begin{center}
+\begin{tabular}{l|c|c|c|c|c|c|c|c}
+  Name & $\A^0$ & $\A^*_\R$ & $\R$ & CS & CT & CKT & CKM \\ \hline
+  
+  {\tt List1.java} & 118/82 & 422/219 & 228 & 180 & $\approx$ 3 days & 0,9s & 2,3 Mo \\ \hline
+  %Yoh
+  {\tt List2.java} & 1/1 & 954/364 & 308 & 473 & 1h30 & 2,2s & 3,1 Mo \\ \hline
+  %Res_
+  {\tt Ex\_poly.java} & 88/45 & 951/352 & 264 & 161 & $\approx$ 1 day & 2,5s & 3,3 Mo \\ \hline
+  %Res_ modifié
+  {\tt Bad\_Fixp} & 88/45 & 949/352 & 264 & 161 & $\approx$ 1 day & 1,6s & 3,2 Mo \\ \hline
+
+%  NSPK & 26tr. 12 states & 243 tr. 12st. & 13 & 6 & 8'/21.4s & 5 Mo \\ \hline
+\end{tabular}
+\end{center}
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

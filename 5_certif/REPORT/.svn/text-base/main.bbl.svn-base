@@ -1,0 +1,140 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{GTTVTT03}
+
+\bibitem[ABB{\etalchar{+}}05]{avispa}
+A.~Armando, D.~Basin, Y.~Boichut, Y.~Chevalier, L.~Compagna, J.~Cuellar,
+  P.~Hankes~Drielsma, P.-C. H\'eam, O.~Kouchnarenko, J.~Mantovani,
+  S.~M\"odersheim, D.~von Oheimb, M.~Rusinowitch, J.~Santos~Santiago,
+  M.~Turuani, L.~Vigan\`o, and L.~Vigneron.
+\newblock {The AVISPA Tool for the automated validation of internet security
+  protocols and applications}.
+\newblock In K.~Etessami and S.~Rajamani, editors, {\em {17th International
+  Conference on Computer Aided Verification, CAV'2005}}, volume 3576 of {\em
+  Lecture Notes in Computer Science}, pages 281--285, Edinburgh, Scotland,
+  2005. Springer.
+
+\bibitem[BC04]{coqart}
+Y.~Bertot and P.~Cast\'eran.
+\newblock {\em Interactive Theorem Proving and Program Development. Coq'Art:
+  The Calculus of Inductive Constructions}.
+\newblock Texts in Theoretical Computer Science. Springer Verlag, 2004.
+
+\bibitem[BD04]{BartheD-FASE04}
+G.~Barthe and G.~Dufay.
+\newblock A tool-assisted framework for certified bytecode verification.
+\newblock In {\em FASE'04}, volume 2984 of {\em LNCS}, pages 99--113. Springer,
+  2004.
+
+\bibitem[BGJ08]{BoyerGJ-RR08}
+B.~Boyer, T.~Genet, and T.~Jensen.
+\newblock {T}ree {A}utomata {C}ompletion {C}hecker.
+\newblock Technical report, INRIA, 2008.
+
+\bibitem[BGJL07]{BoichutGJL-RTA07}
+Y.~Boichut, T.~Genet, T.~Jensen, and L.~Leroux.
+\newblock Rewriting {A}pproximations for {F}ast {P}rototyping of {S}tatic
+  {A}nalyzers.
+\newblock In {\em RTA}, volume 4533 of {\em LNCS}, pages 48--62. Springer
+  Verlag, 2007.
+
+\bibitem[BHK04]{BoichutHKO-AVIS04}
+Y.~Boichut, P.-C. H\'eam, and O.~Kouchnarenko.
+\newblock {A}utomatic {A}pproximation for the {V}erification of {C}ryptographic
+  {P}rotocols.
+\newblock In {\em Proc.\ AVIS'2004, joint to ETAPS'04, Barcelona (Spain)},
+  2004.
+
+\bibitem[BJP06]{BessonJP-TCS06}
+F.~Besson, T.~Jensen, and D.~Pichardie.
+\newblock Proof-carrying code from certified abstract interpretation and
+  fixpoint compression.
+\newblock {\em Theor. Comput. Sci}, 364(3):273--291, 2006.
+
+\bibitem[BN98]{BaaderN-book98}
+F.~Baader and T.~Nipkow.
+\newblock {\em Term Rewriting and All That}.
+\newblock Cambridge University Press, 1998.
+
+\bibitem[CDG{\etalchar{+}}02]{TATA}
+H.~Comon, M.~Dauchet, R.~Gilleron, F.~Jacquemard, D.~Lugiez, S.~Tison, and
+  M.~Tommasi.
+\newblock Tree automata techniques and applications.
+\newblock {\small {\tt http://www.grappa.univ-lille3.fr/tata/}}, 2002.
+
+\bibitem[CJPR05]{CacheraJPR-TCS05}
+D.~Cachera, T.~Jensen, P.~Pichardie, and V.~Rusu.
+\newblock Extracting a data flow analyser in constructive logic.
+\newblock {\em Theor. Comput. Sci.}, 342(1):56--78, 2005.
+
+\bibitem[FGVTT04]{FeuilladeGVTT-JAR04}
+G.~Feuillade, T.~Genet, and V.~Viet Triem~Tong.
+\newblock {R}eachability {A}nalysis over {T}erm {R}ewriting {S}ystems.
+\newblock {\em JAR}, 33 (3-4):341--383, 2004.
+
+\bibitem[Gen97]{Genet-RR97b}
+Thomas Genet.
+\newblock Decidable approximations of sets of descendants and sets of normal
+  forms (extended version).
+\newblock Technical Report RR-3325, INRIA, 1997.
+
+\bibitem[Gen98]{Genet-RTA98}
+T.~Genet.
+\newblock Decidable approximations of sets of descendants and sets of normal
+  forms.
+\newblock In {\em Proc.\ 9th RTA Conf., Tsukuba (Japan)}, volume 1379 of {\em
+  LNCS}, pages 151--165. Springer-Verlag, 1998.
+
+\bibitem[GK00]{GenetK-CADE00}
+T.~Genet and F.~Klay.
+\newblock {R}ewriting for {C}ryptographic {P}rotocol {V}erification.
+\newblock In {\em Proc.\ 17th CADE Conf., Pittsburgh (Pen., USA)}, volume 1831
+  of {\em LNAI}. Springer-Verlag, 2000.
+
+\bibitem[GT95]{GilleronTison-FI95}
+R.~Gilleron and S.~Tison.
+\newblock Regular tree languages and rewrite systems.
+\newblock {\em Fundamenta Informaticae}, 24:157--175, 1995.
+
+\bibitem[GTTVTT03]{GenetTTVTT-wits03}
+T.~Genet, Y.-M. Tang-Talpin, and V.~Viet Triem~Tong.
+\newblock {V}erification of {C}opy {P}rotection {C}ryptographic {P}rotocol
+  using {A}pproximations of {T}erm {R}ewriting {S}ystems.
+\newblock In {\em In Proceedings of {W}orkshop on {I}ssues in the {T}heory of
+  {S}ecurity}, 2003.
+
+\bibitem[GVTT00]{timbuk-site}
+T.~Genet and V.~Viet Triem~Tong.
+\newblock {T}imbuk 2.0 -- a {T}ree {A}utomata {L}ibrary.
+\newblock IRISA / Universit\'e de Rennes 1, 2000.
+\newblock {\small \tt http://www.irisa.fr/lande/genet/timbuk/}.
+
+\bibitem[KN03]{KleinN-TCS03}
+G.~Klein and T.~Nipkow.
+\newblock Verified bytecode verifiers.
+\newblock {\em TCS}, 298, 2003.
+
+\bibitem[LT00]{LetouzeyT-TPHOL00}
+P.~Letouzey and L.~Théry.
+\newblock Formalizing stalmarck's algorithm in coq.
+\newblock In {\em Proc. of TPHOL'00}, volume 1869 of {\em LNCS}. Springer,
+  2000.
+
+\bibitem[RGL01]{RivalGL-TPHOL01}
+X.~Rival and Jean Goubault-Larrecq.
+\newblock Experiments with finite tree automata in coq.
+\newblock In {\em Proc. of TPHOL'01}, LNCS. Springer, 2001.
+
+\bibitem[Tak04]{Takai-RTA04}
+T.~Takai.
+\newblock {A} {V}erification {T}echnique {U}sing {T}erm {R}ewriting {S}ystems
+  and {A}bstract {I}nterpretation.
+\newblock In {\em Proc.\ 15th RTA Conf., Aachen (Germany)}, volume 3091 of {\em
+  LNCS}, pages 119--133. Springer, 2004.
+
+\bibitem[ZD06]{ZuninoD-FOSSACS06}
+R.~Zunino and P.~Degano.
+\newblock Handling exp, {$\times$} (and timestamps) in protocol analysis.
+\newblock In {\em Proc. of FOSSACS'06}, volume 3921 of {\em LNCS}, pages
+  413--427. Springer, 2006.
+
+\end{thebibliography}

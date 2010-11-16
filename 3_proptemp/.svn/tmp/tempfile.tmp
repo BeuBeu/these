@@ -1,0 +1,228 @@
+\documentclass[submission, copyright]{eptcs}
+% Pour définir les options correctes, regarder example.tex
+%\newcommand{\volume}{118}
+%\newcommand{\anno}{2009}
+
+\newcommand{\firstpage}{15}
+\usepackage{breakurl}
+\usepackage[latin1]{inputenc}
+\usepackage{amscd, amsfonts, amssymb, amsmath}
+\usepackage{bussproofs}
+\include{macros}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+
+\newcommand{\titre}{Verifying Temporal Regular Properties for Java Programs}
+\title{\titre}
+
+\author{Benoît Boyer
+\institute{Université Rennes 1, France}
+\email{Benoit.Boyer@irisa.fr}
+\and
+Thomas Genet
+\institute{Université Rennes 1, France}
+\email{Thomas.Genet@irisa.fr}
+}
+\def\titlerunning{\titre}
+\def\authorrunning{Boyer \& Genet}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+  The tree automaton completion is an algorithm used for proving safety
+  properties on systems which can be modeled by a term rewriting system. This
+  representation and verification technique works well for proving properties on
+  infinite systems like cryptographic protocols or more recently on Java
+  Bytecode programs.  This algorithm computes a tree automaton which represents
+  a (regular) over approximation of the set of reachable terms by rewriting
+  initial terms. This approach is limited by the lack of information about
+  rewriting relation between terms. Actually, terms in relation by rewriting are
+  in the same equivalence class: there are recognized into the same state by the
+  tree automaton.
+
+<<<<<<< .mine
+  We propose to extend the algorithm by introducing more equivalence
+  classes to locally distinguish a term or a subterm from its
+  successors. In a such approach each equivalence class is
+  characterized by terms which can be rewritten to generate all the
+  equivalence subclasses. This terms are called canonical
+  terms. Intuitively an equivalence class is inductively defined by a
+  set of canonical terms and a set of equivalence sub classes.  Since
+  an equivalence class is a state in tree automaton, the relation \emph{
+  is a sub class of} is simply denoted by a silent transition.
+=======
+  Our objective is to produce a completed automaton embedding an 
+  abstraction of the rewriting relation sufficient to prove temporal
+  properties on the term rewriting system.
+>>>>>>> .r3205
+
+  We propose to extend the algorithm to produce a completed automaton having more
+  equivalence classes to distinguish a term or a subterm from its successors w.r.t. rewriting. 
+  While ground transitions are used to recognize equivalence classes of terms,
+  $\epsilon$-transitions represent the rewriting relation between terms.
+  From the completed automaton, it is possible to automatically build a
+  Kripke structure abstracting the rewriting sequence.
+  States of the Kripke structure are states of the tree automaton and the
+  transition relation is given by the set of $\epsilon$-transitions.
+  States of the Kripke structure are labelled by the set of terms recognized
+  using ground transitions. On this Kripke structure, we define the Regular
+  Linear Temporal Logic (R-LTL) for expressing properties. Such properties can then 
+  be checked using standard model checking algorithms. The only
+  difference between LTL and R-LTL is that predicates are replaced by
+  a regular set of acceptable terms.  
+\end{abstract}
+
+
+
+
+
+\newpage
+
+% \section{Introduction}
+
+
+
+%   In this way the tree automaton computed contains a sufficient
+%   abstraction of the rewriting relation to prove temporal
+%   properties. By focusing at a position $p$ of any canonical term we
+%   can consider this abstraction of the rewriting sequence at the top
+%   position of subterms (located at the position $p$). In this case we
+%   consider only rewriting relation at the top position between the
+%   between canonical subterms at position $p$.
+
+%   This abstraction is particularly interesting for term rewriting systems,
+%   where rewriting sequence at a particular position of a term can be
+%   seen has a module of the global computation in the analyzed
+%   system. For instance in Java Bytecode programs where terms denote
+%   states, rewriting at the top position of a state only corresponds to
+%   a call to a method, whereas rewriting on the greatest and left-most
+%   subterm of a state only corresponds to execution of Bytecode
+%   instructions of the current method.
+
+
+
+% But : Verifier des proprietes temporelles sur des programmes Java
+% Comment : en etendant la completion d'automates arbres pour
+% prendre en compte la relation de reecriture, afin d'extraire 
+% du résultat une structure de Kripke avec laquelle on peut
+% faire du modèle checking standard.
+
+% \section{Preliminaries}
+
+% Termes, Clos, Variables, Systeme de reecriture, 
+% Automates considérés caractérisation du langage reconnu
+
+% $\rw^{\not\varepsilon}$ et $\rw^\varepsilon$
+
+
+% \section{Extension of the Tree Automata Completion}
+% Decrire le principe de la completion + Ref
+% Classe d'equivalence = tous les termes en relation par réécriture...
+% Modification = 1 terme et tous ses succsesseurs dans la meme classe
+% mais pas le terme lui-même...
+
+
+
+% \section{Java Bytecode as a Term Rewriting System}
+% As detailed in [1], the Java Bytecode Semantics can be formalized
+% using rewriting rules. Program states are viewed as terms and all
+% steps of computation are executed by a set of rules. In this paper we
+% only consider a subset of the Java Bytecode semantics but the
+% principle can be extended to the whole semantics. Here we focus on the
+% frame which denotes the current state of executed methods.
+
+% A frame is a tuple $frame(m, p, vars, stack, heap)$ composed by the name of the
+% executed method, a program point, local variables, an operand stack
+% and a heap. Actually we also have an intermediate frame called $xframe$.
+% The semantics of each instruction is defined by a set of rules on the $xframe$.
+% The current $xframe$ is rewritten until obtaining a new $frame$ corresponding to the
+% result of the executed instruction. The transition from a $frame$ to a $xframe$ is done 
+% by the control flow rules. Control flow rules depend on the considered program.
+% \begin{figure}
+%   \centering
+%   \[\begin{array}{|c|lcl|}
+%     \hline
+%     1& left-side & \longleftarrow & right-side\\
+%     \hline
+%     2&&{\bf TODO}\\
+%     3&&\vdots\\
+%   \end{array}\]
+%   \caption{$add$ instruction by rewriting rules}
+%   \label{fig:add}
+% \end{figure}
+
+
+% We have to see an important point for the next. By considering the figure \cite{fig:add}
+% only two (1 and 4) rules can rewrite at the top of the term. This property can be verified for
+% all instructions of the Bytecode.
+
+% Furthermore, for any sequence of rewriting an approximation of
+% rewriting relation can be defined just by keeping the rewriting at the
+% top of the $frame$ and $xframe$ terms.
+
+% \begin{definition}[$\arw$]
+%   Let be $r$, a rule of the set $\R$. We have $u \arw_r v$ if and only if
+%   exists a term $w$ such that $u \rw^*_\R w$ and $w \trw_R v$.
+% \end{definition}
+
+
+% This property is preserved by the tree automata completion :
+
+% \begin{theorem}
+%   Let be $\R$, $\A$, and $q'\rw q$ a $\varepsilon$-transition of $\A$.
+%   For all terms $u$ $v$ such we have $u \rwne_\A q$ and $v \rwne_\A q'$, then exists
+%   $w$ such that $u \rw^*_\R w \trw_\R v$.
+% \end{theorem}
+
+
+
+% Compilation du bytecode (.class) en TRS.
+% Principe : termes, organisation des transitions.
+% Sémantique, opérateur, graphe de flot de controle...
+
+
+% \section{From $\R$-automaton Fixpoint to Kripke structure}
+
+
+
+
+% Construction de la structure ${\cal M}(\Q, \Q_F, \Delta_\varepsilon^-1, \A_P)$
+
+ 
+ 
+% \section{R-LTL properties}
+% To express our properties we propose to define the Regular Linear
+% Temporal Logic (R-LTL) which is almost the standard LTL. The
+% difference is the atomic formula. Predicates used in LTL denoted by a
+% tree automaton. The language of a such tree automaton describes a set
+% of admissible states.  A state $q$ of a Kripke structure validates the
+% atomic property $P$ if and only if one term recognized by $Ap$ must be
+% recognized by $P$ to satisfy the property.
+
+% \[\K(Q,\ Q_F,\ \trans,\ Ap),\ q \models P\quad \equ\quad \lang{} (Ap, q) \cap \lang{} (P) \neq \emptyset\]
+
+% We also add the operators ($\land$, $\lor$, $\neg$, $\nxt$, $\fut$, $\gbl$, $\unt$, $\rel$)
+% with their standard semantics as in LTL. Now, we can build a
+% Büchi automaton 
+
+
+% \paragraph{Checking Properties....}
+% \section{}
+
+
+% \section{}
+
+
+% \section{Discussion}
+
+
+\bibliographystyle{eptcs} % or whatever you prefer
+%1 - Rewriting Approximations for Fast Prototyping of Static Analyzers
+
+
+\end{document}
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 

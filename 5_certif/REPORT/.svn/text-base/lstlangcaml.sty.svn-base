@@ -1,0 +1,15 @@
+\lst@definelanguage[Objective]{Caml}[light]{Caml}
+  {deletekeywords={not,prefix,value,where},%
+   morekeywords={assert,asr,class,closed,constraint,external,false,%
+      functor,include,inherit,land,lazy,lor,lsl,lsr,lxor,method,mod,%
+      module,new,open,parser,private,sig,struct,true,val,virtual,when},%
+  }%
+\lst@definelanguage[light]{Caml}
+  {morekeywords={and,as,begin,do,done,downto,else,end,exception,for,%
+      fun,function,if,in,module,struct,val,sig,let,match,mutable,not,of,or,prefix,rec,then,%
+      to,try,type,value,where,while,with},%
+   sensitive,%
+   morecomment=[n]{(*}{*)},%
+   morestring=[b]",%
+   moredirectives={open,close,include}%
+  }[keywords,comments,strings,directives]%

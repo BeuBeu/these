@@ -1,0 +1,407 @@
+% Version light du papier de TACC
+
+% \section{Tree Automata Completion}
+%\label{section:completion}
+
+Given a tree automaton $\A$ and a TRS $\R$, the tree automata completion
+algorithm, proposed in~\cite{Genet-RTA98,FeuilladeGVTT-JAR04}, computes a \emph{tree complete
+automaton} $\aaex^*$ such that $\Lang{}(\aaex^*)=\desc(\Lang{}(\A))$ when it is
+possible (for some of the classes of TRSs where an exact computation is
+possible, see~\cite{FeuilladeGVTT-JAR04}), and such that $\Lang{}(\aaex^*)
+\supseteq \desc(\Lang{}(\A))$ otherwise. 
+In this paper, we only consider the exact case.
+
+The tree automata completion with $\varepsilon$-transtions works as follow.
+From $\A=\aaex^0$ completion builds a sequence $\aaex^0.\aaex^1\ldots\aaex^k$ of automata such that if
+$s\in\Lang{}(\aaex^i)$ and $s\f_{\R} t$ then $t\in\Lang{}(\aaex^{i+1})$. Transitions of $\aaex^i$ are denoted by the set
+$\Delta^i \cup \Deps^i$. Since for every tree automaton, there exists a
+deterministic tree automaton recognizing the same language, we can assume
+that initially $A$ has the following properties:
+
+\begin{property}[$\rwne$ deterministic]
+  \label{prop:deterministic}
+  If $\Delta$ contains two normalized transitions of the form 
+  $f(q_1, \dots, q_n) \rw q$ and $f(q_1, \dots, q_n) \rw q'$, it means $q = q'$. 
+  This ensures that the rewriting relation $\rwne$ is deterministic.
+\end{property}
+
+\begin{property}
+  \label{prop:wellinitial}
+  For all state $q$ there is at most one normalized transition $f(q_1, \dots, q_n) \rw q$
+  in $\Delta$. This ensures that if we have $t \rwne q$ and $t' \rwne q$ then $t = t'$.
+\end{property}
+
+If we find a fixpoint automaton $\aaex^k$ such that $\desc(\Lang{}(\aaex^k)) =
+\Lang{}(\aaex^k)$, then we note $\aaex^*=\aaex^k$ 
+and we have $\Lang{}(\aaex^*) \supseteq \desc(\Lang{}(\aaex^0))$~\cite{FeuilladeGVTT-JAR04}.
+% , or $\Lang{}(\aaex^*)\supseteq
+%\desc(\Lang{}(\A))$ if $\R$ is not in one class of~\cite{FeuilladeGVTT-JAR04}.
+To build $\aaex^{i+1}$ from $\aaex^{i}$, we achieve a \textit{completion step}
+which consists of finding \textit{critical pairs} between $\f_{\R}$ and
+$\f_{\aaex^i}$. To define the notion of critical pair, we extend the definition
+of substitutions to the terms of $\TFQ$. For a substitution $\sigma:\X\mapsto\Q$ and
+a rule $l\f r \in \R$, a critical pair is an instance $l\sigma $ of $l$ such
+that there exists $q\in\Q$ satisfying $l\sigma \f^*_{\aaex^i}q$ and $l\sigma
+\f_{\R} r\sigma$. Note that since
+$\R$, $\aaex^i$ and the set $\Q$ of states of $\aaex^i$ are finite, there is only a finite
+number of critical pairs. For every critical pair detected between $\R$ and
+$\aaex^i$ such that we do not have a state $q$' for which $r\sigma \rwne_{\aaex^i}q'$ and $q' \rw q \in \Deps^i$, the
+tree automaton $\aaex^{i+1}$ is constructed by adding new transitions $r\sigma \rwne q'$ to $\Delta^i$
+and $q' \rw q$ to $\Deps^i$ such that $\aaex^{i+1}$ recognizes $r\sigma$ in $q$, i.e. $r\sigma \f^*_{\aaex^{i+1}} q$, see
+Figure~\ref{fig:cp}.
+%\vspace*{-5mm}
+\begin{figure}[!ht]
+  {\small
+    \[
+    \xymatrix{
+      l\sigma \ar[r]_-{\R}\ar[d]^-{*}_-{\aaex^i} & r\sigma \ar[d]_-{\not\varepsilon}^{\aaex^{i+1}}\\
+      q & q' \ar[l]^-{\aaex^{i+1}}
+    }
+    \]}
+  \vspace*{-7mm}
+  \caption{\footnotesize A critical pair solved \label{fig:cp}
+  }
+\end{figure}
+%\vspace*{-3mm}
+%%%%%%%
+It is important to note that we consider the critical pair only if the
+last step of the reduction $l\sigma \f^*_{\aaex^i}q$, is the last step of rewriting is not a $\varepsilon$-transition.
+Without this condition, the completion computes the transitive closure of the
+expected relation $\Deps$, and thus looses precision. %waste of information ?
+%%%%%%
+The transition $r \sigma \f q'$ is not necessarily a normalized
+transition of the form $f(q_1, \ldots, q_n) \f q'$ and so it has to be normalized
+first. Instead of adding $r\sigma \rw q'$ we add $\norm(r\sigma \rw q')$ to
+transitions of $\Delta^i$.
+Here is the $\norm$ function used to normalize transitions. Note that, in 
+this function, transitions are normalized using new states of $\Q_{new}$.
+%As we will see in Lemma~\ref{lemma:approx}, this has no effect on the
+%safety of the normalization but only on its precision.
+
+\begin{definition} [$\norm$] Let $\A=\la \F, \Q, \Qf, \Delta\cup\Deps\ra$ be a tree automaton, $\Q_{new}$ a
+  set of {\em new} states such that $\Q\cap \Q_{new} = \emptyset$, $s \in \TFQ$ and $q'\in
+  \Q$.
+  The normalization of the transition $s \rw q'$ is done in two mutually inductive steps.
+  The first step denoted by $\norm(s \rw q'\sep\Delta)$, we rewrite $s$ by $\Delta$ until rewriting 
+  is impossible: we obtain a unique configuration $t$ if $\Delta$ respects the property~\ref{prop:deterministic}.
+  The second step $\norm'$ is inductively defined by:
+  % TODO : A REVOIR 
+  \begin{itemize}
+%  \item 
+%    $\norm'(t \rw q')= \emptyset$ if $t\in\Q$,
+  \item
+    $\norm'(f(t_1, \ldots, t_n) \rw q\sep\Delta)= \Delta \cup \{f(t_1, \ldots,
+    t_n) \rw q\}$ if $\forall i = 1\ldots n:\ t_i \in \Q$
+  \item 
+    $\norm'(f(t_1, \ldots, t_n) \rw q \sep \Delta)= \norm(f(t_1, \ldots, q_i,\ldots, t_n) \rw q\sep \norm'(t_i\rw q_i\sep \Delta)\ )$
+    where $t_i$ is subterm s.t. $t_i \in \TFQ\setminus \Q$ and $q_i \in \Q_{new}$.
+  \end{itemize}
+\end{definition}
+
+ \begin{lemma}
+   \label{lem:welldefined}
+   If the property \ref{prop:deterministic} holds for $\aaex^i$ then it holds also for $\aaex^{i+1}$.
+ \end{lemma}
+
+ \begin{proof}[Intuition]
+   The determinism of $\rwne$ is preserved by $\Delta$, since when a new set of transitions
+   is added to $\Delta$ for a subterm $t_i$, we rewrite all other subterms $t_j$ with the new $\Delta$ until rewriting is impossible 
+   before resuming the normalization. Then, if we try to add to $\Delta$ a transition $f(q_1, \dots, q_n) \rw q$
+   though there exists a transition $f(q_1, \dots, q_n) \rw q'\in \Delta$, it means that the configuration $f(q_1, \dots, q_n)$ 
+   can be rewritten by $\Delta$. This is a contradiction : when we resume the normalization all subterms $t_i$ can not be rewritten 
+   by the current $\Delta$. So, we never add a such transition to $\Delta$. The normalization produces a new set of transitions $\Delta$
+   that preserves the property \ref{prop:deterministic}.
+ \end{proof}
+
+It is very important to remark that the transition $q'\rw q$ in Figure~\ref{fig:cp}
+creates an order between the language recognized by $q$ and the one recognized by
+$q'$.  Intuitively, we know that for all substitution $\sigma' : \X \rw \TF$ such that $l\sigma'$ is
+a term recognized by $q$, it is rewritten by $\R$ into a canonical term ($r\sigma'$) of $q'$.
+By duality, the term $r\sigma'$ has a parent ($l\sigma'$) in the state $q$.
+Extending this reasoning, $\Deps$ defines a relation between canonical
+terms. This relation follows rewriting steps at the top position and forgets
+rewriting in the subterms.
+
+\begin{definition}[$\arw$]
+  Let $\R$ be a TRS. For all terms $u$ $v$, we have $u \arw_{\R} v$ iff there exists
+  $w$ such that $u \rw_\R^* w$, $w \trw_{\R} v$ and there is not
+  rewriting on top position $\lambda$ on the sequence denoted by $u
+  \rw_\R^* w$.
+  
+\end{definition}
+%A détailler
+
+In the following, we show that the completion builds a tree automaton where
+the set $\Deps$ is an \emph{abstraction} $\arw_{\R_i}$ of the rewriting relation $\rw_\R$, for
+any relevant set $\R_i$.
+
+
+\begin{theorem}[Correctness]
+  \label{thm:correct}
+  Let be $\aaex^*$ a complete tree automaton %obtained from $\R$ and $\A_0$,
+  such that $q'\rw q$ is a $\varepsilon$-transition of $\aaex^*$. Then, for all canonical
+  terms $u$ $v$ of states $q$ and $q'$ respectively s.t. $q'\rw q$, we have :
+  \vspace*{-5mm}
+  
+  \[\xymatrix{ 
+    u \ar[d]^-{\not\varepsilon}_-{\aaex^*} \ar@{-->}[r]_-{\R}
+                &v \ar[d]^-{\not\varepsilon}_-{\aaex^*}\\ 
+    q &q' \ar[l] }
+  \]
+\end{theorem}
+
+First, we have to prove that the property \ref{prop:deterministic} is preserved by completion.
+To prove theorem \ref{thm:correct}, we need a stronger lemma.
+
+\begin{lemma}[]
+  \label{lem:correct}
+  Let be $\aaex^*$ a complete tree automaton, $q$ a state of $\aaex^*$ and $v\in\Lang{}(\aaex^*,q)$.
+  Then, for all canonical term $u$ of $q$, we have $u \rw_\R^* v$. 
+\end{lemma}
+
+\begin{proof}[Proof sketch]
+  
+  The proof is done by induction on the number of  completion steps
+  to reach the post-fixpoint $\aaex^*$ : we are going to show that
+  if $\aaex^i$ respects the property of lemma~\ref{lem:correct},
+  then $\aaex^{i+1}$ also does.
+  
+  The initial $\aaex^0$ respects the expected property~: we consider
+  any state $q$ and a canonical term $t$ of $q$: since no completion
+  step was done, $\aaex^0$ has no $\varepsilon$-transitions. It means
+  that for all term $t'\rwne q$. Thanks to the property
+  \ref{prop:wellinitial}, we have $t = t'$ and obviously $t \rw^*_\R
+  t'$.
+
+  Now, we consider the normalization of a transition of the form $r\sigma \rwne q'$
+  such that $l\sigma \rw^*_{\aaex^i} q$ with $\Delta$ the ground transition set and $\Deps$ the $\varepsilon$-transition set of $\aaex^i$.
+  We show that the property is true for all new states (including $q'$). 
+  Then, in a second time, we will show that it is true for state $q$,
+  if we add the second transition of completion: $q'\rw q$. 
+  
+  %
+  Let us focus on the normalization of $\norm'(r\sigma \rw q'\sep \Delta)$ where for
+  any existing state $q$ and for all $u\ v \in \TF$ such that $v \rw_{\Delta\cup\Deps} q$ and $u \rw_{\Delta} q$, we have $u \rw_\R^* v$.
+  We show that for all $t \in \TFQ$, if we have $\Delta' = \norm'(t \rw q'\sep \Delta)$, for all $u\ v \in \TF$ such that $v \rw_{\Delta'\cup\Deps} q'$ and $u \rw_{\Delta'} q$, we have $u \rw_\R^* v$. 
+  The induction is done on the %decreasing
+  number of symbols of $\F$ used to build $t$.
+
+  First case $\norm'(t \rw q \sep \Delta)$ where $t = f(q_1,\dots, q_n)$ : we define $\Delta'$ by adding the transition $f(q_1, \dots, q_n) \rw q$
+  to $\Delta$, where $q$ is a new state. Then, for all substitutions $\sigma' : \Q \mapsto \TF$ such that $t\sigma' \rw_{\Delta\cup\Deps} q$, and all 
+  substitutions $\sigma'' : \Q \mapsto \TF$ such that $t\sigma'' \rw_{\Delta'} q$ we aim at proving that $t\sigma''
+  \rw_\R^* t\sigma'$. Since each state $q_i$
+  is already defined, using the hypothesis on $\Delta$ we deduce that $\sigma''(q_i) \rw^*_\R \sigma'(q_i)$. This implies that $t\sigma'' \rw_\R^* t\sigma'$, the property 
+  also holds for $\Delta'$.
+
+  Second case $\norm'(t \rw q \sep \Delta)$ where $t = f(t_1,\ldots,t_n)$: we select $t_i$ a subterm of $t$, obviously the number
+  of symbols is strictly lower to the number of symbols of $t$.
+  By induction, for the normalization of $\norm'(t_i \rw q_i\sep \Delta)$ we have a new 
+  set $\Delta'$ that respects the expected property. Then, we normalize $t$ into $t' = f(t'_1, \dots, q_i, \dots, t'_n)$, 
+  the term obtained after rewriting with $\Delta'$ thanks to $\norm$. Since $t_i \not\in \Q$, the number of
+  symbols of $\F$ in $t' = f(t_1, \dots, q_i, \dots, t_n)$ is strictly smaller than the number of symbols of $ \F$ in $t$. Note 
+s  that rewriting $t'$ with $\Delta'$ can only decrease the number of symbols of $\F$ in $t'$.
+  Since $t'$ has a decreasing number of symbols and $\Delta'$ respects the property we can deduce by induction
+  that we have $\Delta'' = \norm'(t'\rw q\sep \Delta')$ such that for all $v \rw_{\Delta''\cup\Deps} q'$ and $u \rw_{\Delta''} q$, $u \rw_\R^* v$.
+  
+  So, we conclude that the normalization $\norm'(r\sigma \rw q'\sep \Delta)$ computes $\Delta'$ the set of ground transitions for $\aaex^{i+1}$.
+  For all terms $u$ $v$ such that $u \rw_{\Delta'\cup\Deps} q'$ and $u \rw_{\Delta'} q'$ we have $u \rw_\R^* v$. 
+
+  Now, let us consider the second added transition $q' \rw q$ to $\Deps$, all canonical terms
+  $r\sigma''$ of $q'$, and all terms $l\sigma''' \in
+  \Lang{}(\aaex^i, q)$ such that $l\sigma''' \rw_\R r\sigma'''$ and
+  $r\sigma''' = r\sigma''$.  By hypothesis on $\aaex^i$, we know that every canonical term $u$ of $q$
+  we have $u \rw_\R^*
+  l\sigma'''$. By transitivity, we have $u \rw_\R^* r\sigma''$.  The
+  last step consists in proving that for all terms of all states of
+  $\aaex^{i+1}$, the property holds: this can be done by induction on
+  the depth of the recognized terms.
+\end{proof}
+
+The theorem \ref{thm:correct} is shown by considering the introduction of the
+transition $q' \rw q$. By construction, there exists a substitution $\sigma : \X \mapsto \Q$ and a rule
+$l \rw r \in \R$ such that we have $l\sigma \rw^*_{\aaex^*} q$ and $r\sigma \rwne_{\aaex^*} q'$. We consider all substitution  
+$\sigma' : \X \mapsto \TF$ such that for each variable $x \in \vars(l)$, $\sigma'(x)$ is a canonical term
+of the state $\sigma(x)$. Obviously, using the result of the lemma \ref{lem:correct},
+for all canonical term $u$ of $q$ we have $u \rw^*_\R l\sigma'$. Since the last step of rewriting 
+in the reduction $l\sigma \rw^*_{\aaex^*} q$ is not a $\varepsilon$-transition, we also deduce that $l\sigma'$ is not produced
+by a rewriting at the top position of $u$ whereas it is the case for $r\sigma'$ and we have $u \arw_{\R} r\sigma'$.
+
+ 
+\begin{theorem}[Completeness]
+  Let $\aaex^*$ be a complete tree automaton, %obtained from $\R$ and $\A_0$,
+  $q,q'$ states of $\aaex^*$ and $u,v \in \TF$ such that $u$ is a canonical term of $q$
+  and $v$ is a canonical term of $q'$. If $u \arw_\R v$ then there exists a $\varepsilon$-transition $q' \rw q$ in $\aaex^*$.
+\end{theorem}
+\begin{proof}[Proof sketch]
+  By definition of $u \arw_\R v$ there exists a term $w$ such that $u \rw_\R^* w$ and
+  and there exists a rule $l \rw r \in \R$ and a substitution $\sigma : \X \mapsto \TF$ such that 
+  $w = l\sigma$ and $v = r\sigma$.
+  Since $\aaex^*$ is a complete tree automaton, it is closed by rewriting. This means 
+  that any term obtained by rewriting any term of $\Lang{}(\aaex^*, q)$ is also in $\Lang{}(\aaex^*, q)$. This
+  property is true in particular for the terms $u$ and $w$. 
+  Since $w$ is rewritten in $q$ by transitions of $\aaex^*$, we can define
+  a second substitution $\sigma' : \X \mapsto \Q$ such that $l\sigma \rw^*_{\aaex^*} l\sigma' \rw^*_{\aaex^*} q$.
+  Using again the closure property of $\aaex^*$, we know that the critical pair $l\sigma' \rw_\R r\sigma'$
+  and $l\sigma' \rw^*_{\aaex^*} q$ is solved by adding the transitions $r\sigma' \rwne_{\aaex^*} q''$ and $q'' \rw q$. Since the property \ref{prop:deterministic}
+  is preserved by completion steps, we can deduce that $q'' = q'$ which means $q' \rw q$.
+\end{proof}
+%Bon il faut mettre du baratin ici, la preuve ne marche pas...
+
+
+%When using only new states to normalize all the new transitions occurring in all
+%the completion steps, completion is as precise as possible.
+
+% However, doing so, completion is likely not to terminate (because of general undecidability
+% results~\cite{GilleronTison-FI95}).  Enforcing termination of completion can be
+% easily done by bounding the set of new states to be used with $\norm$ during the
+% whole completion. We then obtain a finite tree automaton over-approximating the
+% set of reachable states. The fact that normalizing with any set of states (new
+% or not) is {\em safe} is guaranteed by the following simple lemma. For the
+% general safety theorem of completion see~\cite{FeuilladeGVTT-JAR04}.
+
+% \begin{lemma}
+% \label{lemma:approx}
+% For all tree automaton $\A=\aut$, $t\in \TFQ\setminus \Q$ and $q\in\Q$, if $\Pi=\norm(t \rw
+% q)$ whatever the states chosen in $\norm(t \rw q)$ we have $t \rw^*_{\Pi} q$.
+% \end{lemma}
+% \begin{proof}
+% This can be done by a simple induction on transitions~\cite{FeuilladeGVTT-JAR04}.
+% %to normalize, see~\cite{FeuilladeGVTT-JAR04}.
+% \end{proof}
+
+% To let the user of completion guide the approximation, we use two different
+% tools: a set $\nr$ of {\em normalization rules} (see~\cite{FeuilladeGVTT-JAR04})
+% and a set $\E$ of {\em approximation equations}. Rules and equations can be
+% either defined by hand so as to prove a complex
+% property~\cite{GenetTTVTT-wits03}, or generated automatically when the property
+% is more standard~\cite{BoichutHKO-AVIS04}. Normalization rules can be seen as a
+% specific strategy for normalizing new transitions using the $\norm$
+% function. We have seen that Lemma~\ref{lemma:approx} is enough to
+% guarantee that the chosen normalization strategy has no impact on the safety of
+% completion. Similarly, for our checker, we will see in Section~\ref{sec:closure}
+% that the related \coq\ safety proof can be carried out independently of the
+% normalization strategy (i.e. set $N$ of normalization rules).  On the opposite, the
+% effect of approximation equations is more complex and has to be studied more
+%%carefully.
+
+
+% On the one side, normalization
+% rules define which states are to be used to normalize a transition with
+% $\norm$. When using $\nr$ to guide the normalization, we note $\norm_{\nr}$ the
+% normalization function.  On the other side, approximation equations define some
+% approximated equivalence classes. Equations of $\E$ are applied directly on
+% $\A^{i+1}_{\R}$ to merge together the states whose recognized terms are in the
+% same equivalence class w.r.t. $\E$.
+%
+% For all $s,l_1, \ldots, l_n \in\TFQX$ and for all
+% $x,x_1, \ldots, x_n \in \Q\cup\X$, the general form for a normalization rule
+% is:
+% \[[s \rw x] \rw [l_1 \rw x_1, \ldots, l_n \rw x_n]\] where the expression $[s
+% \rw x]$ is a pattern to be matched with the new transitions $t \rw q'$ obtained
+% by completion. The expression $ [l_1 \rw x_1, \ldots, l_n \rw x_n]$ is a set of
+% rules used to normalize $t$. To normalize a transition of the form $t \rw q'$,
+% we match $s$ with $t$ and $x$ with $q'$, obtain a substitution $\sigma$ from the
+% matching and then we normalize $t$ with the rewrite system $\{l_1\sigma \rw
+% x_1\sigma, \ldots, l_n \sigma \rw x_n\sigma\}$. Furthermore, if $\forall
+% i=1\ldots n: x_i\in \Q$ or $x_i \in \var(l_i) \cup \var(s) \cup \{x\}$ then
+% since $\sigma: \X \mapsto \Q$, $x_1 \sigma, \ldots, x_n\sigma$ are necessarily
+% states. 
+% If a transition cannot be fully normalized using approximation rules
+% $\nr$, normalization is finished using some new states, see Example
+% \ref{example:approx}. 
+% %We denote by $\norm_\nr(t \rw q')$ the set of transitions
+% %obtained by the normalization of $t \rw q'$ by normalization rules $\nr$.
+% An approximation equation is of the form $u=v$ where $u,v\in\TFX$.  Let $\sigma:
+% \X \mapsto \Q$ be a substitution such that $u\sigma \rw_{\A_{\R}^{i+1}} q$,
+% $v\sigma \rw_{\A_{\R}^{i+1}} q'$ and $q\neq q'$, see
+% Figure~\ref{fig:merge}. Then, we know that there exists some terms recognized by
+% $q$ and some recognized by $q'$ which are equivalent modulo $\E$. A correct
+% over-approximation of $\aaex^{i+1}$ consists in applying the $\merge$ function to
+% it, i.e. replace $\aaex^{i+1}$ by $\merge(\aaex^{i+1},q, q')$, as long as an
+% approximation equation of $\E$ applies. The $\merge$ function, defined below,
+% merges states in a tree automaton.  See~\cite{BoyerGJ-RR08} for examples of
+% completion and approximation.
+% \begin{definition}[$\merge$]
+%   Let $\A= \langle \F, \Q, \Q_F, \Delta \rangle$ be a tree automaton and
+%   $q_1,q_2$ be two states of $\A$. We denote by $\merge(\A,q_1, q_2)$ the tree
+%   automaton where every occurrence of $q_2$ is replaced by $q_1$ in $\Q$, $\Q_F$
+%   and in every left-hand side and right-hand side of every transition of
+%   $\Delta$.
+% \end{definition}
+
+% The following examples illustrate completion and how to carry out an
+% approximation, using equations, when the language $\desc(\Lang(\A)) $ is not
+% regular.
+
+% \label{example:merge}
+% Let $\R=\{g(x,y) \rw g(f(x),f(y))\} $ and let $\A$ be the tree automaton such
+% that $\Q_F=\{q_f\}$ and $\Delta=\{a \rw q_a, g(q_a,q_a)\rw q_f\}$. Hence
+% $\Lang(\A)= \{g(a,a)\}$ and $\desc(\Lang(\A))=\{g(f^n(a),f^n(a))~|~n\geq
+% 0\}$. Let $\E=\{f(x)=x\}$ be the set of approximation equations. During the
+% first completion step on $\aaex^0=\A$,  we find $\sigma=\{x \mapsto q_a\}$ and
+% the following critical pair
+
+% {\small
+% $$
+% \xymatrix{
+%   g(q_a,q_a) \ar[r]_{\R}\ar[d]^{*}_{\aaex^0} & g(f(q_a),f(q_a)) \ar@/^1.2pc/[ld]_{*}^{\aaex^{1}}\\
+%   q_f & %\ar[l]^{\A_{i+1}} q'
+% }
+% $$}
+
+% Hence, we have to add the transition $g(f(q_a),f(q_a)) \rw q_f$ to $\aaex^0$ to
+% obtain $\aaex^1$. This transitions can be normalized in the following way:
+% $\norm(g(f(q_a),f(q_a)) \rw q_f)=\{g(q_1, q_2) \rw q_f, f(q_a)\rw q_1,f(q_a)\rw
+% q_2 \}$ where $q_1$ and $q_2$ are new states. Those new states and transitions
+% are added to $\aaex^0$ to obtain $\aaex^1$. On this tree automaton, we can apply
+% the equation $f(x)=x$ of $\E$ with the substitution $\sigma=\{x\mapsto q_a\}$:
+
+% {\small
+% $$\xymatrix{
+% f(q_a) \ar@{=}[r]_{\E}\ar[d]_{\aaex^{1}}^{*} & q_a \ar[d]_{*}^{\aaex^{1}}\\
+% q_1 & q_a
+% }
+% $$}
+
+% Hence, we can replace $\aaex^1$ by
+% $\merge(\aaex^1,q_1,q_a)$ where $\Delta$ is $\{ a \rw q_1, g(q_1,q_1)\rw q_f,
+% g(q_1, q_2) \rw q_f, f(q_1) \rw q_1, f(q_1) \rw q_2\}$. Similarly, in this last
+% tree automaton, we have 
+
+% {\small $$\xymatrix{
+% f(q_1) \ar@{=}[r]_{\E}\ar[d]_{\aaex^{1}}^{*} & q_1 \ar[d]_{*}^{\aaex^{1}}\\
+% q_2 & q_1
+% }
+% $$}
+
+% and we can thus apply $\merge(\aaex^1, q_2, q_1)$. Finally, the value of
+% $\Delta$ for $\aaex^1$ approximated by $\E$ is $\{a \rw q_2, g(q_2,q_2)\rw q_f,
+% f(q_2) \rw q_2 \}$. Now, the only critical pair that can be found on $\aaex^1$ is
+% joinable:
+
+% {\small
+% $$
+% \xymatrix{
+%   g(q_2,q_2) \ar[r]_{\R}\ar[d]^{*}_{\aaex^1} & g(f(q_2),f(q_2)) \ar@/^1.2pc/[ld]_{*}^{\aaex^{1}}\\
+%   q_f & %\ar[l]^{\A_{i+1}} q'
+% }
+% $$}
+
+% Hence, we have $\aaex^*=\aaex^1$ and
+% $\Lang(\aaex^*)=\{g(f^n(a),f^m(a))~|~n,m\geq 0\}$ which is an over-approximation
+% of $\desc(\Lang(\A))$.
+% \end{example}
+
+% The tree automata completion algorithm and the approximation mechanism are
+% implemented in the \timbuk~\cite{timbuk-site} tool. On the previous example, once
+% the fixpoint automaton $\aaex^*$ has been computed, it is possible to check
+% whether some terms are reachable, i.e. recognized by $\aaex^*$ or not. This
+% can be done using tree automata 
+% intersections~\cite{FeuilladeGVTT-JAR04}. 
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

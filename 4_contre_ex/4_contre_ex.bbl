@@ -1,0 +1,29 @@
+\begin{thebibliography}{1}
+
+\bibitem{fib:arra08}
+Yohan Boichut, Rom\'{e}o Courbis, Pierre-Cyrille H\'{e}am, and Olga
+  Kouchnarenko.
+\newblock Finer is better: Abstraction refinement for rewriting approximations.
+\newblock In {\em RTA '08: Proceedings of the 19th international conference on
+  Rewriting Techniques and Applications}, pages 48--62, Berlin, Heidelberg,
+  2008. Springer-Verlag.
+
+\bibitem{artmc06}
+Ahmed Bouajjani, Peter Habermehl, Adam Rogalewicz, and Tom\'{a}\v{s} Vojnar.
+\newblock Abstract regular tree model checking.
+\newblock {\em Electron. Notes Theor. Comput. Sci.}, 149(1):37--48, 2006.
+
+\bibitem{cegar00}
+Edmund Clarke, Orna Grumberg, Somesh Jha, Yuan Lu, and Helmut Veith.
+\newblock Counterexample-guided abstraction refinement for symbolic model
+  checking.
+\newblock {\em J. ACM}, 50(5):752--794, 2003.
+
+\bibitem{tata07}
+H.~Comon, M.~Dauchet, R.~Gilleron, C.~L\"oding, F.~Jacquemard, D.~Lugiez,
+  S.~Tison, and M.~Tommasi.
+\newblock Tree automata techniques and applications.
+\newblock Available on: \url{http://www.grappa.univ-lille3.fr/tata}, 2007.
+\newblock release October, 12th 2007.
+
+\end{thebibliography}

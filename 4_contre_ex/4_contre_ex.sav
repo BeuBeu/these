@@ -1,0 +1,208 @@
+\chapter{Détection de contre-exemples et Raffinement}
+\section{Fausses Alarmes et Contre-Exemples}
+Lors de la vérification d'une propriété basée sur le calcul d'une sur-approximation telle
+que décrite précédemment, on ne s'est intéressé qu'à la correction de l'approche~: c'est à dire le
+cas où la vérification permet de conclure à la préservation de la propriété. Or en pratique, il est rare
+de trouver immédiatement une approximation qui contienne l'ensemble des états du système et qui en
+même temps soit assez fine pour ne pas produire de fausses alarmes. Les \emph{fausses alarmes} sont
+le résultat d'une approximation trop grossière qui contient des états supplémentaires qui violent la
+propriété. Puisque ces états n'appartiennent pas au système, le système ne viole pas la propriété.
+
+%TODO introduire un schéma sur les différents cas de 
+\input{4_contre_ex/fausses_alarmes}
+
+En résumé, la propriété peut être violée pour 2 raisons~:\\
+
+\begin{itemize}
+\item L'exécution du système peut conduire à un état (atteignable) qui ne
+  respecte pas la propriété~: cet état constitue un \emph{contre-exemple}.
+  
+\item Le système respecte la propriété mais l'approximation trop
+  grossière introduit des états (inatteignables) qui violent la
+  propriété~: c'est une \emph{fausse alarme}.\\
+\end{itemize}
+
+Or cette méthode de vérification d'une propriété est semi-décidable: il n'est généralement pas possible
+de distinguer un état du système d'un état issu de l'approximation. En résumé, cela signifie que lorsque
+la procédure de vérification de la propriété échoue, il n'est pas possible de savoir si le système viole
+la propriété.
+
+L'enjeu revient donc à chercher si l'intersection contient des états du système. Alors qu'il est impossible
+de déterminer si un état quelconque appartient au système, on peut marquer les états pour lesquels leur
+appartenance au système est sûre. Un tel marquage est réalisable itérativement~: il sûr de considérer qu'un état
+appartient au système si il peut être produit à partir d'un état pour lequel on a aussi l'assurance qu'il
+appartient au système. Dualement, on perd l'assurance pour tout état introduit par une approximation ou
+si l'état est obtenu par des transitions issues d'états pour lesquels il n'existe aucune assurance
+qu'ils appartiennent au système.
+
+
+%%%%%%%%%%%%%%%%%%%%% TODO introduire un schéma qui donne les différents cas où l'on sûr ou pas l'on est que des états
+%%%%%%%%%%%%%%%%%%%%% appartenant au système ou non.
+
+Ainsi dans le cas où la vérification de la propriété échoue à cause d'un état $s$ dont on est sûr
+qu'il appartienne au système, on peut conclure que le système viole la propriété et dans cas 
+l'état $s$ constitue un \emph{contre-exemple}, dans le cas contraire on ne sait toujours rien dire,
+on est soit dans le cas d'une fausse alarme ou d'un contre-exemple.
+
+\section{Principe de l'approche à la {CEGAR}}
+Il est possible d'améliorer l'approche précédente~: lors de la construction de 
+la sur-approximation $E$ de l'ensemble des états atteignables du système si la vérification échoue
+et on ne sait pas si l'on fait face à un contre-exemple ou une une fausse alarme.
+Le principe de l'approche à la {CEGAR} (\emph{Counter-Example Guided Abstraction Refinement})
+tel qu'initialement présenté dans \cite{cegar00} consiste à retirer itérativement tous les
+états $s_?$ qui conduisent à la mise en échec de la propriété alors qu'il n'est pas possible
+de déterminer si ils sont réellement des contre-exemples ou non. On tente alors de terminer le calcul
+$E$ privés des états $s_?$. En fonction de la réelle nature de chaque état $s_?$ supprimé on peut différencier
+deux cas possibles~:
+
+\begin{itemize}
+\item
+  Si $s_?$ est atteignable, il existe au moins une exécution du système qui passe par cet état~:
+  cela signifie qu'au moment où la propriété a été violée, la trace correspondant à l'exécution
+  n'a pas encore été considérée et que donc l'état a été introduit par l'approximation. Ainsi en 
+  complétant l'ensemble des états du systèmes, l'état finira par être de nouveau ajouté à l'ensemble
+  puisqu'il est réellement atteignable.
+
+\item
+  Si $s_?$ n'est pas réellement atteignable, alors il s'agissait d'une fausse alarme qui est supprimée
+  par l'étape de raffinement, puisque l'état est retiré de l'approximation.
+
+\end{itemize}
+
+Cependant raffiner approximation de l'ensemble des états peut entrainer une divergence du calcul
+puisque la raffinement affaiblit l'approximation~: cela impose de raffiner avec parcimonie, pour
+éviter d'accroître ce risque de divergence.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% VERSION EXTRAITE DE ../plan/plan_contre_ex.mm %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Comment introduire et manipuler la notion de contre-exemple avec les automates d'arbres?}
+
+{Les techniques actuelles se basent sur un historique des automates correspondant à chaque étape de calcul ou du calcul en arrière}
+
+{Bouajjani \cite{artmc06}, Besançon \cite{fib:arra08}}
+{Approches intéressantes, mais limitées d'un point de vue complexité et expressivité}
+{Utilisation de l'inclusion d'automates d'arbres + intersection, systèmes linéaires à droite et
+  à gauche : ca n'est pas le cas du TRS de Java (non linéaire à droite) (pour éviter les calculs d'inclusion, calcul en arrière à partir de la propriété)}
+{Autres approches ? voir les papiers de Besançon ???}
+
+\section{Définition d'un $\RE$-automate}
+
+C'est une extension de la sémantique des automates d'arbres qui permettent
+de différentier les termes pour lesquels l'atteignabilité est sûre des autres termes,
+simplement par reconnaissance.
+
+Principe : repose sur le remplacement de la fusion par des transitions epsilons...
+La difficulté rencontrée lors de l'approche jusquà présent repose sur le mécanisme
+de fusion tel que présentée \ref{fusion}. Dans l'exemple \ref{ex:toto}....
+
+
+%%%%%%%%%%%%%%%%%%%% EXEMPLE TOTO pour mettre en évidence la non différentiation du terme et de son abstraction.... %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+pour différentier les termes exacts (définir la notion de termes exacts ici ou au moment de la def de la complétion???)
+des termes issus de l'abstraction. Ainsi on peut savoir si un terme est reconnu simplement en regardant la manière dont 
+il est reconnu par l'autom
+\bigskip
+Un $\RE$-automate est un automate d'arbre -- en fait c'est même une extension des $\R$-automates
+\ref{R-automates} -- dans lequel les transitions sont classées en trois catégories.  D'une part les
+transitions closes et deux ensembles distincts d'$\varepsilon$-transitions~:
+\begin{itemize}
+\item les premières caractérisent la relation de réécriture qui peut exister entre les classes
+  d'équivalence de l'automate, similairement aux $\R$-automates mais étiquetées par des formules
+  logiques.
+
+\item les secondes définissent la relation d'abstraction qui peut exister entre deux classes d'équivalence.
+\end{itemize}
+
+Comme pour les $\R$-automates, la sémantique d'un $\RE$-automate n'a de sens que dans le contexte d'un problème d'atteignabilité
+constitué d'un ensemble initial, d'un système de réécriture, et d'un ensemble d'équations
+\footnote{\footnotesize l'ensemble des équations peut être éventuellement vide, mais on se ramène alors au cas du calcul 
+  sans approximation couvert par les $\R$-automates.}.
+
+\subsection{Définitions formelles}
+Soit un problème d'atteignabilité défini dans l'ensemble de termes $\TF$ avec 
+$I$ comme ensemble fini de termes initiaux $\R$ un ensemble de règles de réécriture
+et $E$ un ensemble d'équations.
+
+\begin{definition}{$\RE$-automate}
+  \label{def:RE-automaton}
+  Un $\RE$-Automaton est un automate d'arbre défini comme un quadruplé de la forme
+  $\A= \langle \F, \Q, \Q_F,\Delta \cup \Drw \cup \Deq\rangle$,
+  avec $\Q_F \subseteq \Q$ et composé de 3 ensembles de transitions distinctes~:
+
+  \begin{description}
+  \item [$\Delta$:] les transitions normaliées
+  \item [$\Drw$:] $\varepsilon$-transitions étiquetées par des formules logiques.
+  \item [$\Deq$:] $\varepsilon$-transitions.
+  \end{description}
+
+  Les formules logiques qui étiquettent les transitions de $\Drw$ sont des formules propositionnelles
+  formées par les connecteurs $\land$ et $\lor$ à partir des $\top$, $\bottom$ et $Eq(q, q')$ tels que $q,\ q' \in \Q$.
+\end{definition}
+
+
+\subsection{Sémantique}
+
+The equivalence relation induced by $(Q, \rw^!)$ simply associates to each state sets of terms.
+Since the relation $\f^!$ is deterministic, thoses sets are disjoined.
+
+We introduce $\f^=$ which denotes the transitive closure of transitions of $\Delta \cup \Deq$.
+The couple $(Q, \f^=)$ induces the equivalence relation such that if terms $u$ and $v$
+are in the same equivalence classe, then $u =_E v$.
+
+{Formules propositionnelles en FND}
+
+
+%%%%%%%%%%%%%%%%%%%% Comparaison avec les TAGED AUTOMATA Ref dans le papier COURBIS HEAM / TAGGED ou les automates à contraintes du TATA...
+
+\subsubsection{Détailler que les étapes de reconnaissance peuvent être permutter tant que la réécriture le permet...}
+comme dans le cas des automates d'arbres standards et des $\R$-automates, il est possible de réorganiser les étapes de
+réécriture....
+
+\subsubsection{Introduire des sous classes pour le cas de la reconnaissance sans $\Delta_\R$ et sans étapes de transisitons epsilon aux feuilles
+  (pas de transition $q -> q'$ sur $f(q)$.)}
+
+\subsection{Exemple de $\RE$-automate}
+
+\section{Equivalence entre la nouvelle sémantique et la sémantique standard}
+\section{$\RE$-Automate complet}
+\subsection{Clôture par réécriture}
+
+
+\section{Complétion d'un $\RE$-Automate}
+\section{Le problème du filtrage ou comment trouver des ensembles de sous-termes avec les étapes d'approximation nécessaires à les rendre atteignables}
+\section{Preuve : quand on a calculé ($\sigma$, $\phi$) on a que tout terme $t --\phi'--> l\sigma --\phi ----> q$ alors le terme est atteignable grâce aux étapes d'approximations $\phi /\ \phi'$}
+\section{Dans quelle cas la paire critique n'est pas résolue}
+\subsection{indiquer pourquoi il est nécessaire de définir des nouveaux cas pour éviter la divergence tout en restant correct !}
+\subsection{La nouvelle technique pour vérifier que l'on est clos}
+\subsection{Nouvelle technique de normalisation}
+\subsection{Preuve même genre de preuve que pour le filtrage}
+
+\section{Conclusion : preuve que l'étape de complétion est correcte}
+\subsection{Clôture sous les contextes}
+
+
+\section{Test de vacuité de l'intersection}
+\subsection{Instrumenter pour obtenir un témoin de non-vacuité + les étapes d'approximation utilisées pour le produire $\phi$}
+\subsection{Soit $\phi \equ \top$ donc le terme est un contre-exemple : la propriété est violée}
+\subsection{Soit $\phi \not\equ \top$ donc il faut raffiner}
+
+\section{Raffiner un $\RE$-automate}
+\subsection{Retirer les transisitions qui ont permis l'introduction du terme dans l'automate ! }
+\subsection{Comment raffiner le plus précisément possible ?}
+\subsection{Préservement des informations inférées}
+\subsection{Nettoyage de l'automate}
+
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{4_contre_ex/4_biblio}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% TeX-PDF-mode: t
+%%% ispell-local-dictionary: "french"
+%%% End: 

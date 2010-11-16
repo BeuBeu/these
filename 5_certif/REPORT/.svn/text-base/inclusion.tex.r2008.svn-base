@@ -1,0 +1,844 @@
+\section{An optimized inclusion checker}
+\label{sec:inclusion}
+
+In this part, we give the formal definition of the \lstinline!Included! property and
+of the \lstinline!inclusion! \coq\ function used to effectively check the tree
+automata inclusion. From the previous formal definitions on tree automata, we
+can state the \lstinline!Included! predicate in the following way:
+
+\begin{lstlisting}
+  Definition Included (a b : t_aut) : Prop :=
+    forall t q, In q a.qf -> IsRec a.delta q t ->
+      exists q', In q' b.qf /\ IsRec b.delta q' t.
+\end{lstlisting}
+
+
+Now let us focus on the function \lstinline!inclusion! itself.  The usual
+algorithm for proving inclusion of regular languages recognized by
+nondeterministic bottom-up tree automata, for instance for proving $\Lang(\A)
+\subseteq \Lang(\B)$, consists in proving that $\Lang(\A) \cap
+\Lang(\overline{\B}) =\emptyset$, where $\overline{\B}$ is the complement
+automaton for $\B$. However, the algorithm for building $\overline{\B}$ from
+$\B$ is EXPTIME-complete~\cite{TATA}. This is the reason why we here define a
+criterion with a better practical complexity. It is is based on a simple
+syntactic comparison of transition sets, i.e. we check the inclusion of
+transition sets modulo the renamings performed by the $\merge$ function.
+This increases a lot the efficiency of our checker, especially by
+saving memory. This is crucial to check inclusion of big tree automata (see
+Section~\ref{sec:benchmarks}). This algorithm is correct but, of course, it is
+not complete in general, i.e. not always able to prove that $\Lang(\A) \not
+\subseteq \Lang(\B)$. However, we show in the following that, under certain
+conditions on $\A$ and $\B$ which are satisfied if $\B$ is obtained by
+completion of $\A$, this algorithm is also complete and thus becomes a decision
+procedure.  First, we introduce the following notation:
+{\small
+\begin{center}
+  \begin{tabular}[c]{lcp{8cm}}
+    $\Gamma$    & : & induction hypothesis set\\
+    $\Delta_i$  & : & transition set of the tree automaton $\mathcal{A}_i$\\
+    $\{c|c \rightarrow q \in \Delta\}$ & : & configurations of $\Delta$ that are rewritten in $q$\\
+    $\{c_i\}_n^m$ & : & configuration set from $c_n$ to $c_m$\\
+%    $\emptyset$ & : & empty set of configurations\\
+%    $[q_1, \dots, q_n]$ & : & a tuple of $n$ states\\
+  \end{tabular}
+\end{center}
+} We formulate our inclusion problem by formulas of the form: ${\Gamma
+  \vdash_{A, B} q \Subset q'}$. Such a statement stands for: under the
+assumption $\Gamma$, it is possible to prove that $\Lang(A,q) \subseteq
+\Lang(B,q')$.
+% A term $t$ is reconnized by state $q$ a tree automaton if it exists
+% one sequence of transitions of $\Delta$ that rewrites $t$ into $q$. 
+% Thus, ${\Gamma \vdash_{A, B} q \Subset q'}$ states inductively for the assertion:
+% if a term $t$ s.t. is rewritten into $q$ by a sequence of transitions of $\Delta_\A$ then
+% it can be done by an equivalent sequence in $\Delta_\B$ which rewrites $t$ into $q'$.\\
+The algorithm consists in building proof trees for those statements using the
+following set of deduction rules.
+% This algorithm checks only transition set inclusion (up to
+% renaming). Transition set inclusion implies corresponding language
+% inclusion (as proved in Section~\ref{sec:correction}). It is more
+% reasonable to implement it in \coq.\\
+%The algorithm checks only this property, but it is enough to imply 
+%corresponding language inclusion. (as proved in Section~\ref{sec:correction}).
+%It is more reasonable to implement it in \coq.\\
+
+{\small
+\[\textrm{(Induction) }
+\dfrac{
+  \Gamma \cup \{q \Subset q'\} \vdash_{A, B}
+  \{c|c \rightarrow_{\Delta_A} q\} \Subset \{c|c \rightarrow_{\Delta_B} q'\}
+}{
+  \Gamma \vdash_{A, B} q \Subset q'
+}\textrm{  if }(q \Subset q') \notin \Gamma
+\]
+
+
+\[\textrm{(Axiom) }
+\dfrac{}{
+  \Gamma \cup \{q \Subset q'\} \vdash_{A, B} q \Subset q'
+}\quad \quad \quad \quad 
+\textrm{(Empty) }
+\dfrac{}{
+  \Gamma \vdash_{A, B} \emptyset \Subset \{c'_j\}^m_1
+}
+\]
+
+
+
+\[\textrm{(Split-l) }
+\dfrac {
+  \Gamma \vdash_{A, B} c_1 \Subset \{c'_j\}^m_1 \quad \dots\dots \quad
+  \Gamma \vdash_{A, B}  c_n \Subset \{c'_j\}^m_1
+}{
+  \Gamma \vdash_{A, B} \{c_i\}^n_1 \Subset \{c'_j\}^m_1
+}\]
+
+%\[(empty)\]
+
+\[\textrm{(Weak-r) }
+\dfrac{
+  \Gamma \vdash_{A, B} c \Subset c'_k
+}{
+  \Gamma \vdash_{A, B} c \Subset \{c'_i\}^n_1
+}\textrm{ if }(1 \le k \le n)
+\quad\quad\quad \quad
+\textrm{(Const.) }
+\dfrac{}{
+  \Gamma \vdash_{A, B} a() \Subset a()
+}
+\]
+
+
+
+\[\textrm{(Config) }
+\dfrac{
+  \Gamma \vdash_{A, B} q_1 \Subset q'_1 \quad \dots\dots \quad \Gamma \vdash_{A, B} q_n \Subset q'_n
+}{
+  \Gamma \vdash_{A, B} f(q_1, \dots, q_n) \Subset f(q'_1, \dots, q'_n)
+}\]
+
+%\[const\]
+}
+\noindent
+
+Given $\Q_{F_\A}$ and $\Q_{F_\B}$ the sets of final states of
+$\A$ and $\B$, $\#()$ a symbol of arity $1$ not occurring in $\F$,
+to prove $\Lang(\A) \subseteq \Lang(\B)$, we start our deduction by the
+statement: $\emptyset \vdash_{\A, \B} \{\#(q)\ |\ q \in \mathcal{Q}_{F_\A}\} \Subset
+  \{\#(q)\ |\ q \in \mathcal{Q}_{F_\B}\} $
+ 
+
+\begin{example}
+  Let $\A$ and $\B$ be two automata s.t.:
+  {\small
+  \[\A = \left\{ 
+    \begin{array}{rcl}
+      a& \rightarrow &q_1\\
+      b& \rightarrow &q_2\\
+      f(q_1, q_2)&\rightarrow &{\bf q}\\
+    \end{array}\right\}
+  \textrm { with } \Q_{F_\A}=\{{\bf q}\}
+  \textrm { and }
+  \B = \left\{ 
+    \begin{array}{rcl}
+      a& \rightarrow &{\bf q'}\\
+      b& \rightarrow &{\bf q'}\\
+      f(q', q')&\rightarrow &{\bf q'}\\
+    \end{array}\right\}
+  \textrm { with } \Q_{F_\B}=\{{\bf q'}\}
+  \]
+  }
+  Here we have $\Lang(\A) \subseteq \Lang(\B)$ and we can derive
+  $\emptyset \vdash_{\A, \B} \#(q) \Subset \#(q')$ with the deduction rules:
+
+  {\tiny
+    \begin{prooftree}
+      \AxiomC{}
+      \LeftLabel{(Const.)}
+      \UnaryInfC{$\{q \Subset q', q_1 \Subset q'\} \vdash_{\A, \B} a() \Subset a()$}
+      \LeftLabel{(Weark-r)}
+      \UnaryInfC{$ \{q \Subset q',\ q_1 \Subset q'\} \vdash_{\A, \B} a() \Subset \{ a(), b(), f(q', q') \}$}
+      \LeftLabel{(Induction)}
+      \UnaryInfC{$\{q \Subset q'\} \vdash_{\A, \B} q_1 \Subset q'$}
+      %%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+      \AxiomC{}
+      \LeftLabel{(Const.)}
+      \UnaryInfC{$\{q \Subset q', q_2 \Subset q'\} \vdash_{\A, \B} b() \Subset b()$}
+      %\RightLabel{(Weark-r)}
+      \UnaryInfC{$ \{q \Subset q',\ q_2 \Subset q'\} \vdash_{\A, \B} b() \Subset \{ a(), b(), f(q', q') \}$}
+      %\RightLabel{(Induction)}
+      \UnaryInfC{$\{q \Subset q'\} \vdash_{\A, \B} q_2 \Subset q'$}
+      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      \LeftLabel{(Config)}
+      \BinaryInfC{$\{q \Subset q'\} \vdash_{\A, \B} f(q_1, q_2) \Subset f(q', q') $ }
+      \LeftLabel{(Weark-r)}
+      \UnaryInfC{ $\{q \Subset q'\} \vdash_{\A, \B} f(q_1, q_2) \Subset \{ a(), b(), f(q', q')\} $}
+      \LeftLabel{(Induction)}
+      \UnaryInfC{$\emptyset \vdash_{\A, \B} q \Subset q'$}
+      \LeftLabel{(Config)}
+      \UnaryInfC{$\emptyset \vdash_{\A, \B} \#(q) \Subset \#(q')$}
+    \end{prooftree}
+  }
+\end{example}
+
+%We define the simple inclusion relation as :
+%\begin{definition}
+%  Let $\Delta$ and $\Delta'$ be two transition functions.\\
+%  We say $\Delta \subseteq \Delta'$ if $\Delta'$ contains all rules of $\Delta$ :
+%  \begin{equation}
+%    \Delta \subseteq \Delta' \Longleftrightarrow \forall\ (c \rightarrow q) \in \Delta,\ (c \rightarrow q) \in \Delta'
+%  \end{equation}
+%\end{definition}
+%Then we have trivially the property :
+%\begin{theorem}
+%  Given two transition function $\Delta$ and $\Delta'$,
+%  \begin{equation}
+%    \forall q,\ \Lang(\Delta, q) \subseteq \Lang(\Delta', q)
+%  \end{equation}
+%\end{theorem}
+
+The main property we want demonstrate in \coq\
+is that this syntactic criterion implies the semantic inclusion for the
+considered languages in \ref{sec:automata}.
+
+\begin{lstlisting}
+Theorem inclusion_sound :
+   forall A B, inclusion A B = true -> Included A B.
+\end{lstlisting}
+
+
+Before proving this in \coq, we need to define more formally the function
+\lstinline!inclusion!. This function cannot be defined as a simple structural
+recursion.  Thus \coq\ needs a termination
+proof for this algorithm. Thanks to the \coq\ feature \lstinline!Function!, it is
+possible to define the algorithm using a measure function and provide a proof
+that its value decreases at each recursive call to ensure the termination.
+
+\versioncourte{\subsection{Termination, Soundness, Completeness}}
+\versionlongue{\subsection{Termination}}
+\label{sec:termination}
+Termination of deduction rules can be proved by defining a measure function $\mu$ on statements of he form $\Gamma \vdash_{\A,\B} \alpha \Subset \beta$.
+%We use the finiteness property of $\Gamma$ that is finite and the size of terms on the right of $\vdash$.
+The $\Gamma$ relation can be seen as a subset of $\mathcal{Q}_A \times \mathcal{Q}_B$ which is a finite set. All tree automata have
+a finite number of states.
+Then the statement measure $\mu({\Gamma \vdash_{A, B} \alpha \unlhd \beta})$ is defined as tuple $(\mu_1(\Gamma), \mu_2(\alpha)+\mu_2(\beta))$
+where:
+{\small
+\[\left[
+  \begin{array}{lcl}
+    \mu_1(\Gamma) & = & | \Q_A \times \Q_B | - |\Gamma|\\
+    \mu_2(x) &=&
+    \left\{\begin{array}{l}
+        (m+1-n) \textrm{ if } x = \{c_i\}^m_n\\
+        1 \textrm{ if } x = f(q_1, \dots, q_n),\\
+        0 \textrm{ otherwise}
+      \end{array}\right.\\
+  \end{array}\right.
+\]}
+
+Then we define the ordering $\ll$ by the lexicographic combination of the usual 
+order $<$ on natural numbers for $\mu_1$ and $\mu_2$.% and $\mu_3$:
+\versionlongue{
+\[(x, y) \ll (x', y') \Longleftrightarrow
+\bigvee\left\{
+\begin{array}{l}
+  x < x' \\
+  x = x' \land y < y'\\
+  %x = x' \land y = y' \land z < z'
+\end{array}\right.
+\]
+}
+Since $<$ is well founded, the lexicographic combination $\ll$ is also well
+founded.
+
+\begin{theorem}{(Termination)}
+  At each deduction step, the measure decreases strictly:
+  \[
+  \dfrac{
+    \Gamma \vdash_{A, B} \alpha \Subset \beta
+  }{
+    \Gamma' \vdash_{A, B} \alpha' \Subset \beta'
+  }
+  \Longrightarrow \mu({\Gamma \vdash_{A, B} \alpha \Subset \beta}) \ll \mu({\Gamma' \vdash_{A, B} \alpha' \Subset \beta'})
+  \]
+\end{theorem}
+\versioncourte{
+\begin{proof}
+See~\cite{BoyerGJ-RR08}, for details.
+\end{proof}
+}
+\annexe{
+\begin{proof}
+  The following array summarizes for each derivation rule what component of the tuple
+  proves that $\mu$ decreases between conclusion and premises of the rule:
+
+  \[\begin{array}[h]{l|c|c|}%c|}
+    \footnotesize
+    & \mu_1 & \mu_2 \\ \hline % & \mu_3\\ \hline
+    \textrm{Induction}   & \strut \mu_1(\Gamma) < \mu_1(\Gamma') & - \\ \hline
+    \textrm{Split-l} & \mu_1(\Gamma) = \mu_1(\Gamma') & 
+    %\begin{array}{l}
+      \mu_2(c_i) = 1 < \mu_2(\{c_i\}_1^n)\\
+     % \mu_2((\{c_i\}_2^n) < \mu_2(\{c_i\}_1^n)\\
+    %\end{array}\\ \hline
+
+    \textrm{Weak-r} & \mu_1(\Gamma) = \mu_1(\Gamma') & \mu_2(c_k) < \mu_2(\{c_i\}_1^n)\\ \hline
+    \textrm{Config} & \mu_1(\Gamma) = \mu_1(\Gamma') & 
+    \begin{array}{l}
+      \mu_2(f(\dots, q_i, \dots)) = \mu_2(f(\dots, q'_i, \dots)) = 1\\
+      \mu_2(q_i) = \mu_2(q'_i) = 0 \textrm{ thus } 2 > 0
+    \end{array}\\ \hline
+    %\textrm{Tuple} & \mu_1(\Gamma) = \mu_1(\Gamma') & 0 = 0 &
+    %\begin{array}{l}
+    %  \mu_3([q_1, \dots, q_n]) > \mu_3(q1)\\
+    %  \mu_3([q_1, \dots, q_n]) > \mu_3([q_2, \dots, q_n])\\
+    %\end{array}\\ \hline
+\end{array} \]
+For the {\tt Split-l} (resp. {\tt Weak-r}) rule, we consider $n > 1$ to have a set $\alpha = \{c_i\}_1^n$ (resp. $\beta$) with
+at least two elements. If ($n = 1$) then this rule does not apply on the current statement
+${\Gamma \vdash \alpha \Subset \beta}$.\\
+
+\end{proof}
+}
+\versionlongue{
+\begin{theorem}
+  When $\mu(\Gamma \vdash_{A, B} \alpha \Subset \beta) = (0, 0)$, we have a statement as Axiom or Nil:
+  the current proof derivation is completed.
+\end{theorem}
+\begin{proof}
+  From  $\mu(\Gamma \vdash_{A, B} \alpha \Subset \beta) = (0, 0)$ we deduce immediately:
+  \begin{enumerate}
+  \item $\mu_1(\Gamma) = 0$ implies $\Gamma = \Q_A \times \Q_B$ 
+  \item $\mu_2(\alpha) = \mu_2(\beta) = 0$ implies $\alpha$ and $\beta$ are both either a state or empty set.
+  \end{enumerate}
+  Thus the statement may be:
+  \begin{itemize}
+  \item $\Gamma \vdash_{A, B} \emptyset \Subset \emptyset$ is the case
+    of Empty rule : proof derivation is ended.
+  \item $\Gamma \vdash_{A, B} q \Subset q'$ : we can use the fact
+    $\Gamma = \Q_A \times \Q_B$, thus $(q, q') \in \Q_A\times\Q_B \imp
+    (q \Subset q') \in \Gamma$. This case matches with Axiom rule that
+    terminates the proof derivation.
+  \end{itemize}
+\end{proof}
+}
+\archive{
+In \coq, do not need not exactly define all the measure as such. In fact,
+a part of the algorithm can be expressed by structural recursion. In
+particular, we use \lstinline!list! to represent configurations set as
+for configurations which are expressed by \lstinline!list! of
+\lstinline!state!. Since list covering is structural recursive, it is
+also for configurations set. Then we have implemented this algorithm
+as a single big recursive function \lstinline!inclusion_aux : Delta.t -> Delta.t -> gamma -> state -> state -> bool!  where
+\lstinline!gamma! stands for a \lstinline!list! of \lstinline!state * state!. For a such function we only need $\mu_1$ and
+we have reduce the \coq\ proof termination at one case.}
+
+\versionlongue{\subsection{Soundness}}
+\label{sec:correction}
+
+\versioncourte{
+\begin{theorem}{(Soundness)}
+  \label{thm:soundness}
+  For all tree automata $\A$ and $\B$, if there exists $\prod$ a proof tree
+  of $\emptyset \vdash_{\A, \B} q \Subset q'$ then we have
+  $\Lang(\Delta_\A, q) \subseteq \Lang(\Delta_\B, q')$
+\end{theorem}
+
+\begin{proof}
+This can be done by an induction on the size of the term of 
+$\Lang(\Delta_\A, q)$. See~\cite{BoyerGJ-RR08} for details.
+\end{proof}
+}
+
+\annexe{
+  Before proving it, we have to define and prove a very important lemma for
+  the next.
+  \begin{theorem}{(Cut in $\Subset$-proof trees)}
+    \label{thm:cut}
+    For all tree automata $\A$ and $\B$, if there exists $\prod$ a proof tree
+    of $\Gamma \vdash_{\A, \B} q \Subset q'$, and a proof tree of 
+    $\Gamma \cup \{q \Subset q'\}\vdash_{\A, \B} q_a \Subset q_b$
+    then exists also a proof tree of $\Gamma \vdash_{\A, \B} q_a \Subset q_b$.
+  \end{theorem}
+  \begin{proof}
+    We proceed by induction on $\mu(\Gamma)$.
+    
+    \noindent
+    If $\mu(\Gamma) = 0$, we have immediately $\Q_\A \times \Q_\B =
+    \Gamma$. Hence,
+    since $q_a \Subset q_b \in \Gamma$, 
+    we can prove $\Gamma \vdash_{\A,\B} q_a \Subset q_b$ using the Axiom rule.
+
+    \medskip
+    \noindent
+    Now, as induction hypothesis, let us assume that $\forall \Gamma\ 
+    s.t.\ \mu(\Gamma) = n$, $\forall q\ q'$, if there exists a proof tree $\prod$ of
+    $\Gamma \vdash_{\A, \B} q \Subset q'$ and if for all $q_a, q_b$ there exists a
+    proof tree of $\Gamma \cup \{q \Subset q'\}\vdash_{\A, \B} q_a \Subset q_b$ then we
+    have also a proof tree of $\Gamma \vdash_{\A, \B} q_a \Subset q_b$.  Now, we
+    aim at proving that this property is true for $\Gamma$ such that $\mu(\Gamma)
+    = n+1$.
+  
+    \medskip
+    \noindent
+    Let us consider the proof tree of the second hypothesis $\Gamma \cup \{q \Subset
+    q'\}\vdash_{\A, \B} q_a \Subset q_b$.  Firstly, if the proof tree is built
+    using the Axiom rule we have $(q_a \Subset q_b) \in \Gamma \cup \{(q \Subset
+    q')\}$.  Two cases are possible:
+    \begin{itemize}
+    \item either $(q_a \Subset q_b) \in \Gamma$, and then we build the proof of 
+      $\Gamma \vdash_{\A,\B} q_a \Subset q_b$ using the Axiom rule.
+      
+    \item or $q = q_a$ and $q' = q_b$, and then the goal $\Gamma \vdash_{\A,\B} q_a
+      \Subset q_b$ is equivalent to $\Gamma \vdash_{\A, \B} q \Subset q'$ whose
+      proof tree is $\prod$.
+    \end{itemize}
+    
+    \noindent
+    Secondly, if the proof tree of $\Gamma \cup \{q \Subset q'\}\vdash_{\A, \B} q_a
+    \Subset q_b$ is built using the Induction rule, then we have: 
+
+    \medskip
+    \newcommand{\env}{\Gamma \cup \{q_a \Subset q_b\} \cup \{q \Subset q'\} \vdash_{\A, \B}}
+    
+    \centerline{
+      \begin{minipage}{21cm}
+        {\tiny
+          \begin{prooftree}
+            \AxiomC{\small $\prod_{c_1}$}
+            \UnaryInfC{$\env c_1 \Subset c'_{k_1}$}
+            \LeftLabel{(Weark-r)}
+            \UnaryInfC{$\env 
+              c_1 \Subset  \{c_k'| c_k' \rightarrow_\B q_b\}_1^m$}
+            % Pointillets du milieu
+            \AxiomC{\small \dots\dots}
+            \AxiomC{\small $\prod_{c_n}$}
+            \UnaryInfC{$\env c_n \Subset c'_{k_n}$}
+            \RightLabel{(Weark-r)}
+            \UnaryInfC{$\env
+              c_n \Subset  \{c_k'| c_k' \rightarrow_\B q_b\}_1^m$}
+            \LeftLabel{(Split-l)}
+            \TrinaryInfC{$\env
+              \{c_i| c_i \rightarrow_\A q_a\}_1^n \Subset  \{c_i'| c_i'\rightarrow_\B q_b\}_1^m$}
+            \LeftLabel{(Induction)}
+            \UnaryInfC{$\Gamma \cup \{q \Subset q'\} \vdash_{\A, \B} q_a \Subset q_b$}
+          \end{prooftree}
+        }
+      \end{minipage}}
+    
+    \medskip
+    \noindent
+    Where each $\prod_{c_i}$ has the following form (assuming
+    that $c_i = f(q_{i_1}, \dots, q_{i_n})$ and $c'_{k_i} = f
+    (q'_{i_1}, \dots, q'_{i_n})$ ):
+    
+    {\tiny
+      \begin{prooftree}
+        \AxiomC{\small $\prod_{i_1}$}
+        \UnaryInfC{$\env q_{i_1} \Subset q'_{i_1}$}
+        \AxiomC{\small \dots\dots}
+        \AxiomC{\small $\prod_{i_n}$}
+        \UnaryInfC{$\env q_{i_n} \Subset q'_{i_n}$}
+        \LeftLabel{(Config)}
+        \TrinaryInfC{$\env f(q_{i_1}, \dots, q_{i_n}) \Subset f (q'_{i_1}, \dots, q'_{i_n})$}
+      \end{prooftree}
+    }
+    
+    If we try to build the proof tree of our goal $\Gamma \vdash_{\A,\B} q_a
+    \Subset q_b$, it necessarily begins in the same way except that $\{q \Subset
+    q'\}$ will not appear in the left-hand side of statements. Each branch of
+    this tree will end by a statement of the form $\Gamma \cup \{q_a \Subset
+    q_b\} \vdash_{\A, \B} q_{i_j} \Subset q'_{i_j}$. Now to conclude the proof,
+    we have to find proof trees $\prod'_{i_j}$ for all those statements. We know
+    that there exists proof trees $\prod_{i_j}$ for all statements $\Gamma \cup \{q
+    \Subset q'\} \cup \{q_a \Subset q_b\} \vdash_{\A, \B} q_{i_j} \Subset
+    q'_{i_j}$.  We can use the induction hypothesis on $\prod_{i_j}$ to obtain
+    $\prod'_{i_j}$ as follows:
+    \begin{itemize}
+
+    \item Since $\mu(\Gamma) = n + 1$, then $\mu(\Gamma\cup \{q_a \Subset q_b\}) = n$
+      
+
+    \item Since $\prod$ is a proof of $\Gamma \vdash_{\A, \B} q \Subset q'$, it is also a proof of
+      $\Gamma \cup \{q_a \Subset q_b\}\vdash_{\A, \B} q \Subset q'$.
+      
+    \item Each $\prod_{i_j}$ is a proof of $\env  q_{i_j} \Subset q'_{i_j}$
+    \end{itemize}
+    
+    \noindent
+    Using induction, we deduce that for all $i,j$ there exist proof trees
+    $\prod'_{i_j}$ of $\Gamma \cup \{q_a \Subset q_b\} \vdash_{\A, \B} q_{i_j}
+    \Subset q'_{i_j}$.  This ends the proof tree of our goal $\Gamma \vdash_{\A,
+      \B} q_a \Subset q_b$.
+  \end{proof}
+  
+  \begin{theorem}{(Soundness)}
+    \label{thm:soundness}
+    For all tree automata $\A$ and $\B$, if there exists $\prod$ a proof tree
+    of $\emptyset \vdash_{\A, \B} q \Subset q'$ then we have $\Lang(\A, q) \subseteq \Lang(\B, q')$
+  \end{theorem}
+  
+  \begin{proof}
+    We prove that $\forall t$, $t \in \Lang(\A, q) \imp t \in \Lang(\B, q')$ by
+    induction on $t$. Let $t = f(t_1, \dots, t_n)$. We assume that the property is
+    true for each subterm $t_i$, i.e. for all $q_i, q'_i$ s.t. if there exists a
+    proof tree $\prod_i$ of $\emptyset \vdash_{\A, \B} q_i \Subset q'_i$ then $t_i
+    \rightarrow^*_{\A} q \imp t \rightarrow^*_{\B} q_i'$.  Since $t=f(t_1, \dots,
+    t_n) \in \Lang(\A, q)$, then for each subterm $t_i$, we know that there exists
+    $q_1, \ldots, q_n$ such that $t_i \in \Lang(\A, q_i)$ and $f(q_1, \dots, q_n)
+    \rightarrow q \in \A$. Besides this, by unfolding $\prod$ the proof tree of
+    $\emptyset \vdash_{\A, \B} q \Subset q'$, we can deduce that for each
+    transition like $f(q_1, \dots, q_n) \rightarrow q \in \A$, there exists $f(q'_1,
+    \dots, q'_n) \rightarrow q' \in \B$ s.t. we have a proof tree $\prod_i$ of
+    $\{q \Subset q'\} \vdash_{\A, \B} q_i \Subset q'_i$. 
+    Since $f(q_1, \ldots, q_n) \rw q \in \A$, we obtain that $f(q'_1, \dots, q'_n)
+    \rightarrow q' \in \B$ and a proof $\prod_i$ for $\{q \Subset q'\} \vdash_{\A,
+      \B} q_i \Subset q'_i$. To conclude that $f(t_1, \dots, t_n) \in \Lang(\B,
+    q')$ we just have to prove that $t_i \in \Lang(\B, q'_i)$. Note that we have a
+    proof tree $\prod_i$ for $\{q \Subset q'\} \vdash_{\A,\B} q_i \Subset q'_i$
+    and that to apply the induction hypothesis we need a proof tree for $\emptyset
+    \vdash_{\A,\B} q_i \Subset q'_i$. Using the Theorem~\ref{thm:cut} on $\prod$
+    and $\prod_i$, we can deduce the existence of $\prod'_i$ the proof tree of
+    $\emptyset \vdash_{\A, \B} q_i \Subset q'_i$. Then using induction hypothesis
+    on $t'_i, q_i, q'_i$ and $\prod'_i$,
+    we obtain that for each $t_i \in \Lang(\A, q_i)$, we also have $t_i \in
+    \Lang(\B, q'_i)$. Finally, since $f(q'_1, \ldots, q'_n)\rw q' \in \B$, we
+    obtain that $t=f(t_1, \dots, t_n) \in \Lang(\B, q')$.
+  \end{proof}
+}
+
+
+\versionlongue{\subsection{Completeness}}
+\label{sec:completness}
+
+As said above, the described algorithm is not complete in general.
+However, we show that it is complete for tree automata produced by
+completion. In particular if $\A_\R^k$ is obtained after $k$
+completion step from $\A^0$ then we can build a proof $\prod$ for the
+statement $\emptyset \vdash_{\A^0, \A^k_{\R}} \{\#(q)\ |\ q \in
+\mathcal{Q}_{F_0}\} \Subset \{\#(q')\ |\ q'\in
+\mathcal{Q}_{F_k}\}$. Recall that the tree automaton produced by the
+$k^{th}$ step of completion is noted $\mathcal{A}_k = \langle
+\mathcal{F}, \mathcal{Q}_k, \mathcal{Q}_{F_k}, \Delta_k\rangle$.
+\versioncourte{ The tree automata completion performs two main
+  operations at each step of calculus: \emph{normalization} and
+  \emph{state merging}.  In the case of normalization, the language
+  inclusion can simply be proved using transition set inclusion. With
+  the state merging operation, set inclusion is not enough because it
+  implies transition merging too.  This is the reason why we have to
+  define a new ordered relation preserved by each operation.  }
+\versionlongue{
+First, let us introduce some new ordered relation on tree automata:
+}
+\begin{definition}
+    \label{eq:prop0}
+  Given $\A$, $\B$ two tree automata, $\sqsubseteq$ is the reflexive and
+  transitive relation defined as follows: $\A \sqsubseteq \B$ if there exists a function
+  $\varrho$ that renames states of $\A$ into states of $\B$ and such that 
+  all renamed rules $\Delta_\A$ are contained in $\Delta_\B$:
+  
+  \begin{equation}
+    \A \sqsubseteq \B \Longleftrightarrow
+    \exists \varrho : \mathcal{Q_\A} \rightarrow \mathcal{Q_\B},
+    \ \varrho(\Delta_\A) \subseteq \Delta_\B\ \wedge \ \varrho(\Q_{F_\A}) \subseteq \Q_{F_\B}
+  \end{equation}
+\end{definition}
+
+
+\annexe{
+We need to extend the renaming $\varrho$ to the structures and sets used in the following:
+\begin{itemize}
+\item $\varrho(\{q_i\}_1^n)$ stands for $\{\varrho(q_i)\}_1^n$
+
+\item $\varrho(c) = \left\{\begin{array}{ll}
+      f (\varrho(c_1), \dots, \varrho(c_n)) &\textrm{ if } c = f(c_1, \dots, c_n)\\
+      c &\textrm{ if } c \in \F_{0}\\
+      \varrho(q) &\textrm{ if } c = q\in \Q\\
+    \end{array}\right.$
+  
+\item $\varrho(c \rightarrow q)$ stands for $\varrho(c) \rightarrow \varrho(q)$
+
+
+\item $\varrho(\Delta)$ stands for $\{ \varrho(c\rightarrow q)\ |\ c \rightarrow q \in \Delta \}$.
+\end{itemize}
+}
+\versionlongue{
+In tree automata completion, two main operations can be
+performed at each steps of calculus: \emph{normalization} and
+\emph{state merging}. 
+The following lemma shows that those two operations ensure $\sqsubseteq$.
+}
+
+\begin{lemma}
+  Given a tree automaton $\A$,
+  
+  \[
+  \begin{array}{llll}
+    1. & \mbox{ if } \A' = \A \cup \norm(r\sigma \rw q) & \mbox{ then } &\A \sqsubseteq \A' \\
+    2. & \mbox{ if } \A' = \merge(\A, q_1,q_2) &\mbox{ then }& \A \sqsubseteq \A'  \\
+  \end{array}
+  \]
+\end{lemma}
+\versioncourte{
+\begin{proof}
+  For details, see~\cite{BoyerGJ-RR08}.
+\end{proof}
+}
+
+\annexe{
+\begin{proof}
+  \begin{enumerate}
+  \item This is easy to show since we trivially have $\Delta_{A'} \supseteq
+    \Delta_A$ whatever $r\sigma$ or $q$ may be.
+    Then by choosing $\varrho = id$, we have immediately the conclusion $\A
+    \sqsubseteq \A'$.
+
+  \item Let $\Delta_\A$ be the transition set of $\A$. Let $q_i$ and $q_j$ be
+    the two states to merge.  We can apply to $\Delta_\A$
+    a renaming function $\varrho$ which has the same behavior than state merging
+    with regard to $q_1 = q_2$:
+    \[
+    \varrho(q) = \left\{
+      \begin{array}{l}
+        \textrm{if }(q\ =\ q_2)\\
+        \quad \quad q_1\\
+        \textrm{else}\\
+        \quad \quad q
+      \end{array}\right.
+    \]
+    
+    So state merging builds $\Delta_{\A'} = \varrho(\Delta_\A)$ and by
+    Definition~\ref{eq:prop0} we have trivially $\Delta_A \sqsubseteq
+    \Delta_{\A'}$.
+  \end{enumerate}
+\end{proof}
+}
+
+
+\begin{theorem}
+  Given a tree automaton $\mathcal{A}^0$, a TRS $\R$ and an
+  equation set $\mathcal{E}$, after $k$ completion steps we obtain
+  $\A_\R^k$ such that $\A^0 \sqsubseteq \A_\R^k$.
+\end{theorem}
+\versioncourte{
+\begin{proof}
+  Since we have proved that $\sqsubseteq$ is preserved
+  by $\norm$ and $\merge$ functions, it is also the case for every completion 
+  step between $\A^k_\R$ and $\A^{k+1}_\R$, i.e $\A^k_\R \sqsubseteq \A^{k+1}_\R$.
+  Then, the theorem can be deduced using the reflexivity and transitivity of
+  $\sqsubseteq$. See~\cite{BoyerGJ-RR08}.
+\end{proof}
+}
+
+\annexe{
+\begin{proof}
+  By induction on $k$:
+  
+  \begin{itemize}
+  \item Since $\sqsubseteq$ is reflexive, we have trivially $\A^0
+    \sqsubseteq \A^0$.
+  \item Let $\mathcal{A}_k$ be a tree automaton obtained after $k$ completion
+    steps such that $\A^0 \sqsubseteq \A_\R^k$. By definition of completion
+    $\A_\R^{k+1}$ is built from $\A_\R^k$ by applying successively normalization
+    and merge. We thus have $\A_\R^k \sqsubseteq \A_\R^{k+1}$.  
+%Let us apply one
+%    more step of completion. After normalization of $\A_\R^k$ we have $\A_\R^k
+%    \sqsubseteq \A'$; then we merge $\A'$ with set $\mathcal{E}$ to obtain $\A'
+%    \sqsubseteq \A_\R^{k+1}$. 
+    By transitivity of $\sqsubseteq$, from $\A^0 \sqsubseteq \A_\R^k$ and
+    $\A_\R^k \sqsubseteq \A_\R^{k+1}$ we deduce immediately that $\A^0
+    \sqsubseteq \A_\R^{k+1}$.
+  \end{itemize}
+\end{proof}
+}
+\versioncourte{
+Now, we define the completness property as the following:
+}
+\begin{theorem}{(Completeness)}
+  Given two tree automata $\A$ and $\B$ if $\A \sqsubseteq \B$ then there
+  exists $\prod$ a proof of statement $\emptyset \vdash_{\A, \B}
+  \{\#(q_f)\ |\  q_f \in \mathcal{Q}_{F_A}\} \Subset  \{\#(q'_f)\ |\  q'_f \in \mathcal{Q}_{F_B}\}$.
+\end{theorem}
+\versioncourte{
+\begin{proof}
+For details, see~\cite{BoyerGJ-RR08}.
+\end{proof}
+}
+\annexe{
+\begin{proof}
+  By definition of $\A \sqsubseteq \B$, we can deduce that there exists a renaming $\varrho$.\\
+  First we prove by induction on the proof tree we have for all $\Gamma$
+  and $q$, $\Gamma \vdash_{\A, \B} q \Subset \varrho(q)$:\\
+  The hypothesis induction is $\forall \Gamma,\ q,\ q_i,$
+  \begin{prooftree}
+    \AxiomC{$\prod_i$}
+    \UnaryInfC{$\Gamma \cup \{q \Subset \varrho(q)\} \vdash_{\A, \B} q_i \Subset \varrho(q_i)$}
+  \end{prooftree}
+
+  We want to construct a proof tree for $\Gamma \vdash_{\A, \B} q \Subset \varrho (q)$.\\
+  Two cases are possible:
+  \begin{itemize}
+  \item 
+    if $q \Subset \varrho(q) \in \Gamma$ then we can conclude immediately:
+    \begin{prooftree}
+      \AxiomC{}
+      \LeftLabel{(Axiom)}
+      \UnaryInfC{$\Gamma' \cup  \{q \Subset \varrho(q)\} \vdash_{\A, \B} q \Subset \varrho(q)$}
+    \end{prooftree}
+
+  \item 
+    Otherwise, we need to apply Induction rule to obtain the following tree:
+  
+    \newcommand{\env}{\Gamma \cup \{q \Subset \varrho(q)\} \vdash_{\A, \B}}
+    {\tiny
+      \begin{prooftree}
+        \AxiomC{\small $\prod_{c_1}$}
+        \UnaryInfC{$\env 
+          c_1 \Subset  \{c_k'| c_k' \rightarrow \varrho(q)\}_1^m$}
+        % Pointillets du milieu
+        \AxiomC{\small \dots\dots}
+        \AxiomC{\small $\prod_{c_n}$}
+        \UnaryInfC{$\env
+          c_n \Subset  \{c_k'| c_k' \rightarrow \varrho(q)\}_1^m$}
+        \LeftLabel{(Split-l)}
+        \TrinaryInfC{$\env
+          \{c_i| c_i \rightarrow q\}_1^n \Subset  \{c_k'| c_k'\rightarrow \varrho(q)\}_1^m$}
+        \LeftLabel{(Induction)}
+        \UnaryInfC{$\Gamma \vdash_{\A, \B} q \Subset \varrho(q)$}
+      \end{prooftree}
+    } From hypothesis $\varrho(\Delta_A) \subseteq \Delta_B$ for each
+    rule $c \rightarrow q$ of $\Delta_A$, we have $\varrho(c\rightarrow q) \in \Delta_\B$.
+    \[\textrm{Thus for all } (c\rightarrow q)\in \Delta_\A,\textrm{ we have } \varrho(c) \in \{c_k' | c_k' \rightarrow \varrho(q)\}_1^m \]
+    For each $c_i= f_i(q_{i_1}, \dots, q_{i_n})$ we can construct the corresponding tree
+    $\prod_{c_i}$ which his each branch is concluded by $\prod_{i_j}$
+    an instance of induction hypothesis for the corresponding state
+    $q_{i_j}$: {\tiny
+      \begin{prooftree}
+        \AxiomC{\small $\prod_{i_1}$}
+        \UnaryInfC{$\env q_{i_1} \Subset \varrho(q_{i_1}) $}
+        \AxiomC{\small \dots\dots}
+        \AxiomC{\small $\prod_{i_n}$}
+        \UnaryInfC{$\env q_{i_n} \Subset \varrho(q_{i_n}) $}
+        %%%%%%%%%%%%%%%%%%%%%%% 
+        \LeftLabel{(Config)}
+        \TrinaryInfC{$\env c_i \Subset  \varrho(c_i) $}
+        \LeftLabel{(Weak-r)}
+        \UnaryInfC{$\env c_i \Subset  \{c_k'| c_k' \rightarrow \varrho(q)\}_1^m$}
+      \end{prooftree}
+    }
+  \end{itemize}
+
+  Now, we have for all $\Gamma$ and $q \in \Q_\A$ there exists a proof
+  tree $\prod_q$ for all statement $\Gamma \vdash_{\A, \B} q \Subset \varrho(q)$.\\
+  In particular, this is true for $\Gamma = \emptyset$ all $q$ of
+  $\Q_{F_\A}$.  Since we have $\A \sqsubseteq \B \imp
+  \varrho(\Q_{F_\A}) \subseteq \Q_{F_\B}$, we can build a proof tree
+  as:
+
+  {\small
+    \begin{prooftree}
+      \AxiomC{$\prod_{q_{f_1}}$}
+      \UnaryInfC{$\emptyset \vdash_{\A, \B} q_{f_1} \Subset \varrho(q_{f_1})$}
+      %\AxiomC{$\emptyset \vdash_{\A, \B} [\ ] \Subset [\ ]$}
+      \LeftLabel{(Config)}
+      \UnaryInfC{$\emptyset \vdash_{\A, \B} \#(q_{f_1}) \Subset \#(\varrho(q_{f_1}))$}
+      \LeftLabel{(Weak-r)}
+      \UnaryInfC{$\emptyset \vdash_{\A, \B} q_{f_1} \Subset \Q_{F_\B}$}
+      \AxiomC{\small \dots\dots}
+      \AxiomC{$\prod_{q_{f_n}}$}
+      \UnaryInfC{$\emptyset \vdash_{\A, \B} q_{f_1} \Subset \varrho(q_{f_1})$}
+      %\AxiomC{$\emptyset \vdash_{\A, \B} [\ ] \Subset [\ ]$}
+      \RightLabel{(Config)}
+      \UnaryInfC{$\emptyset \vdash_{\A, \B} \#(q_{f_n}) \Subset \#(\varrho(q_{f_n}))$}
+      \RightLabel{(Weak-r)}
+      \UnaryInfC{$\emptyset \vdash_{\A, \B} \#(q_{f_n}) \Subset \{\#(q)\ |\ \Q_{F_\B}\}$}
+      \LeftLabel{(Split-l)}
+      \TrinaryInfC{$\emptyset \vdash_{\A, \B} \{\#(q)\ |\ q \in \Q_{F_\A}\} \Subset \{\#(q)\ |\ q \in \Q_{F_\B}\}$}
+    \end{prooftree}}
+\end{proof}
+}
+
+
+Thus, we can ensure that for an automaton $\A_\R^k$ obtained by $k$
+completion steps from $\mathcal{A}^0$, there exists a proof $\prod$ of
+the statement $\emptyset \vdash_{\A^0, \A^k_{\R}} \{\#(q)\ |\ q \in
+\mathcal{Q}_{F_{0}} \Subset \{\#(q')\ |\ q'\in \mathcal{Q}_{F_{k}}\}$.
+This can be obtained by a simple combination of the two previous
+theorems.
+
+%\begin{theorem}
+%  Given a tree automaton $\mathcal{A}^0$, a TRS $\R$ and an equation set
+%  $\mathcal{E}$, after $k$ completion steps we obtain $\A_\R^k$ such that
+%\end{theorem}
+
+
+\versionlongue{
+\paragraph{Remark about restrictions:}
+To obtain a decision procedure, the "Weak-r" rule must be modified.
+This version is too weak; it does not take all possible cases for
+union construction into account.
+
+\begin{example}
+  Let $\A$ and $\B$ be two automata s.t.:
+  \[\A = \left\{ 
+    \begin{array}{rcl}
+      a& \rightarrow &q_1\\
+      b& \rightarrow &q_2\\
+      c& \rightarrow &q_2\\
+      f(q_1, q_2)&\rightarrow &{\bf q}\\
+    \end{array}\right\}
+  \textrm { and }
+  \B = \left\{ 
+    \begin{array}{rcl}
+      a& \rightarrow &q_1'\\
+      b& \rightarrow &q_2'\\
+      c& \rightarrow &q_3'\\
+      f(q_1', q_2')&\rightarrow &{\bf q'}\\
+      f(q_1', q_3')&\rightarrow &{\bf q'}\\
+    \end{array}\right\}
+  \]
+  Here we have $\Lang(\A, q) = \Lang(\B, q')$ but $\emptyset \vdash_{\B, \A} q' \Subset q$ is clearly derivable
+  whereas $\emptyset \vdash_{\A, \B} q \Subset q'$ is not.
+\end{example}
+}
+
+\subsection{Complexity}
+
+As said in section~\ref{section:objectives}, the standard algorithm for checking
+the inclusion $\Lang(\A) \subseteq \Lang(\B)$ is based on computing the
+complement automaton $\overline{\B}$. However, for non deterministic tree
+automata the size~\cite{TATA} of $\overline{\B}$ can be exponentially greater
+than the size of $\B$. The algorithm that we have proposed above has not this
+drawback and use only a memory size that is polynomial w.r.t. to the automata
+sizes.
+
+Let $|\Q|$ be the maximum number of states in tree automata $\A$ and $\B$.  The
+proof trees built using the deduction rules we gave are of height at most
+$|\Q|^2$. This is due to the rules 'Induction' and 'Axiom' ensuring that every
+inclusion problem $q \Subset q'$ will be analyzed only once per branch.  Since
+$q\in \Q_\A$ and $q' \in \Q_\B$ and we know that the cardinal of $\Q_\A$ and
+$\Q_\B$ is bounded by $|\Q|$, the length of branch is at most bounded by
+$|\Q|^2$.  Since, the \lstinline!inclusion! function only constructs one branch
+of the proof tree at a time, the memory usage is thus bounded by $|\Q|^2$ and
+thus polynomial.
+
+However, the time complexity of a straightforward implementation of this
+algorithm is exponential. Indeed, even if each couple $q \Subset q'$ is
+considered only once on each branch, the number of branches is exponential
+w.r.t. $\Q$ and the same couple $q \Subset q'$ may be analyzed once per
+branch. A very simple optimization of this algorithm is to table the result of
+the analysis of each $q \Subset q'$ and make it available to cut similar proof
+branches. Using this optimization, every couple is considered {\em only once}
+for the whole proof tree and, thus, lead to an overall polynomial time
+complexity, close to $|\Q|^2$. Nevertheless, the current \coq\ implementation is
+based on the non tabled version for two reasons.  First, the proof of theorem
+\lstinline!inclusion_sound! is more difficult on a tabled version of the \coq\
+\lstinline!inclusion! function. Second, on test cases, it appears that avoiding
+the exponential blow-up of memory was critical but that practical performances
+of the, potentially, exponential time algorithm are sufficient.
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

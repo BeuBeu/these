@@ -1,0 +1,82 @@
+ 
+@TECHREPORT{BoyerGJ-RR08,
+	AUTHOR = "Boyer, B. and Genet, T. and Jensen, T.",
+	TITLE = "{C}ertifying a {T}ree {A}utomata {C}ompletion {C}hecker",
+        INSTITUTION = "INRIA",
+        NOTE = {{\small \verb|http://hal.inria.fr/inria-00258275/fr/|}},
+        NUMBER = {RR 6462},
+        YEAR = 2008
+}
+
+
+@InProceedings{Leroy-POPL06,
+  title =	"Formal certification of a compiler back-end or:
+		 programming a compiler with a proof assistant",
+  author =	"Leroy, X.",
+  booktitle =	"Proc. of POPL'06",
+  publisher =	"ACM Press",
+  year = 	"2006",
+  pages =	"42-54"
+}
+
+@Article{BessonJP-TCS06,
+  title =	"Proof-carrying code from certified abstract
+		 interpretation and fixpoint compression",
+  author =	"Besson, F. and Jensen, T. and Pichardie, D.",
+  journal =	"Theor. Comput. Sci",
+  year = 	"2006",
+  number =	"3",
+  volume =	"364",
+  pages =	"273-291"
+}
+
+
+@InProceedings{Necula-POPL97,
+  author =	"Necula, G.",
+  title =	"Proof-{C}arrying {C}ode",
+  booktitle =	"Proc. of POPL'97",
+  pages =	"106-119",
+  year = 	"1997",
+  publisher =	"ACM Press"
+}
+
+
+
+@Book{coqart,
+  author       = "Bertot, Y. and Cast\'eran, P.",
+  title        = "Interactive Theorem Proving and Program Development. Coq'Art: The Calculus of Inductive Constructions",
+  series       = "Texts in Theoretical Computer Science",
+  year         = "2004",
+  publisher    = "Springer Verlag"
+}
+
+@inproceedings{RivalGL-TPHOL01,
+  author    = {Rival, X. and Goubault-Larrecq, Jean},
+  title     = {Experiments with finite tree automata in Coq},
+  booktitle = {Proc. of TPHOL'01},
+  year      = {2001},
+  publisher = {Springer},
+  series    = {LNCS}
+}
+
+@ARTICLE{BeJePi06TCS,
+  AUTHOR = {Fr\'ed\'eric Besson, Thomas Jensen and David Pichardie},
+  TITLE = {{Proof-Carrying Code from Certified Abstract Interpretation and Fixpoint Compression}},
+  JOURNAL = {Theoretical Computer Science},
+  YEAR = {2006},
+  PUBLISHER = {\url{http://www.elsevier.com}{Elsevier}},
+  ABSTRACT = {Proof-Carrying Code (PCC) is a technique for downloading mobile code
+on a host machine while ensuring that the code adheres to the host's
+safety policy.  We show how certified abstract interpretation can be
+used to build a PCC architecture where the code producer can produce
+program certificates automatically.  Code consumers use proof checkers
+derived from certified analysers to check certificates.  Proof
+checkers carry their own correctness proofs and accepting a new proof
+checker amounts to type checking the checker in Coq.  Certificates
+take the form of strategies for reconstructing a fixpoint and are kept
+small due to a technique for fixpoint compression.  The PCC
+architecture has been implemented and evaluated experimentally on a
+byte code language for which we have designed an interval analysis
+that allows to generate certificates ascertaining that no
+array-out-of-bounds accesses will occur.}
+}

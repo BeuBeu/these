@@ -1,0 +1,121 @@
+\section{Formalisation des automates d'arbres}
+\label{sec:automata}
+
+Le fait que le checker, qui doit être exécuté, est directement extrait de la formalisation \coq\
+a une importante conséquence sur la formalisation des automates d'arbres. Comme
+Les structures de données utilisées dans la formalisation sont celles qui sont réellement utilisées
+lors de lors de l'exécution, elles doivent être {\em efficaces} d'un point de vue algorithmique.
+Pour les automates d'arbres, au lieu d'une représentation naïve, il est donc nécessaire d'utiliser 
+une formalisation de la structure de données proposée dans~\cite{RivalGL-TPHOL01} pour manipuler de 
+façon optimale les automates d'arbres.
+
+\switchlstcoq
+
+
+Dans la section~\ref{sec:rewriting}, on a représenté les variables $\X$ et les symboles de 
+de fonctions $\F$ par le type \lstinline!ident!. On fait la même chose pour définir les états $\Q$.
+On définit un automate comme un couple $(\Q_F, \Delta)$, où $\Q_F$ est l'ensemble fini des 
+états finals, et $\Delta$ l'ensemble fini des transitions normalisées comme $f(q_1, \dots, q_n) \rightarrow q$.
+En \coq, $\Q_F$ est une simple \lstinline!list ident! alors que $\Delta$ est représentée en utilisant les \lstinline!FMapPositive!
+de la librairie \coq\. Il s'agit d'une implémentation des tables d'associations fonctionelles, où les données sont indexées par \lstinline!positive!.
+Les \lstinline!positive! sont en fait une représentation binaire des entiers strictement positifs.
+Dans la structure de \lstinline!FMapPositive!, chaque transition $f(q_1, \dots, q_n) \rightarrow q$ est encodée par une liste d'états $(q_1, \dots, q_n)$ indexée par $f$
+dans une première table qui est ensuite indexée par l'état $q$ dans une seconde table. Cette représentation est une bonne 
+solution pour manipuler efficacement les ensembles de transtions en \coq.
+%
+%
+
+\begin{lstlisting}
+Module Delta : DELTA.
+   (* Transition sets : *)
+   Definition config := list state.
+   
+   Definition t := 
+        FMap.t (FMap.t (list config)).
+   (* ............... *)
+\end{lstlisting}
+
+%
+%
+Ensuite, on peut définir un prédicat pour caractériser le langage reconnu par un automate d'arbres.
+En fait, il s'agit de définir l'ensembler des termes clos qui sont réduits (réécrits) dans un état 
+$q$ par les transitions de $\Delta$. Cet ensemble, qui correspond à $\Lang(\Delta,q)$ si $\Delta$ 
+est l'ensemble des transitions de $\A$, peut-être construit inductivement en \coq\ en utilisant l'unique règle de déduction:
+
+\begin{prooftree}
+  \AxiomC{$t_1 \in \Lang(\Delta, q_1)$}
+  \AxiomC{\dots\dots}
+  \AxiomC{$t_n \in \Lang(\Delta, q_n)$}
+  \RightLabel{Si $f(q_1, \dots, q_n) \rightarrow q \in \Delta$}
+  \TrinaryInfC{$f(t_1,\dots, t_n) \in \Lang(\Delta, q)$}  
+\end{prooftree}
+
+En \coq, on exprime cette proposition en utilisant le prédicate inductif
+\lstinline!IsRec!. Un terme $t$ est reconnu par un automate d'arbre $(\Q_F, \Delta)$, si
+le prédicat \texttt{IsRec}~$\Delta$~$q$~$t$ est valide pour $q \in \Q_F$.
+
+\begin{lstlisting}
+Inductive IsRec (D: Delta.t) : state -> term -> Prop :=
+  Rec_Term : forall f lt q,
+      IsRec' D (Delta.get q f D) lt -> IsRec D q (Fun f lt)
+
+with IsRec' (D: Delta.t) : list config -> list term -> Prop :=
+| Rec_SubTerm : forall lt c lc, IsRec'' D c lt -> IsRec' D (c::lc) lt
+| Rec_SubTerm' : forall lt c lc, IsRec' D lc lt -> IsRec' D (c::lc) lt
+     
+with IsRec'' (D: Delta.t) : config -> list term -> Prop :=
+| Rec_Nil : IsRec'' D nil nil
+| Rec_Cons : forall t q lt lq, IsRec D q t -> IsRec'' D lq lt ->
+       IsRec'' D (q::lq) (t::lt).
+\end{lstlisting}
+
+Il est encore légitime de se demander quel crédit accorder à une telle spécification
+qui n'a plus beaucoup de point commun avec la théorie des automates d'arbres classiques.
+C'est pour cette raison que l'on décide de montrer l'équivalence entre ce formalisme 
+et la définition classique telle que présentée dans le chapitre~\ref{chap:preliminaires}.
+On définit alors un automate comme un couple composé de l'ensemble des états finaux et 
+et l'ensemble des transitions normalisées. Les ensembles sont représentés par des listes.
+\begin{lstlisting}
+Inductive transition : Set :=
+| Ground (l r: term):
+      forall f lt q (Hl: l = Fun f lt) (Hr: r = State q)
+                    (Hnorm: forall t, t \in lt -> exists q', t = State q') : Transition.
+
+(* Conversion  Delta.t vers un ensemble de transitions *)
+Definition trans_of: Delta.t -> list transitions.
+    (* ... Body ... *)
+
+(* L'execution $t \rw^*_\A t'$ *)
+Definition Run (t: transition)(u v: term) := 
+   forall l r f lt q Hl Hr Hnorm, Ground l r f lt q Hl Hr Hnorm = t ->
+      exists p: position,
+         get u p = Some l /\ v = set u p r.
+
+(* Cloture de Run *)
+Inductive StdRun (l: list transition): term -> term -> Prop :=
+| RunRefl: forall u, StdRun l u
+| RunStep: forall u v w t, StdRun l u v -> t \in l -> Run t v w -> StdRun l u w.
+
+
+(* Equivalence: *)
+Theorem StdRun_IsRec:
+   forall $\Delta$ q t,
+      IsRec $\Delta$ q t <-> StdRun (trans_of $\Delta$) t (state q).
+\end{lstlisting}
+Bien que la formalisation soit plus simple que dans la librairie \coq\ d'automates déterministes 
+descendants~\cite{RivalGL-TPHOL01}, la preuve qu'elle soit équivalente à la formalisation théorique
+est un argument irréfutable pour se convaincre de la correction de l'approche.
+Enfin, il existe aussi une librairie récente d'automates d'arbres pour Isabelle\cite{TA-isabelle2010}
+basée sur une implémentation similaire à celle-ci. La principale différence est l'utilisation des 
+arbres "rouges et noirs" pour construire les tables d'associations plutôt que des arbres d'association.
+Cela permet de maintenir des structures avec une bonne complexité pour tout accès notamment pour
+contruire les unions et intersections d'automates. Pour le checker, le seul algorithme nécessaire
+est la décision du vide entre deux automates, pour vérifier les propriétés, mais il n'est pas
+nécessaire de construire explicitement l'intersection, on recherche seulement si il existe une exécution commune 
+entre les deux automates d'arbres considérés.
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End: 
