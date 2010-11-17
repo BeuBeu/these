@@ -4,8 +4,8 @@
 Le fait que le $\kw{checker}$, qui doit être exécuté, est directement extrait de la formalisation \coq\
 contraint la formalisation des automates d'arbres. Comme les structures de données
 utilisées dans la formalisation sont celles qui sont réellement utilisées
-lors de lors de l'exécution, elles doivent être {\em efficaces} d'un point de vue algorithmique.
-Pour les automates d'arbres, au lieu d'une représentation naïve, il est donc nécessaire d'utiliser 
+lors de l'exécution, elles doivent être {\em efficaces} d'un point de vue algorithmique.
+Pour les automates d'arbres, au lieu d'une représentation naïve, il est nécessaire d'utiliser 
 une formalisation de la structure de données proposée dans~\cite{RivalGL-TPHOL01} pour manipuler de 
 façon optimale les automates d'arbres.
 
@@ -17,7 +17,7 @@ de fonctions $\F$ par le type \lstinline!ident!. On fait la même chose pour dé
 On définit un automate comme un couple $(\Q_F, \Delta)$, où $\Q_F$ est l'ensemble fini des 
 états finals, et $\Delta$ l'ensemble fini des transitions normalisées comme $f(q_1, \dots, q_n) \rightarrow q$.
 En \coq, $\Q_F$ est une simple \lstinline!list ident! alors que $\Delta$ est représentée en utilisant les \lstinline!FMapPositive!
-de la librairie \coq. Il s'agit d'une implémentation des tables d'associations fonctionelles, où les données sont indexées par \lstinline!positive!.
+de la librairie \coq. Il s'agit d'une implémentation des tables d'associations fonctionnelles, où les données sont indexées par \lstinline!positive!.
 Les \lstinline!positive! sont en fait une représentation binaire des entiers strictement positifs.
 Dans la structure de \lstinline!FMapPositive!, chaque transition $f(q_1, \dots, q_n) \rightarrow q$ est encodée par une liste d'états $(q_1, \dots, q_n)$ indexée par $f$
 dans une première table qui est ensuite indexée par l'état $q$ dans une seconde table. Cette représentation est une bonne 

@@ -1,4 +1,3 @@
-
 \chapter{Certification de la complétion d'automates d'arbres}
 \label{chap:certif}
 
@@ -10,17 +9,17 @@
 %This part has to describe precisely the contribution of the paper.
 
 
-La certification d'un algorithme dans un assistant de preuve, est une tâche difficile dans la mesure
+La certification d'un algorithme dans un assistant de preuve est une tâche difficile dans la mesure
 où la preuve doit généralememt être entièrement construite à la main. Cela peut devenir d'autant plus ardu que l'algorithme implémente
 des optimisations complexes basées sur des structures de données
 avancées ou des astuces algorithmiques. C'est souvent une nécessité  si l'on cherche à certifier une implémentation réaliste,
 c'est à dire dont les performances supportent un passage à l'échelle. 
 Dans le cas de la complétion d'automates d'arbres, les difficultés rencontrées lors du passage à l'échelle ont
 conduit les différents développements de l'outil \timbuk\ vers une implémentation qui est actuellement bien éloignée du formalisme initial.
-Bien qu'impromptue, des bugs ont été et peuvent être découverts mais la détection est d'autant plus difficile que les automates
+De manière impromptue, des bugs ont été et peuvent être découverts mais la détection est d'autant plus difficile que les automates
 obtenus sont de taille importante. Même si chaque nouveau bug supprimé est l'occasion d'enrichir le jeu de tests, on ne peut que
 s'interroger quant à l'empirisme d'une telle approche.
-Peut-on avoir {\em confiance} en un outil tel que \timbuk? La question est d'autant plus cruciale, lorsque cet outil sert
+Peut-on avoir {\em confiance} en un outil tel que \timbuk? La question est d'autant plus cruciale que cet outil sert
 la validation d'un système, comme dans les chapitres précédents.
 L'objet de la certification est donc d'augmenter le degré de confiance que l'on peut accorder à \timbuk.
 On souhaiterait donc prouver que l'implémentation de \timbuk\ calcule bien un post point-fixe, soit 
@@ -31,7 +30,7 @@ le théorème de correction suivant la propriété:
 Si la question est légitime, il existe plusieurs manières de répondre à cette question. Allant des différentes
 techniques d'analyse statique jusqu'aux assistants de preuve, la preuve d'un programme de plus de 11000 lignes
 de code en \ocaml, reste un challenge important. D'autre part, une telle preuve de correction est liée 
-à une implémentation particulière de l'algorithme. Ce qui signifie que tout apport d'une nouvelle optimisation
+à une implémentation particulière de l'algorithme. Cela signifie que tout apport d'une nouvelle optimisation
 rend caduque la partie de la preuve concernée par la modification, remettant en cause la correction de toute
 l'implémentation.
 
@@ -91,7 +90,7 @@ Theorem closure_sound:
       forall R A', closure R A' = true -> IsClosed R A'.
 \end{lstlisting}
 
-Le théorème qui permet de déduire \lstinline!AReachable A R A'! à partir de \lstinline!Included A A'! et \lstinline!IsClosed R A'!:
+Le théorème suivant permet de déduire \lstinline!AReachable A R A'! à partir de \lstinline!Included A A'! et \lstinline!IsClosed R A'!:
 \begin{lstlisting}
 Theorem Included_IsClosed_Reachable:
       forall A A' R, Included A A' -> IsClosed R A' -> AReachable A R A'.
@@ -139,8 +138,8 @@ par des automates d'arbres non-déterministes et ascendants, par exemple
 pour montrer $\Lang(\A) \subseteq \Lang(\B)$, consiste à montrer que $\Lang(\A) \cap
 \Lang(\overline{\B}) =\emptyset$, où $\overline{\B}$ est l'automate qui reconnaît le complément 
 le langage de l'automate $\B$. Cependant, l'algorithme pour construire $\overline{\B}$ à partir
-$\B$ est EXPTIME-complete~\cite{TATA}. Cela est d'autant peu raisonnable que l'automate $\B$ est
-le point fixe calculé par la complétion, il s'agit d'un automate particulièrement gros.
+$\B$ est EXPTIME-complete~\cite{TATA}. Cela est d'autant moins raisonnable que l'automate $\B$ est
+le point fixe calculé par la complétion, et qu'il s'agit d'un automate particulièrement gros.
 Pour cette raison, on propose de contourner le problème en définissant un critère dont
 la complexité est meilleure en pratique. Il est basé sur une simple comparaison syntaxique
 des ensembles de transitions, \textit{i.e.} on vérifie l'inclusion des ensembles de transitions
@@ -149,7 +148,7 @@ Cette technique améliore considérablement l'efficacité du $\kw{checker}$, sp�
 mémoire. Or il est crucial de pouvoir vérifier l'inclusion de gros automates d'arbres (\textit{cf.}
 la section~\ref{sec:benchmarks}). Cet algorithme est correct mais, bien sûr, il n'est pas 
 complet en général. Il n'est donc pas toujours capable de montrer $\Lang(\A) \subseteq \Lang(\B)$.
-Cependant, on montre par la suite, sous certaines hypothèses sur $\A$ et $\B$, qui sont satisfaites
+Cependant, on montre par la suite, sous certaines hypothèses sur $\A$ et $\B$, satisfaites
 si $\B$ est obtenu par la complétion de l'automate $\A$, que cet algorithme est complet et redevient une procédure de
 décision. En premier lieu, on introduit la notation suivante:
 {\small
@@ -240,8 +239,8 @@ formulé au moyen des règles de déduction suivantes.
 }
 \noindent
 
-Si on considère $\Q_{F_\A}$ et $\Q_{F_\B}$ comme les ensembles d'états finals de $\A$ et $\B$, 
-et $\#()$ un symbole particulier d'arité $1$ qui n'est pas dans $\F$.
+On considère $\Q_{F_\A}$ et $\Q_{F_\B}$ les ensembles d'états finals de $\A$ et $\B$, 
+et on définit$\#()$ un symbole particulier d'arité $1$ qui n'est pas dans $\F$.
 Pour prouver $\Lang(\A) \subseteq \Lang(\B)$, il suffit de démarrer le raisonnement à partir de la formulation
 $\emptyset \vdash_{\A, \B} \{\#(q)\ |\ q \in \mathcal{Q}_{F_\A}\} \Subset \{\#(q)\ |\ q \in \mathcal{Q}_{F_\B}\} $.
  
@@ -316,7 +315,7 @@ $\emptyset \vdash_{\A, \B} \{\#(q)\ |\ q \in \mathcal{Q}_{F_\A}\} \Subset \{\#(q
 %\end{theorem}
 
 La principale propriété que l'on veut montrer en \coq\ est que le critère syntaxique
-implique l'inclusion sémantique c'est à dire l'inclusion de langages tel que formulée
+implique l'inclusion sémantique c'est-à-dire l'inclusion de langages telle que formulée
 au début de la section~\ref{sec:inclusion}.
 
 \begin{lstlisting}
@@ -431,8 +430,8 @@ au moins deux éléments différents. Sinon lorsque $n = 1$, cette règle ne s'a
 \begin{proof}
   A partir $\mu(\Gamma \vdash_{A, B} \alpha \Subset \beta) = (0, 0)$ on en déduit immédiatement:
   \begin{enumerate}
-  \item $\mu_1(\Gamma) = 0$ on a $\Gamma = \Q_A \times \Q_B$ 
-  \item $\mu_2(\alpha) = \mu_2(\beta) = 0$ induit $\alpha$ et $\beta$ sont tous les deux soit un état soit l'ensemble vide.
+  \item si $\mu_1(\Gamma) = 0$, on a $\Gamma = \Q_A \times \Q_B$ 
+  \item si $\mu_2(\alpha) = \mu_2(\beta) = 0$ alors $\alpha$ et $\beta$ sont tous les deux soit un état soit l'ensemble vide.
   \end{enumerate}
   On en déduit que le but que l'on cherche à prouver peut être de la forme:
   \begin{itemize}
@@ -461,7 +460,7 @@ IH: forall $\Gamma'$, $\mu_1\ \Gamma'$ < $\mu_1\ \Gamma$ ->
 % et la preuve de terminaison en \coq\ ce qui réduit la preuve à un cas.
 Les ensembles $\Gamma$ et $\Gamma'$ sont modélisés par une structure
 qui contient des couples d'états. Initialement implémentée par une \lstinline!list! of \lstinline!state * state!,
-cette structure s'est révélée très vite insuffisante pour de gros automates: en effet la recherche d'un élément
+cette structure s'est révélée très vite insuffisante pour de gros automates: en effet, la recherche d'un élément
 dans une liste est peu efficace, puisqu'il faut parcourir toute la liste dont la taille peut aller jusqu'à $|\Q_\A \times \Q_\B|$.
 %Afin de gagner notablement, 
 Le recours aux tables d'associations s'est imposé pour revenir à une complexité plus raisonnable.
@@ -471,7 +470,7 @@ Pour rendre plus facile la définition d'une mesure pour n'importe quelle implé
 (par exemple les listes ou les tables), on utilise l'interface suivante pour abstraire l'implémentation 
 de l'ensemble fini: cette signature de module isole les fonctions nécessaires ainsi que leur propriétés pour construire
 les différentes instances $\Gamma$. En fait, la seule opération nécessaire dans cet algorithme est l'ajout d'un élément à $\Gamma$.
-Le type $\alpha$ abstrait le types des éléments de l'ensemble, et $\tau$ correspond à la structure qui implémente l'ensemble.
+Le type $\alpha$ abstrait le type des éléments de l'ensemble, et $\tau$ correspond à la structure qui implémente l'ensemble.
 On suppose bien sûr que l'on est en mesure de distinguer les éléments de l'ensemble~(\lstinline!$\alpha$_eq!).
 \begin{lstlisting}
 Module Type FINITE_SET.
@@ -513,8 +512,8 @@ Module Type WF_MEASURE.
   Hypothesis wf_R: forall top, well_founded (R top).
 End WF_MEASURE.
 \end{lstlisting}
-Le module construit contient une relation \lstinline!R top! bien-fondée 
-définit comme \lstinline!R top $\Gamma'$ $\Gamma$! équivaut à $\mu_1(\Gamma') < \mu_1(\Gamma)$.
+Le module construit contient une relation \lstinline!R top! bien-fondée et
+définie comme \lstinline!R top $\Gamma'$ $\Gamma$! équivaut à $\mu_1(\Gamma') < \mu_1(\Gamma)$.
 Le premier argument correspond à la totalité de l'ensemble que l'on veut parcourir,
 soit \lstinline!top = $\Q_\A \times \Q_\B$!. Au final, le module fournit une preuve que la relation 
 \lstinline!(R top)! est bien fondée ainsi qu'une preuve que l'ajout d'un nouvel élément 
@@ -543,10 +542,10 @@ Pour construire la démonstration de la correction, on a besoin du résultat int
 
 \begin{lemma}{(Coupures dans les arbres de $\Subset$-preuve)}
   \label{lem:cut}
-  Soient deux automates d'arbres $\A$ et $\B$, si il existe $\prod$ un arbre de preuve
+  Soient deux automates d'arbres $\A$ et $\B$. S'il existe $\prod$ un arbre de preuve
   pour $\Gamma \vdash_{\A, \B} q \Subset q'$, ainsi qu'un arbre de preuve pour
   $\Gamma \cup \{q \Subset q'\}\vdash_{\A, \B} q_a \Subset q_b$
-  alors il est possible dec construire un arbre de preuve pour $\Gamma \vdash_{\A, \B} q_a \Subset q_b$.
+  alors il est possible de construire un arbre de preuve pour $\Gamma \vdash_{\A, \B} q_a \Subset q_b$.
 \end{lemma}
 
 \begin{proof}
@@ -560,7 +559,7 @@ Pour construire la démonstration de la correction, on a besoin du résultat int
   \medskip
   \noindent
   Maintenant, comme hypothèse d'induction, on pose que $\forall \Gamma\  s.t.\ \mu(\Gamma) = n$, $\forall q\ q'$,
-  si il existe un arbre de preuve $\prod$ pour $\Gamma \vdash_{\A, \B} q \Subset q'$ et si pour tous les états $q_a, q_b$
+  s'il existe un arbre de preuve $\prod$ pour $\Gamma \vdash_{\A, \B} q \Subset q'$ et si pour tous les états $q_a, q_b$
   il existe un arbre de preuve pour $\Gamma \cup \{q \Subset q'\}\vdash_{\A, \B} q_a \Subset q_b$ alors on a aussi
   un arbre de preuve pour $\Gamma \vdash_{\A, \B} q_a \Subset q_b$. On va donc montrer que cette propriété est vraie
   pour $\Gamma$ tel que $\mu(\Gamma) = n+1$.
@@ -670,7 +669,7 @@ Pour construire la démonstration de la correction, on a besoin du résultat int
 \begin{proof}
   On montre que la propriété $\forall t$, $t \in \Lang(\A, q) \imp t \in \Lang(\B, q')$ est vérifiée par
   induction sur le terme $t$. On pose $t = f(t_1, \dots, t_n)$. 
-  On suppose alors que la propriété est vraie pour chacun sous-terme 
+  On suppose alors que la propriété est vraie pour chaque sous-terme 
   $t_i$, \textit{i.e.} pour tous les états  $q_i, q'_i$ tels que si il existe un arbre de
   preuve $\prod_i$ pour $\emptyset \vdash_{\A, \B} q_i \Subset q'_i$ alors $t_i
   \rightarrow^*_{\A} q \imp t \rightarrow^*_{\B} q_i'$. Comme $t=f(t_1, \dots,
@@ -688,7 +687,7 @@ Pour construire la démonstration de la correction, on a besoin du résultat int
   un arbre de preuve $\prod_i$ pour $\{q \Subset q'\} \vdash_{\A,\B} q_i \Subset q'_i$
   et que pour appliquer l'hypothèse d'induction, on a besoin d'un arbre de preuve pour
   $\emptyset \vdash_{\A,\B} q_i \Subset q'_i$. C'est ici que l'on utilise le lemme~\ref{lem:cut} sur $\prod$
-  et $\prod_i$, on peut en déduire l'existence de $\prod'_i$, l'arbre de preuve pour
+  et $\prod_i$; on peut en déduire l'existence de $\prod'_i$, l'arbre de preuve pour
   $\emptyset \vdash_{\A, \B} q_i \Subset q'_i$. Alors en utilisant l'hypothèse d'induction sur
   $t'_i, q_i, q'_i$ et $\prod'_i$,
   on obtient que pour chaque sous-terme $t_i \in \Lang(\A, q_i)$, on a aussi $t_i \in
@@ -769,7 +768,7 @@ Le lemme suivant montre que la \emph{normalisation} et la \emph{fusion
     2. & \mbox{ si } \A' = \merge(\A, q_1, q_2) &\mbox{ alors }& \A \sqsubseteq \A'  \\
   \end{array}
   \]
-  où $\merge(\A,q_1,q_2)$ l'automate obtenu par la fusion des états $q_1$ et $q_2$ de $\A$, soit le renommage de  $q_1$
+  où $\merge(\A,q_1,q_2)$ est l'automate obtenu par la fusion des états $q_1$ et $q_2$ de $\A$, soit le renommage de  $q_1$
   en $q_2$ dans toutes les transitions de $\A$.
 \end{lemma}
 
@@ -777,7 +776,7 @@ Le lemme suivant montre que la \emph{normalisation} et la \emph{fusion
 
   \begin{enumerate}
   \item Le premier point est très facile à montrer puisqu'on a évidemment $\Delta_{\A'} \supseteq
-    \Delta_\A$ quelque soient $r\sigma$ et $q$ choisis.
+    \Delta_\A$ quels que soient $r\sigma$ et $q$ choisis.
     Il suffit de prendre $\varrho = id$, on peut immédiatement conclure $\A
     \sqsubseteq \A'$.
 
@@ -879,7 +878,7 @@ Maintenant, on peut définir la propriété de complétude vis-à-vis de cette r
     $c \rightarrow q$ de $\Delta_A$, on a $\varrho(c\rightarrow q) \in \Delta_\B$.
     \[\textrm{Ainsi, pour tout } (c\rightarrow q)\in \Delta_\A,\textrm{ on a } \varrho(c) \in \{c_k' | c_k' \rightarrow \varrho(q)\}_1^m \]
     Pour chaque $c_i= f_i(q_{i_1}, \dots, q_{i_n})$ on peut construire l'arbre correspondant
-    $\prod_{c_i}$ dont chaque branche est conclue par $\prod_{i_j}$
+    $\prod_{c_i}$ dont chaque branche est conclue par $\prod_{i_j}$,
     une instance de l'hypothèse d'induction pour $q_{i_j}$ l'état correspondant:
     %\comments{Revoir ce passage\dots}
     {\tiny
@@ -931,7 +930,7 @@ Ainsi, on peut assurer que pour un automate $\aaexeq^k$ obtenu après $k$
 étapes de complétion à partir $\aaexeq^0$, il existe une preuve $\prod$ pour le 
 but $\emptyset \vdash_{\A^0, \A^k_{\R}} \{\#(q)\ |\ q \in
 \mathcal{Q}_{F_{0}} \Subset \{\#(q')\ |\ q'\in \mathcal{Q}_{F_{k}}\}$.
-Il peut être vu comme une conséquence des deux théorèmes précédents.
+C'est une simple conséquence des deux théorèmes précédents.
 
 %\begin{theorem}
 %  Given a tree automaton $\mathcal{A}^0$, a TRS $\R$ and an equation set
@@ -944,7 +943,7 @@ Il peut être vu comme une conséquence des deux théorèmes précédents.
 Pour obtenir une procédure de décision pour tout automate d'arbres (\textit{i.e.}
 des automates d'arbres obtenus autrement que par la complétion), la règle
 Weak-r doit être modifiée. C'est à cause de cette règle que le système est incomplet 
-en oubliant de prendre en compte d'autres manière de construire l'union.
+en oubliant de prendre en compte d'autres possibilités pour la construction de l'union.
 
 \begin{example}
   Soient deux automates d'arbres $\A$ et $\B$ tels que:
@@ -968,7 +967,7 @@ en oubliant de prendre en compte d'autres manière de construire l'union.
   Cet exemple illustre l'incomplétude du système. Les deux automates d'arbres reconnaissent 
   clairement le même langage $\Lang(\A, q) = \Lang(\B, q')$. Si on peut construire une preuve pour le but $\emptyset \vdash_{\B, \A} q' \Subset q$,
   ce n'est en revanche pas le cas pour le but $\emptyset \vdash_{\A, \B} q \Subset q'$. En effet, la règle Weak-r ne peut montrer 
-  le but $\Gamma \vdash_{\A, \B} \{f(q_1, q_2)\} \Subset \{f(q_1', q_2'), f(q_1', q_3')\}$ qu'à partir du but $\Gamma \vdash_{\A, \B} f(q_1, q_2) \Subset f(q_1', q_2')$
+  le but $\Gamma \vdash_{\A, \B} \{f(q_1, q_2)\} \Subset \{f(q_1', q_2'), f(q_1', q_3')\}$ qu'à partir des buts $\Gamma \vdash_{\A, \B} f(q_1, q_2) \Subset f(q_1', q_2')$
   ou $\Gamma \vdash_{\A, \B} f(q_1, q_2) \Subset f(q_1', q_3')$ qui sont tous les deux faux.
 \end{example}
 
@@ -980,36 +979,36 @@ Comme expliqué précédemment dans la section~\ref{sec:objectives}, l'algorithm
 vérifier l'inclusion $\Lang(\A) \subseteq \Lang(\B)$ est basé sur le calcul de $\overline{\B}$ l'automate complément.
 Cependant, pour les automates d'arbres non-déterministes, la taille~\cite{TATA} de $\overline{\B}$ peut être exponentiellement plus grande
 que la taille de $\B$. L'algorithme proposé ici n'a pas cet inconvénient et utilise seulement
-une taille mémoire qui est polynomiale par rapport à la taille des automates considérés.
+une taille mémoire polynomiale par rapport à la taille des automates considérés.
 
 On pose $|\Q|$ le nombre maximum d'états des deux automates d'arbres $\A$ et $\B$.  Les arbres de preuves
 construits en utilisant les règles de déduction données sont au plus de hauteur $|\Q|^2$.
 On doit cela aux règles Induction et Axiom qui assurent que chaque problème d'inclusion $q \Subset q'$
 sera analysé seulement une fois par branche. 
-Comme on a $q\in \Q_\A$ et $q' \in \Q_\B$ et que l'on sait que les cardinal de $\Q_\A \times Q_\B$ est borné par $|\Q|^2$,
-la longueur de la branche est au plus bornée par $|\Q|^2$.  De plus, l'algorithme \lstinline!inclusion! explorant chaque branche 
+Comme on a $q\in \Q_\A$ et $q' \in \Q_\B$ et que l'on sait que le cardinal de $\Q_\A \times Q_\B$ est borné par $|\Q|^2$,
+la longueur de la branche est aussi bornée par $|\Q|^2$.  De plus, l'algorithme \lstinline!inclusion! explorant chaque branche 
 de l'arbre de preuve une par une, la mémoire utilisée est donc bornée par $|\Q|^2$,
 et donc polynomiale.
 
 Cependant, la complexité d'une exécution de l'algorithme tel qu'il est implémenté est exponentielle.
 En effet, même si chaque $q \Subset q'$ n'est considéré qu'une seule fois par branche,
 le nombre de branches à considérer est exponentiel par rapport à 
-$\Q$ et un même couple $q \Subset q'$ peut être rencontré dans plusieurs branches
-et donc le but peut-être reprouvé plusieurs fois.
+$\Q$ et un même couple $q \Subset q'$ peut être rencontré dans plusieurs branches.
+Il peut être nécessaire de construire plusieurs fois la même preuve.
 Une optimisation très simple de cet algorithme consiste à tabuler une partie des résultats
-pour certains des couples $q \Subset q'$. Ainsi, on en utilisant le lemme~\ref{lem:cut}
-pour chacun des couples $q \Subset q'$ pour lesquels la propriété a été prouvée on peut l'ajouter
+pour certains des couples $q \Subset q'$. Ainsi, en utilisant le lemme~\ref{lem:cut}
+pour chacun des couples $q \Subset q'$ pour lesquels la propriété a été prouvée, on peut l'ajouter
 à la liste des hypothèses des buts suivants. 
 Par exemple, en utilisant cette optimisation pour tous les couples,
-chaque couple n'est alors plus considéré qu'une {\em seule fois}, dans tout l'arbre de preuve.
-Si les opérations d'accès à la table était réalisé en temps constant, 
+chaque couple n'est alors considéré qu'une {\em seule fois} dans tout l'arbre de preuve.
+Si les opérations d'accès à la table étaient réalisées en temps constant, 
 cela ramènerait la complexité polynomiale en temps bornée par $|\Q|^2$. 
 Néanmoins, on n'a jamais besoin de tabuler la totalité des états car cela augmente par ailleurs
-la consommation de mémoire). En fait, on peut voir cette liste de couples, comme une stratégie
+la consommation de mémoire. En fait, on peut voir cette liste de couples comme une stratégie
 pour définir un ordre sur les sous-branches de la preuve que l'on souhaite réutiliser plusieurs fois.
 L'approche est correcte car si une branche ne peut être prouvée pour une certaine paire d'états, 
-elle ne sera pas ajoutée à l'environnement. On peut donc définir soit à la main ou par l'intermédiaire
-d'un oracle la liste d'états pour laquelle on souhaite construire et conserver les preuves.
+elle ne sera pas ajoutée à l'environnement. On peut donc définir, soit à la main soit par l'intermédiaire
+d'un oracle, la liste d'états pour laquelle on souhaite construire et conserver les preuves.
 
 % \lstinline!inclusion_sound! is more difficult on a tabled version of the \coq\
 % \lstinline!inclusion! function. Second, on test cases, it appears that avoiding
@@ -1093,7 +1092,7 @@ défini dans~\cite{Genet-RR97b}. Ici, on présente une version plus algorithmiqu
 
 On énonce le problème de filtrage pour la règle $l \rw r$ et l'état $q$ de l'automate $\A$,
 par $l\match q,\ \{id\} \vdash_\A S$ où $S$ contient l'ensemble des substitutions telles que
-$l\sigma \rightarrow_\Delta^* q$. On remarque que l'ensemble initial est le singleton contenant $id$
+$l\sigma \rightarrow_\Delta^* q$. On remarque que l'ensemble initial est le singleton contenant $id$,
 la substitution identité.
 
 \begin{theorem}
@@ -1107,7 +1106,7 @@ la substitution identité.
   donnée au chapitre~3.
 \end{proof}
 
-L'implémentation de la fonction \lstinline!matching_rec! est \coq\ très proche
+L'implémentation de la fonction \lstinline!matching_rec! en \coq\ est très proche
 des règles de cet algorithme. L'ensemble des substitutions est définie par une 
 \lstinline!list! de substitutions, et les substitutions sont définies comme des fonctions.
 La signature \coq\ de la fonction de filtrage est alors:
@@ -1125,7 +1124,7 @@ Le but $l\match q,\ \{id\} \vdash_\A S$ se pose par l'intermédiaire de
 la définition \lstinline!matching! dont l'évaluation renvoie $S$.
 Lorsque le filtrage échoue, c'est à dire si il n'existe aucune substitution
 telle que $l\sigma \rightarrow_\Delta^* q$, la fonction \lstinline!matching! retourne
-simplement la liste vide \lstinline!nil!, ce qui correspond simplement à l'ensemble vide.
+simplement la liste vide \lstinline!nil!, ce qui correspond à l'ensemble vide.
 Pour cet algorithme, la terminaison est syntaxique: la fonction \lstinline!matching_rec! est définie par récurrence 
 structurelle sur le terme $l$ passé en argument à la fonction.
 On énonce la propriété de complétude du filtrage de la manière suivante:
@@ -1147,7 +1146,7 @@ Le prédicat \lstinline!linear l! s'assure que le terme \lstinline!l! est le mem
 Le prédicat \lstinline!IsRed! est une simple extension du prédicat \lstinline!IsRec!
 introduit à la section~\ref{sec:automata} pour étendre la reconnaissabilité des termes clos
 $\TF$ à l'ensemble des configurations $\TFQ$. 
-On peut noter aussi une différence entre l'énoncé du théorème~\ref{th:completeness} et
+On peut aussi noter une différence entre l'énoncé du théorème~\ref{th:completeness} et
 son équivalent \lstinline!matching_spec!. En effet, dans ce dernier cas, on ne montre pas directement que la substitution 
 $\sigma$ appartient à l'ensemble \lstinline!(matching $\Delta$ q l)! mais qu'il existe une substitution $\sigma'$
 telle que son image est égale à celle de $\sigma$ pour chaque variable~\lstinline!x! de~\lstinline!l! le terme filtré.
@@ -1234,7 +1233,7 @@ Lemma IsRed_dec:
 Il est important de remarquer que la signature de la fonction~\lstinline!all_reduce_dec! est basée
 sur le type de données \lstinline!boolopt! qui correspond à construire un type de données
 isomorphe au booléen paramétré par un type. En cas d'échec, 
-on aimerait récupérer la substitution la substitution pour laquelle la clôture n'est pas vérifiée, celle-ci
+on aimerait récupérer la substitution pour laquelle la clôture n'est pas vérifiée, celle-ci
 constituant simplement un contre-exemple. Cela permet de donner un caractère plus informatif à la procédure
 de vérification, en précisant la nature de l'échec: la règle de réécriture $l \rw r$, l'état $q$, et la substitution $\sigma$. 
 Pour cela, on a donc introduit le type suivant:
@@ -1244,7 +1243,7 @@ Inductive boolopt (A: Type): Type :=
   | ko : A -> sumdec A.
 \end{lstlisting}
 Avec une expertise un peu plus avancée, on peut montrer que  le type~\lstinline!boolopt! est
-équivalent au type~\lstinline!option!. Si d'un point de vue logique les types sont effectivement équivalents,
+équivalent au type~\lstinline!option!. Si, d'un point de vue logique, les types sont effectivement équivalents,
 il en est tout autrement d'un point de vue syntaxique. En effet, il est possible de les utiliser tous les deux
 avec la construction~\lstinline!if $\dots$ then $\dots$ else $\dots$! qui se réduit pour tout type isomorphe
 à~\lstinline!bool! mais qui suppose toujours que la branche gauche correspond au cas "positif", ce qui n'est pas le cas
@@ -1275,12 +1274,12 @@ Theorem closure_at_state_spec :
 Pour une règle donnée $l \rightarrow r$ et un état donné $q$, cette fonction répond
 \lstinline!ok! si pour toute substitution $\sigma: \X \mapsto \Q$ telle que $l
 \sigma \rw^*_\Delta q$ alors on sait que $r\sigma \rw^*_{\Delta} q$. Sinon, on peut 
-voir l'emploi de la fonction \lstinline!catch! qui en cas d'échec de la vérification
-par la fonction~\lstinline!all_dec! capture le contre-exemple (une substitution)
+voir l'emploi de la fonction \lstinline!catch! qui, en cas d'échec de la vérification
+par la fonction~\lstinline!all_dec!, capture le contre-exemple (une substitution)
 pour construire et retourner l'ensemble des éléments qui forment le contexte
-à l'origine l'échec: la valeur de retour \lstinline!ko(Closure_ko q l r $\sigma$)!
-nous indique que la clôture a échoué pour $r\sigma \not\rw^*_\Delta q$ alors que l'on a bien $l\sigma \rw^*_{\Delta} q$,
-la paire critique semble ne pas être résolue. La preuve du théorème~\lstinline!closure_at_state_spec!
+à l'origine de l'échec. La valeur de retour \lstinline!ko(Closure_ko q l r $\sigma$)!
+nous indique que la clôture a échoué pour $r\sigma \not\rw^*_\Delta q$ alors que l'on a bien $l\sigma \rw^*_{\Delta} q$:
+Ce qui correspond à la paire critique $\la q, r\sigma\ra$ qui semble ne pas être résolue. La preuve du théorème~\lstinline!closure_at_state_spec!
 est une conséquence immédiate du théorème~\lstinline!matching_spec! et du théorème~\lstinline!all_reduce_dec_spec!.
   
 
@@ -1292,7 +1291,7 @@ Symboliquement, la réécriture de la configuration $l\sigma$ en $r\sigma$ à l'
 de n'importe quel terme clos de la forme $l\sigma' \rw_\Delta^* q$ en un terme clos $r\sigma' \rw_\Delta^* q$.
 On va donc transférer cette propriété de clôture aux substitutions $\sigma':\X \mapsto \TF$. On pourra alors en déduire
 que si la vérification par \lstinline!closure_at_state $\Delta$ $q$ $l$ $r$! est un succès à l'état $q$ pour la règle
-$l \rw r$ alors pour tout terme clos $u \in \Lang(\Delta, q)$ si $u$ se réécrit en $v$ à la racine par $l\rw r$  alors $v \in \Lang(\Delta, q)$.
+$l \rw r$ alors, pour tout terme clos $u \in \Lang(\Delta, q)$, si $u$ se réécrit en $v$ à la racine par $l\rw r$  alors $v \in \Lang(\Delta, q)$.
 
 En fait, on doit être capable de passer des substitutions de $\X \rw \Q$ aux substitutions de $\X \to \TF$, mais on a aussi
 besoin de montrer que l'inverse est possible. Pour cela on a besoin des deux théorèmes suivants:
@@ -1315,7 +1314,7 @@ qui se réduisent $c\sigma' \rw^*_\Delta c\sigma$ avec $\sigma :\X \mapsto \Q$. 
 alors on a $c\sigma' \rw^*_\Delta q$. La "petite" difficulté dans ce théorème est la formalisation $c\sigma' \rw^*_\Delta c\sigma$ qui ne 
 s'exprime pas immédiatement avec les prédicats~\lstinline!IsRec! et~\lstinline!IsRed!. On est obligé d'exprimer la propriété plus localement,
 c'est à dire d'exprimer comment est reconnu le sous-terme $\sigma'(x_i)$ associé à chaque variable $x_i$ de $c$.
-Ce qui revient à décomposer la relation $c\sigma' \rw^*_\Delta c\sigma$ en une suite de réductions de la forme $\sigma'(x_i) \rw^*_\Delta \sigma(x_i)$.
+Cela revient à décomposer la relation $c\sigma' \rw^*_\Delta c\sigma$ en une suite de réductions de la forme $\sigma'(x_i) \rw^*_\Delta \sigma(x_i)$.
 
 % Si le membre gauche $c$ d'une règle de réécriture filtre une configuration $u\sigma \in \TFQ$ telle que $u\sigma \rw^*_{\Delta} q$
 % alors tous les termes clos $u\sigma' \in \TF$, que l'automate peut réécrire dans la configuration $u\sigma' \rw_\Delta^* u\sigma$
@@ -1333,17 +1332,17 @@ Theorem IsRec_subst: forall c s q D, IsRec D q (c @ s) ->
 
 
 Dualement, le théorème montre que tout terme clos de la forme $c\sigma \in \TF$ réduit par l'automate 
-en l'état $q$ par est forcément réécrit en une configuration intermédiaire de la forme $c\sigma'$ avec
-$\sigma': \X \mapsto \Q$. Ce qui correspond à :
+en l'état $q$ est forcément réécrit en une configuration intermédiaire de la forme $c\sigma'$ avec
+$\sigma': \X \mapsto \Q$. Cela correspond à :
 
 \[\forall \sigma,\ \exists \sigma' \text{ t.q. } c\sigma \rw^*_\Delta c\sigma' \text{ et } c\sigma' \rw^*_\Delta q \]
   
 Le théorème~\lstinline!IsRec_subst! utilise la même astuce pour formaliser la réduction de $c\sigma$ en $c\sigma'$.
-Pour ces deux théorèmes la preuve se fait simplement par induction sur le terme $c \in \TFX$.
+Pour ces deux théorèmes, la preuve se fait simplement par induction sur le terme $c \in \TFX$.
 
 
 En utilisant ces deux théorèmes, on peut reformuler le théorème~\lstinline!closure_at_state_spec!
-en transférant la propriété sur les termes clos, c'est à dire la relation de réécriture à la racine(\lstinline!Trew u v!)
+en transférant la propriété sur les termes clos, c'est-à-dire la relation de réécriture à la racine(\lstinline!Trew u v!)
 entre deux termes clos:
 
 \begin{lstlisting}
@@ -1357,14 +1356,14 @@ Lemma closure_at_state_spec :
 
 \paragraph{Lorsque le membre droit est une variable...}
 \label{par:si-le-membre}
-Dans le cas où le membre droit de la règle est une variable c'est à dire que l'on a une règle de la forme 
-$f(x) \rw x$. Supposons qu'il existe une substitution $\sigma : \X \rw \Q$ telle l'on ait la relation 
-$f(q') \rw_\Delta^* q$ à l'état $q \not= q'$. Comme on considère des automates d'arbres sans $\varepsilon$-transition,
+On se place maintenant dans le cas où le membre droit de la règle est une variable, c'est à dire que l'on vérifie 
+la clôture pour une règle de la forme $f(x) \rw x$ par exemple. Supposons qu'il existe une substitution $\sigma : \X \rw \Q$
+telle que l'on ait la relation $f(q') \rw_\Delta^* q$ à l'état $q \not= q'$. Comme on considère des automates d'arbres sans $\varepsilon$-transition,
 on ne peut pas avoir $q \rw^*_\Delta q'$, la réflexivité de la relation ne pouvant s'appliquer à $q$ et $q'$.
 Comme le prédicat~\lstinline!IsRed $\Delta$ q (Var x @ $\sigma$)! est faux, la procédure~\lstinline!closure_at_state $\Delta$ q l r!
 va échouer et rendre la substitution $\sigma$ comme contre-exemple. 
 Dans ce type de cas, la complétion (sans $\varepsilon$-transition) duplique chaque transition de la forme $f(q_1,\dots,q_n) \rw q'$ en une $f(q_1,\dots,q_n) \rw q$,
-ce qui est évidemment suffisant pour avoir la relation l'inclusion $\Lang(\Delta, q') \subseteq \Lang(\Delta, q)$.
+ce qui est évidemment suffisant pour avoir la relation d'inclusion $\Lang(\Delta, q') \subseteq \Lang(\Delta, q)$.
 On ajoute donc la fonction~\lstinline!closure_at_q'! qui vérifie ce critère syntaxique:
 
 \begin{lstlisting}
@@ -1382,7 +1381,7 @@ Lemma closure_at_q'_spec : forall $\Delta$ q l x,
 
 
 Il ne reste plus qu'à vérifier la propriété de clôture pour toutes les règles de réécriture 
-à tous les états de l'automate. C'est le rôle jouée par la fonction~\lstinline!closure!,
+à tous les états de l'automate. C'est le rôle joué par la fonction~\lstinline!closure!,
 qui itère sur l'ensemble des couples règle-état de \lstinline!$\R$ $\times$ (Delta.dom $\Delta$)!.
 
 \begin{lstlisting}
@@ -1427,16 +1426,16 @@ L'extraction produit le type \ocaml\ suivant:
 \begin{lstlisting}
 type l_rule = Lrule of term * term
 \end{lstlisting}
-L'extraction supprime dans le type \ocaml, la propriété \lstinline!H! qui permet de s'assurer que la règle est bien
-formée et \lstinline!Hl! qui s'assure que le membre gauche est bien linéaire. L'absence de ces propriétés dans le type 
+L'extraction supprime, dans le type \ocaml, la propriété \lstinline!H! qui permet de s'assurer que la règle est bien
+formée et la propriété \lstinline!Hl! qui assure que le membre gauche est bien linéaire. L'absence de ces propriétés dans le type 
 \ocaml\ rend le type de données plus permissif. Cela peut poser des problèmes pour les fonctions extraites puisque
 leur comportement peut être non spécifié dans le cas où les propriétés \lstinline!H! et \lstinline!Hl! ne sont pas
 assurées. Or, le type \ocaml\ nous permet de construire des règles de réécriture qui en fait ne sont ni bien formées ni
-linéaires à gauche: $f(x,x) \rw g(y)$. Si l'on ne tient pas compte de cette remarque, on peut par construire un $\kw{checker}$
+linéaires à gauche: $f(x,x) \rw g(y)$. Si l'on ne tient pas compte de cette remarque, on peut par exemple construire un $\kw{checker}$
 \ocaml\ qui n'est plus conforme à la spécification \coq. La solution la plus simple pour contourner le problème consiste 
 à écrire une fonction qui vérifie que la règle \lstinline!l_rule! est bien formée et linéaire à gauche en \ocaml.
-Cependant, on peut toujours se demander si cette fonction est correcte vis-à-vis de la spécification de propriétés
-~\lstinline!H! et~\lstinline!Hl! qui est donnée en \coq\dots\ Pour cette raison, on préférera définir une fonction qui 
+Cependant, on peut toujours se demander si cette fonction est correcte vis-à-vis de la spécification des propriétés
+~\lstinline!H! et~\lstinline!Hl! donnée en \coq\dots\ Pour cette raison, on préférera définir une fonction qui 
 construira une règle conforme à la spécification à partir d'un simple couple de termes \lstinline!(l, r)!.
 \switchlstcoq
 \begin{lstlisting}
@@ -1446,8 +1445,8 @@ Definition build_l_rule: term -> term -> option l_rule :=
 On peut alors légitimement se poser la même question pour l'extraction du type \lstinline!term!. 
 Mais dans ce cas, la définition \coq\ ne contient pas de propriété supplémentaire, ce qui implique
 que la totalité de la définition est extraite vers \ocaml.
-Ainsi, on en déduit un critère raisonnablement simple pour interfacer correctement en \ocaml, du code extrait
-à du code externe: les types de données mis en commun, doivent être le résultat d'une extraction totale.
+Ainsi, on en déduit un critère raisonnablement simple pour correctement interfacer du code extrait à du code externe en \ocaml:
+les types de données mis en commun doivent être le résultat d'une extraction totale.
 
 
 Le tableau~\ref{tab:benchs} résume quelques tests
@@ -1469,15 +1468,15 @@ Pour tous les exemples excepté \texttt{List2.java}, l'automate complété a ét
 Concernant l'exemple \texttt{List2.java}, le calcul a été complété en utilisant 
 une implémentation en Tom~\cite{TOM} réalisée par Yohan Boichut et Emilie Balland~\cite{BallandBGM-AMAST08}.
 Cette version offre des performances accrues en temps d'exécution par rapport à \timbuk. Celle-ci repose
-sur une représentation interne qui n'est plus basée sur des automates d'arbres, mais qui transforme 
+sur une représentation interne non plus basée sur des automates d'arbres, mais qui transforme 
 à posteriori le résultat en un automate clos par réécriture tout en respectant les propriétés de l'algorithme
-initial. Ce qui implique que ces résultats lorsqu'ils sont corrects sont acceptés par le $\kw{checker}$.
+initial. Cela implique que ces résultats, lorsqu'ils sont corrects, sont acceptés par le $\kw{checker}$.
 Les exemples~\texttt{List1.java} et~\texttt{List2.java} correspondent à deux programmes Java 
-manipulant des listes chaînées d'entiers. Dans un cas ils sont sensés être tous positifs,
-alors que dans l'autre ils sont négatifs. Les entiers sont lus sur l'entrée standard définie
+manipulant des listes chaînées d'entiers. Dans un cas, ils sont sensés être tous positifs,
+alors que dans l'autre, ils sont négatifs. Les entiers sont lus sur l'entrée standard définie
 comme une séquence infinie d'entiers. L'ensemble d'équations utilisé permet d'abstraire les entiers 
 en deux classes d'équivalence les entiers positifs ou nuls, et les entiers strictement négatifs. On abstrait aussi
-la représentation mémoire des listes, en capturant dans la même classe d'équivalence toutes les listes quelque 
+la représentation mémoire des listes, en capturant dans la même classe d'équivalence toutes les listes quelle que 
 soit leur longueur.
 L'exemple~\texttt{Ex\_poly.java} est l'exemple utilisé dans~\cite{BoichutGJL-RTA07} 
 pour illustrer comment définir une abstraction pour réaliser 
@@ -1520,7 +1519,7 @@ de ces différents outils afin de vérifier la correction des résultats obtenus
 Le deuxième aspect fondamental est qu'un $\kw{checker}$ en \ocaml\ est extrait directement de la preuve
 de correction de la spécification \coq\ grâce au mécanisme d'extraction de \coq.
 A la vue des performances, on peut conclure qu'il est raisonnable d'exécuter le $\kw{checker}$ sur chaque résultat pour en vérifier
-correction, puisque le coût de ressources pour la vérification reste négligeable devant le coût nécessaire
+la correction, puisque le coût de ressources pour la vérification reste négligeable devant le coût nécessaire
 à la construction du point-fixe.
 Le troisième point important est l'attention portée lors de la formalisation pour obtenir un
 outil efficace. En particulier, le recours à un algorithme d'inclusion
@@ -1531,8 +1530,8 @@ une projection des arbres dans les listes. L'astuce permet ainsi de transférer 
 des arbres vers leur projection dans les listes ce qui simplifie les preuves, puisqu'il est généralement
 plus facile de raisonner sur les listes que sur les arbres.
 Enfin, la principale évolution de la complétion est l'utilisation des $\varepsilon$-transitions 
-pour résoudre les paires critiques. Cette approche qui est utilisée comme base dans les
-techniques d'analyses des chapitres précédents peut être couverte en nettoyant l'automate
+pour résoudre les paires critiques. Cette approche, qui est utilisée comme base dans les
+techniques d'analyses des chapitres précédents, peut être couverte en nettoyant l'automate
 point-fixe de ses $\varepsilon$-transitions. %, mais cela représente un coût supplémentaire.
 D'autre part, le théorème~\ref{sec:completness} sur la complétude de l'algorithme
 d'inclusion reste valide pour les automates avec des $\varepsilon$-transitions. La seule partie
@@ -1543,7 +1542,7 @@ ce qui peut être réalisé très facilement.
 Ensuite, on peut se poser la question d'étendre la clôture pour les systèmes de règles
 de réécriture non linéaires à gauche qui sont requis 
 pour formaliser certains protocoles cryptographiques. Le problème est un peu plus délicat,
-et pose déjà un challenge du point de vue de la complétion elle-même. La plupart du temps
+et pose déjà un challenge du point de vue de la complétion elle-même. La plupart du temps,
 la prise en compte d'un système de règles non linéaires à gauche effondre les performances.
 Il existe alors plusieurs astuces qui peuvent être mises en oeuvre, mais
 demandent pour chacune une méthode de vérification particulière.

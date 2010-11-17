@@ -11,7 +11,7 @@
 \contentsline {section}{\numberline {2.3}Le Model-Checking r\IeC {\'e}gulier}{13}{section.2.3}
 \contentsline {section}{\numberline {2.4}La compl\IeC {\'e}tion d'automates d'arbres}{14}{section.2.4}
 \contentsline {subsection}{\numberline {2.4.1}Principe g\IeC {\'e}n\IeC {\'e}ral}{15}{subsection.2.4.1}
-\contentsline {subsection}{\numberline {2.4.3}Etape de compl\IeC {\'e}tion : calcul exact des $\mathcal R$-descendants}{16}{subsection.2.4.3}
+\contentsline {subsection}{\numberline {2.4.3}\IeC {\'E}tape de compl\IeC {\'e}tion : calcul exact des $\mathcal R$-descendants}{16}{subsection.2.4.3}
 \contentsline {paragraph}{Recherche des paires critiques}{17}{section*.5}
 \contentsline {paragraph}{La r\IeC {\'e}solution des paires critiques}{18}{section*.6}
 \contentsline {paragraph}{S\IeC {\'e}mantique li\IeC {\'e}e aux $\varepsilon $-transitions}{18}{section*.7}
@@ -29,8 +29,8 @@
 \contentsline {section}{\numberline {3.8}La normalisation}{31}{section.3.8}
 \contentsline {section}{\numberline {3.9}R\IeC {\'e}soudre le probl\IeC {\`e}me du filtrage}{36}{section.3.9}
 \contentsline {subsection}{\numberline {3.9.2}Terminaison et pr\IeC {\'e}cision de l'algorithme}{37}{subsection.3.9.2}
-\contentsline {subsection}{\numberline {3.9.3}Propri\IeC {\'e}t\IeC {\'e}s de l'algorithme de Filtrage}{37}{subsection.3.9.3}
-\contentsline {section}{\numberline {3.10}L'\IeC {\'e}tape de ${\mathcal R_{/E}}$-compl\IeC {\'e}tion est correcte}{39}{section.3.10}
+\contentsline {subsection}{\numberline {3.9.3}Propri\IeC {\'e}t\IeC {\'e}s de l'algorithme de Filtrage}{38}{subsection.3.9.3}
+\contentsline {section}{\numberline {3.10}L'\IeC {\'e}tape de ${\mathcal R_{/E}}$-compl\IeC {\'e}tion est correcte}{40}{section.3.10}
 \contentsline {section}{\numberline {3.11}L'acc\IeC {\'e}l\IeC {\'e}ration du calcul $W$}{43}{section.3.11}
 \contentsline {section}{\numberline {3.12}V\IeC {\'e}rification de propri\IeC {\'e}t\IeC {\'e}s r\IeC {\'e}guli\IeC {\`e}res}{45}{section.3.12}
 \contentsline {section}{\numberline {3.13}Test de vacuit\IeC {\'e} de l'intersection}{46}{section.3.13}
@@ -40,7 +40,7 @@
 \contentsline {section}{\numberline {3.15}${\mathcal R_{/E}}$-compl\IeC {\'e}tion et le calcul exact de termes atteignables}{52}{section.3.15}
 \contentsline {section}{\numberline {3.16}Conclusion}{53}{section.3.16}
 \contentsline {chapter}{\chapternumberline {4}Preuves de propri\IeC {\'e}t\IeC {\'e}s temporelles sur TRS}{55}{chapter.4}
-\contentsline {section}{\numberline {4.1}Du Bytecode Java \IeC {\`a} la r\IeC {\'e}\IeC {\'e}criture}{55}{section.4.1}
+\contentsline {section}{\numberline {4.1}Du ByteCode Java \IeC {\`a} la r\IeC {\'e}\IeC {\'e}criture}{55}{section.4.1}
 \contentsline {subsection}{\numberline {4.1.1}Cha\IeC {\^\i }ne de r\IeC {\'e}\IeC {\'e}criture \IeC {\`a} la position $p$}{57}{subsection.4.1.1}
 \contentsline {section}{\numberline {4.2}Completion d'automates d'arbres et $\mathrel {\dabar@ \dabar@ \mathchar "044B}_{\mathcal R_p/E}$}{59}{section.4.2}
 \contentsline {section}{\numberline {4.3}Extraction d'une structure de Kripke}{61}{section.4.3}

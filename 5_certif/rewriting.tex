@@ -31,16 +31,16 @@ et~\lstinline!TFQ: term -> Prop! pour caractériser respectivement chacun des so
 Maintenant, le terme $f(x, a)$ sera construit comme~\lstinline!Fun 0 (Var 0::(Fun 1 nil)::nil)!
 en supposant que l'on a la correspondance suivante entre les symboles,
 variables et les entiers binaires $f \mapsto 0$, $a \mapsto 1$ et $x
-\mapsto 0$ par exemple.  On remarque qu'il est possible de d'attacher
-la valeur $0$ à $f$ et $x$, comme \lstinline!Fun! et \lstinline!Var!,
-les constructeurs du type \lstinline!term!, permettent de distinguer
-les variables des symboles de fonction.
+\mapsto 0$ par exemple.  On remarque qu'il est possible d'utiliser 
+la valeur $0$ pour dénoter les symboles $f$ et $x$, car les constructeurs
+\lstinline!Fun! et \lstinline!Var! du type \lstinline!term! permettent la distinction:
+\lstinline!Var 0! pour la variable $x$ et \lstinline!Fun 0 \dots! pour un terme de la forme $f(\dots)$.
 
 \paragraph{Remarques:}
 Une faiblesse de \coq\ est la génération automatique du principe
 d'induction \lstinline!term_rect!. Le théorème généré ne tient pas
-compte que, dans le cas du constructeur $Fun$, le terme est constitué d'une
-\lstinline!list term! pour former les sous-termes et ce qui
+compte du fait que, dans le cas du constructeur $Fun$, le terme est constitué d'une
+\lstinline!list term! pour former les sous-termes ce qui
 nécessite souvent d'utiliser l'hypothèse d'induction:
 \lstinline!term_rect! est trop faible pour prouver quoi que ce soit.
 Dès lors, il est nécessaire de définir un second théorème nommé \lstinline!term_rect'! pour
@@ -100,7 +100,7 @@ Inductive l_rule: Set :=
 \end{lstlisting}
 
 Dans la suite, le type \lstinline!list rule! représente un système de règles de réécriture et donc
-\lstinline!list lrule! un système de règles de réécriture linéaires à gauche.
+\lstinline!list lrule! correspond à un système de règles de réécriture linéaires à gauche.
 On utilise la notation \lstinline!(t @ sigma)! pour dénoter le terme résultant de 
 l'application d'une substitution \lstinline!sigma! à chaque variable qui apparaît dans le terme~\lstinline!t!. 
 
@@ -168,7 +168,7 @@ Theorem StdRew_Rew:
 \end{lstlisting}
 
 La définition standard utilise les fonctions~\lstinline!get! et~\lstinline!set!
-permettant respectivement d'accéder au de remplacer le sous-terme à la postion $p$:
+permettant respectivement d'accéder ou de remplacer le sous-terme à la postion $p$:
 \lstinline!get u p = Some t! est équivalent à $u|_p = u$ et \lstinline!set u p t! équivaut à $u[t]_p$.
 On remarquera qu'il n'est pas nécessaire de préciser que la position $p$ appartient à $\pos(u)$.
 La fonction~\lstinline!get! est une fonction partielle (elle renvoie une valeur de type~\lstinline!option term!)
