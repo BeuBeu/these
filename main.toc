@@ -24,46 +24,46 @@
 \contentsline {section}{\numberline {3.5}D\IeC {\'e}finition d'un ${\mathcal R_{/E}}$-automate}{26}{section.3.5}
 \contentsline {subsection}{\numberline {3.5.3}S\IeC {\'e}mantique}{27}{subsection.3.5.3}
 \contentsline {section}{\numberline {3.6}Construire un ${\mathcal R_{/E}}$-Automate pour le probl\IeC {\`e}me d'atteignabilit\IeC {\'e}}{29}{section.3.6}
-\contentsline {subsection}{\numberline {3.6.1}Construction de ${\mathit A}_{\mathcal R}^0$}{29}{subsection.3.6.1}
-\contentsline {section}{\numberline {3.7}L'\IeC {\'e}tape de ${\mathcal R_{/E}}$-compl\IeC {\'e}tion $\mathtt {C}$}{30}{section.3.7}
-\contentsline {section}{\numberline {3.8}La normalisation}{31}{section.3.8}
-\contentsline {section}{\numberline {3.9}R\IeC {\'e}soudre le probl\IeC {\`e}me du filtrage}{36}{section.3.9}
-\contentsline {subsection}{\numberline {3.9.2}Terminaison et pr\IeC {\'e}cision de l'algorithme}{37}{subsection.3.9.2}
-\contentsline {subsection}{\numberline {3.9.3}Propri\IeC {\'e}t\IeC {\'e}s de l'algorithme de Filtrage}{38}{subsection.3.9.3}
-\contentsline {section}{\numberline {3.10}L'\IeC {\'e}tape de ${\mathcal R_{/E}}$-compl\IeC {\'e}tion est correcte}{40}{section.3.10}
-\contentsline {section}{\numberline {3.11}L'acc\IeC {\'e}l\IeC {\'e}ration du calcul $W$}{43}{section.3.11}
-\contentsline {section}{\numberline {3.12}V\IeC {\'e}rification de propri\IeC {\'e}t\IeC {\'e}s r\IeC {\'e}guli\IeC {\`e}res}{45}{section.3.12}
-\contentsline {section}{\numberline {3.13}Test de vacuit\IeC {\'e} de l'intersection}{46}{section.3.13}
-\contentsline {section}{\numberline {3.14}Raffiner l'approximation par \IeC {\'e}lagage}{49}{section.3.14}
-\contentsline {subsection}{\numberline {3.14.1}Proc\IeC {\'e}dure d'\IeC {\'e}lagage $\mathtt {P}$.}{49}{subsection.3.14.1}
-\contentsline {subsection}{\numberline {3.14.4}Exemple}{51}{subsection.3.14.4}
-\contentsline {section}{\numberline {3.15}${\mathcal R_{/E}}$-compl\IeC {\'e}tion et le calcul exact de termes atteignables}{52}{section.3.15}
-\contentsline {section}{\numberline {3.16}Conclusion}{53}{section.3.16}
-\contentsline {chapter}{\chapternumberline {4}Preuves de propri\IeC {\'e}t\IeC {\'e}s temporelles sur TRS}{55}{chapter.4}
-\contentsline {section}{\numberline {4.1}Du ByteCode Java \IeC {\`a} la r\IeC {\'e}\IeC {\'e}criture}{55}{section.4.1}
-\contentsline {subsection}{\numberline {4.1.1}Cha\IeC {\^\i }ne de r\IeC {\'e}\IeC {\'e}criture \IeC {\`a} la position $p$}{57}{subsection.4.1.1}
-\contentsline {section}{\numberline {4.2}Completion d'automates d'arbres et $\mathrel {\dabar@ \dabar@ \mathchar "044B}_{\mathcal R_p/E}$}{59}{section.4.2}
-\contentsline {section}{\numberline {4.3}Extraction d'une structure de Kripke}{61}{section.4.3}
-\contentsline {section}{\numberline {4.4}Une logique temporelle portant des automates d'arbres}{63}{section.4.4}
-\contentsline {subsection}{\numberline {4.4.1}La logique LTL, et les automates d'arbres}{64}{subsection.4.4.1}
-\contentsline {subsection}{\numberline {4.4.2}Les automates de B\IeC {\"u}chi}{65}{subsection.4.4.2}
-\contentsline {section}{\numberline {4.5}Conclusion, discussion}{68}{section.4.5}
-\contentsline {paragraph}{Approximation et s\IeC {\^u}ret\IeC {\'e}}{68}{section*.10}
-\contentsline {paragraph}{Des pistes pour la vivacit\IeC {\'e}}{68}{section*.11}
-\contentsline {chapter}{\chapternumberline {5}Certification de la compl\IeC {\'e}tion d'automates d'arbres}{71}{chapter.5}
-\contentsline {section}{\numberline {5.1}Un validateur de r\IeC {\'e}sultat pour la compl\IeC {\'e}tion d'automates d'arbres}{71}{section.5.1}
-\contentsline {section}{\numberline {5.2}Formalisation de la r\IeC {\'e}\IeC {\'e}criture}{73}{section.5.2}
-\contentsline {paragraph}{Remarques:}{73}{section*.12}
-\contentsline {section}{\numberline {5.3}Formalisation des automates d'arbres}{76}{section.5.3}
-\contentsline {section}{\numberline {5.4}L'inclusion efficace d'automates}{78}{section.5.4}
-\contentsline {subsection}{\numberline {5.4.2}Preuve de terminaison}{80}{subsection.5.4.2}
-\contentsline {subsection}{\numberline {5.4.5}Preuve de correction}{83}{subsection.5.4.5}
-\contentsline {subsection}{\numberline {5.4.8}Preuve de compl\IeC {\'e}tude}{85}{subsection.5.4.8}
-\contentsline {paragraph}{A propos de l'incompl\IeC {\'e}tude: }{88}{section*.13}
-\contentsline {subsection}{\numberline {5.4.14}Complexit\IeC {\'e}}{88}{subsection.5.4.14}
-\contentsline {section}{\numberline {5.5}Formalisation de la cl\IeC {\^o}ture par r\IeC {\'e}\IeC {\'e}criture}{89}{section.5.5}
-\contentsline {paragraph}{Des configurations aux termes.}{93}{section*.14}
-\contentsline {paragraph}{Lorsque le membre droit est une variable...}{94}{section*.15}
-\contentsline {subsection}{\numberline {5.5.2}Extraction et benchmarks}{95}{subsection.5.5.2}
-\contentsline {section}{\numberline {5.6}Conclusion}{97}{section.5.6}
-\contentsline {chapter}{Bibliographie g\IeC {\'e}n\IeC {\'e}rale}{99}{section*.17}
+\contentsline {subsection}{\numberline {3.6.1}Construction de ${\mathit A}_{\mathcal R,E}^0$}{30}{subsection.3.6.1}
+\contentsline {section}{\numberline {3.7}L'\IeC {\'e}tape de ${\mathcal R_{/E}}$-compl\IeC {\'e}tion $\mathtt {C}$}{31}{section.3.7}
+\contentsline {section}{\numberline {3.8}La normalisation}{32}{section.3.8}
+\contentsline {section}{\numberline {3.9}R\IeC {\'e}soudre le probl\IeC {\`e}me du filtrage}{37}{section.3.9}
+\contentsline {subsection}{\numberline {3.9.2}Terminaison et pr\IeC {\'e}cision de l'algorithme}{38}{subsection.3.9.2}
+\contentsline {subsection}{\numberline {3.9.3}Propri\IeC {\'e}t\IeC {\'e}s de l'algorithme de Filtrage}{39}{subsection.3.9.3}
+\contentsline {section}{\numberline {3.10}L'\IeC {\'e}tape de ${\mathcal R_{/E}}$-compl\IeC {\'e}tion est correcte}{41}{section.3.10}
+\contentsline {section}{\numberline {3.11}L'acc\IeC {\'e}l\IeC {\'e}ration du calcul $W$}{44}{section.3.11}
+\contentsline {section}{\numberline {3.12}V\IeC {\'e}rification de propri\IeC {\'e}t\IeC {\'e}s r\IeC {\'e}guli\IeC {\`e}res}{46}{section.3.12}
+\contentsline {section}{\numberline {3.13}Test de vacuit\IeC {\'e} de l'intersection}{47}{section.3.13}
+\contentsline {section}{\numberline {3.14}Raffiner l'approximation par \IeC {\'e}lagage}{50}{section.3.14}
+\contentsline {subsection}{\numberline {3.14.1}Proc\IeC {\'e}dure d'\IeC {\'e}lagage $\mathtt {P}$.}{51}{subsection.3.14.1}
+\contentsline {subsection}{\numberline {3.14.4}Exemple}{52}{subsection.3.14.4}
+\contentsline {section}{\numberline {3.15}${\mathcal R_{/E}}$-compl\IeC {\'e}tion et le calcul exact de termes atteignables}{53}{section.3.15}
+\contentsline {section}{\numberline {3.16}Conclusion}{54}{section.3.16}
+\contentsline {chapter}{\chapternumberline {4}Preuves de propri\IeC {\'e}t\IeC {\'e}s temporelles sur TRS}{57}{chapter.4}
+\contentsline {section}{\numberline {4.1}Du ByteCode Java \IeC {\`a} la r\IeC {\'e}\IeC {\'e}criture}{57}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Cha\IeC {\^\i }ne de r\IeC {\'e}\IeC {\'e}criture \IeC {\`a} la position $p$}{59}{subsection.4.1.1}
+\contentsline {section}{\numberline {4.2}Completion d'automates d'arbres et $\mathrel {\dabar@ \dabar@ \mathchar "044B}_{\mathcal R_p/E}$}{61}{section.4.2}
+\contentsline {section}{\numberline {4.3}Extraction d'une structure de Kripke}{63}{section.4.3}
+\contentsline {section}{\numberline {4.4}Une logique temporelle portant des automates d'arbres}{65}{section.4.4}
+\contentsline {subsection}{\numberline {4.4.1}La logique LTL, et les automates d'arbres}{66}{subsection.4.4.1}
+\contentsline {subsection}{\numberline {4.4.2}Les automates de B\IeC {\"u}chi}{67}{subsection.4.4.2}
+\contentsline {section}{\numberline {4.5}Conclusion, discussion}{70}{section.4.5}
+\contentsline {paragraph}{Approximation et s\IeC {\^u}ret\IeC {\'e}}{70}{section*.10}
+\contentsline {paragraph}{Des pistes pour la vivacit\IeC {\'e}}{70}{section*.11}
+\contentsline {chapter}{\chapternumberline {5}Certification de la compl\IeC {\'e}tion d'automates d'arbres}{73}{chapter.5}
+\contentsline {section}{\numberline {5.1}Un validateur de r\IeC {\'e}sultat pour la compl\IeC {\'e}tion d'automates d'arbres}{73}{section.5.1}
+\contentsline {section}{\numberline {5.2}Formalisation de la r\IeC {\'e}\IeC {\'e}criture}{75}{section.5.2}
+\contentsline {paragraph}{Remarques:}{75}{section*.12}
+\contentsline {section}{\numberline {5.3}Formalisation des automates d'arbres}{78}{section.5.3}
+\contentsline {section}{\numberline {5.4}L'inclusion efficace d'automates}{80}{section.5.4}
+\contentsline {subsection}{\numberline {5.4.2}Preuve de terminaison}{82}{subsection.5.4.2}
+\contentsline {subsection}{\numberline {5.4.5}Preuve de correction}{85}{subsection.5.4.5}
+\contentsline {subsection}{\numberline {5.4.8}Preuve de compl\IeC {\'e}tude}{87}{subsection.5.4.8}
+\contentsline {paragraph}{A propos de l'incompl\IeC {\'e}tude: }{90}{section*.13}
+\contentsline {subsection}{\numberline {5.4.14}Complexit\IeC {\'e}}{90}{subsection.5.4.14}
+\contentsline {section}{\numberline {5.5}Formalisation de la cl\IeC {\^o}ture par r\IeC {\'e}\IeC {\'e}criture}{91}{section.5.5}
+\contentsline {paragraph}{Des configurations aux termes.}{95}{section*.14}
+\contentsline {paragraph}{Lorsque le membre droit est une variable...}{96}{section*.15}
+\contentsline {subsection}{\numberline {5.5.2}Extraction et benchmarks}{97}{subsection.5.5.2}
+\contentsline {section}{\numberline {5.6}Conclusion}{99}{section.5.6}
+\contentsline {chapter}{Bibliographie g\IeC {\'e}n\IeC {\'e}rale}{101}{section*.17}

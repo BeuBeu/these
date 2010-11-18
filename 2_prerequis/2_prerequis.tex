@@ -27,7 +27,7 @@ sur la réécriture dans~\cite{BaaderN-book98} et dans~\cite{TATA} pour les auto
   \end{itemize}
 \end{definition}
 Les éléments de $\TFX$ sont appelés des \textbf{termes}. On note $\TF$, l'algèbre des \textbf{termes clos} -- \textit{i.e.} 
-sans variable -- lorsque $\TFX$ est engendrée à partit de $\X = \emptyset$.
+sans variable -- ce qui correspond à $\T(\F,\emptyset)$. %est engendrée à partir de $\X = \emptyset$.
 Cette définition inductive nous indique que toute variable est un terme, 
 et que l'application d'un symbole de fonction à des termes engendre de nouveaux termes. Cette construction permet de voir
 les termes comme des arbres étiquetés.
@@ -95,7 +95,7 @@ $t[s]_p$ dénote le terme obtenu après le \textbf{remplacement} du sous-terme $
 On peut les définir par induction sur $p \in \pos(t)$:
 \begin{itemize}
 \item $t|_\epsilon = t$
-\item $f(t_1,\dots, t_n)[s]_{i.p} = t_i|_p$
+\item $f(t_1,\dots, t_n)|_{i.p} = t_i|_p$
 \end{itemize}
 et
 \begin{itemize}
@@ -110,9 +110,9 @@ et
 On remarque pour tout terme $t \in \TFX$, $\vars(t) = \emptyset$ alors $t$ est un terme clos, ce qui est équivalent à $t \in \TF$.
 
 \begin{definition}
-  Une substitution est une fonction $\sigma$ de $\X$ vers $\TFX$, telle que 
-  pour un certain nombre de variables $x \in X$ on a $x \not= \sigma(x)$.
-  L'ensemble des ces variables est noté $\dom(\sigma)$.
+  Une \textbf{substitution} est une fonction $\sigma$ de $\X$ vers $\TFX$, telle que 
+  pour un ensemble fini de variables $x \in X$ on a $x \not= \sigma(x)$. Cet
+  ensemble constitue le domaine de la fonction $\sigma$ que l'on note $\dom(\sigma)$.
   On étend les substitutions à des endomorphismes de $\TFX$. 
   On note alors $t\sigma$ (ou $t.\sigma$) l'application de la substitution $\sigma$ au terme $t$ 
   qui remplace toute occurrence des variables par leur image respective via $\sigma$:
@@ -132,7 +132,7 @@ Un système de règles de réécriture -- TRS en abrégé
 $\R$ est un ensemble de règles de réécriture. 
 
 \begin{definition}
-  Une \textbf{règle de réécriture} est une paire, notée $l \rw r$, composée de deux termes $l, r \in \TFX$,
+  Une \textbf{règle de réécriture} est un couple, notée $l \rw r$, composée de deux termes $l, r \in \TFX$,
   telle que $l \not \in \X$, et $\var(l) \supseteq \var(r)$. 
   On appelle $l$ et $r$ respectivement le membre gauche et le membre droit de la règle.
   Une règle de réécriture est \textbf{linéaire à gauche} (ou à droite) si chaque variable de $\X$ 
@@ -164,14 +164,14 @@ Si $A$ est un ensemble de termes clos, on définit l'ensemble des $\R$-descendan
 de $A$ comme $\desc(A) = \{t \in \TF \sep \exists s \in A \st s \rw^*_{\R} t \}$.
 
 \begin{definition}
-  Une \textbf{équation} est une paire, notée $s = t$, composée de deux termes $s, t \in \TFX$.
+  Une \textbf{équation} est un couple, notée $s = t$, composée de deux termes $s, t \in \TFX$.
   Si $e$ est l'équation $s = t$, alors deux termes $u$ et $v$ sont égaux modulo $e$ si et seulement si
   
   \noindent $u =_e v \equ$\\
-  \[\exists\ p \in Pos(s),\ \sigma: \X \rw \TFX \textrm{ tels que } \quad s|_p = l\sigma \quad \et \quad  t = s[r\sigma]_p\]
+  \[\exists\ \sigma: \X \rw \TFX \textrm{ telle que } \quad s = u\sigma \quad \et \quad  t = v\sigma\]
   
-  Si $E$ est un ensemble d'équations, on note $=_E$ la plus petite relation d'équivalence qui contienne la relation
-  $\{ u =_E v \sep \exists e \in E,\ u =_e v\}$
+  Si $E$ est un ensemble d'équations, on note $=_E$ la relation d'équivalence définie comme la plus petite relation
+  de congruence contenant la relation $\{ u =_E v \sep \exists e \in E,\ u =_e v\}$
 \end{definition}
 
 
@@ -479,8 +479,8 @@ lorsque l'automate est $\R$-clos.
 
 
 \begin{definition}
-  Un automate d'arbres $\B$ est dit $\R$-clos si pour tous termes $s,t$ tels que 
-  $s \rw_\R t$ avec $s$ reconnu par $\B$ dans un état $q$, alors $t$ est aussi reconnu par $\B$ dans l'état $q$.
+  Un automate d'arbres $\B$ est dit $\R$-clos si chaque état $q$ de cet automate et pour tous termes $s,t$ tels que 
+  $s \rw_\R t$ avec $s$ reconnu par $\B$ dans l'état $q$, alors $t$ est aussi reconnu par $\B$ dans l'état $q$.
   La propriété de clôture est illustrée par le diagramme de la figure~\ref{fig:R-cloture}.
   % The situation is represented with the following graph.
   \begin{figure}[ht!]
@@ -665,7 +665,7 @@ La complétion d'un automate d'arbres par $\R$ assure alors la propriété suiva
   Soit l'automate $\aaex^i$ obtenu par complétion. Pour tout état $q$, 
   chaque terme reconnu en l'état $q$ est le successeur par réécriture d'un représentant 
   de l'état $q$:
-  \[\forall t \in \Lang(\A, q), \exists s \in Rep(q) \st s \rw_\R^* t\]
+  \[\forall t \in \Lang(\aaex^i, q), \exists s \in Rep(q) \st s \rw_\R^* t\]
 \end{property}
 
 
@@ -717,11 +717,13 @@ utiliser une technique d'approximation basée sur un ensemble d'équations $E$ e
 une sur-approximation de l'ensemble des termes atteignables, \textit{i.e.} un automate d'arbres
 $\aapprox$ tels que $\Lang(\aapprox) \supseteq \desc(\Lang(\A))$.
 
-Le principe de l'approximation repose sur la relation $=_E$ induite par les équations $E$ liée
-à la notion des représentants (\textit{c.f.} définition~\ref{def:representants}). 
-L'accélération consiste à définir un nouvel automate $\aaexeq^i$ à partir de l'automate $\aaex^i$:
-
-Elle repose sur la \textbf{fusion d'états} dirigée par les équations de $E$.
+L'accélération consiste à définir un nouvel automate $\aaexeq^i$ à partir de l'automate $\aaex^i$ tel 
+que le langage de $\aaexeq^i$ soit une sur-approximation du langage de $\aaex^i$.
+L'approximation repose sur la relation $=_E$ induite par les équations $E$. 
+Elle consiste à fusionner les états dont les représentants (\textit{c.f.} définition~\ref{def:representants})
+dans la même classe d'équivalence par $=_E$. La fusion correspond au un renommage des états destinés à la fusion
+par un nouveau nom d'état. Cette étape de renommage est réalisée pour l'intégralité des transitions de l'automate.
+%Elle repose sur la \textbf{fusion d'états} dirigée par les équations de $E$.
 \begin{definition}
   Deux états distincts $q,\ q'$ de l'automate $\aaex^i$ sont \textbf{fusionnés} si pour une équation $u=v \in E$,
   il existe une $\Q$-substitution $\sigma : \X \rw \Q$ telle qu'on ait le diagramme de la figure~\ref{fig:fusion}.

@@ -1074,21 +1074,21 @@ défini dans~\cite{Genet-RR97b}. Ici, on présente une version plus algorithmiqu
     % f(t_1,\dots, t_n) \match f(q_1,\dots, q_n) \vdash_\A S
   }{f(t_1, \dots, t_n) \match f(q_1, \dots q_n),\ S_0 \vdash_\A S_n}
   \]
-  \hspace*{-1cm}
-  \[
-  \textrm{(Delta) }
-   \dfrac{
-     f(t_1, \dots, t_n) \match f(q_1^1, \dots, q_n^1)\ S_0 \vdash_\A S_1
-     \quad \dots \quad
-     f(t_1 ,\dots, t_n) \match f(q_1^m, \dots, q_n^m),\ S_0 \vdash_\A S_m
-   }{
-     f(t_1, \dots, t_n) \match q,\ S_0 \vdash_\A \bigcup_1^m S_i
-   }
-   (
-   \textrm{si } \{ f(q_1^i, \dots, q_n^i) \rw q \in \Delta\} _1^m 
-   )
-   \]
- }
+  \begin{multline*}
+    % \hspace*{-1cm}
+    \textrm{(Delta) }
+    \dfrac{
+      f(t_1, \dots, t_n) \match f(q_1^1, \dots, q_n^1)\ S_0 \vdash_\A S_1
+      \quad \dots \quad
+      f(t_1 ,\dots, t_n) \match f(q_1^m, \dots, q_n^m),\ S_0 \vdash_\A S_m
+    }{
+      f(t_1, \dots, t_n) \match q,\ S_0 \vdash_\A \bigcup_1^m S_i
+    }\\
+    (
+    \textrm{si } \{ f(q_1^i, \dots, q_n^i) \rw q \in \Delta\} _1^m 
+    )
+  \end{multline*}
+}
 
 On énonce le problème de filtrage pour la règle $l \rw r$ et l'état $q$ de l'automate $\A$,
 par $l\match q,\ \{id\} \vdash_\A S$ où $S$ contient l'ensemble des substitutions telles que

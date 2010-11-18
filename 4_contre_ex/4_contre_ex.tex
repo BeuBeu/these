@@ -72,9 +72,9 @@ Pour cet état $s_?$, on peut envisager les deux situations suivantes:
   à supprimer $s_?$ est correct, puisqu'il s'agit d'une fausse alarme.
 \item
   Soit $s_?$ est atteignable: il existe au moins une exécution du système qui passe par cet état~:
-  cela signifie qu'au moment où la propriété a été violée, la trace correspondant à l'exécution
-  n'a pas encore été considérée, mais l'état est la conséquence d'une étape d'accélération. 
-  Si même si on retire $s_?$ de l'approximation, comme il est atteignable, on finira toujours
+  cela signifie que la trace d'exécution qui permet d'atteindre $s_?$ n'a pas encore été considérée
+  lors du calcul et qu'une étape d'accélération a introduit l'état $s_?$.
+  Même si on retire $s_?$ de l'approximation, comme il est atteignable, on finira toujours
   par produire le terme par des étapes de calcul exact. 
 \end{itemize}
 On peut donc envisager de supprimer l'état $s_?$ de l'approximation, si l'on tente de compléter à nouveau
@@ -277,8 +277,8 @@ et $E$ un ensemble d'équations.
 \begin{definition}
   \label{def:re-automaton}
   Un \textbf{$\RE$-Automate} est un automate d'arbres défini comme un quadruplet de la forme
-  $\A= \langle \F, \Q, \Q_F,\Delta \cup \Drw \cup \Deq\rangle$,
-  avec $\Q_F \subseteq \Q$ et composé de 3 ensembles de transitions distinctes~:
+  $\A= \langle \F, \Q, \Q_f,\Delta \cup \Drw \cup \Deq\rangle$,
+  avec $\Q_f \subseteq \Q$ et composé de 3 ensembles de transitions distinctes~:
 
   \begin{description}
   \item $\Delta$ est un ensemble de transitions normalisées (\textit{c.f.} définition~\ref{def:transitions}),
@@ -354,7 +354,7 @@ la relation induite par les transitions de tout ensemble $\Delta$.
 Dans le cas où $\Delta$ est l'ensemble de toutes les transitions normalisées on utilisera $\rwne$ 
 pour $\rw_\Delta$. 
 Pour $\Delta$ un ensemble donné de transitions normalisées d'un $\RE$-automate, 
-on définit l'ensemble des représentants d'un état comme $Rep(q) = \{ t \in \TF | t \rwne q\}$. 
+on définit l'ensemble des représentants d'un état comme $\Rep(q) = \{ t \in \TF | t \rwne q\}$. 
 On introduit maintenant la définition formelle des exécutions d'un $\RE$-automate.
 
 %This $\rwned$ is a particular case of the new rewriting relation $\xrw{\alpha}_\A$
@@ -381,7 +381,7 @@ On introduit maintenant la définition formelle des exécutions d'un $\RE$-autom
 
 \noindent
 Une exécution $\xrw{\alpha}$ abstrait une séquence de réécriture de $\rwmod$. Si $t
-\xrw{\alpha} q$, alors il existe un terme $s\in Rep(q)$ tel que 
+\xrw{\alpha} q$, alors il existe un terme $s\in \Rep(q)$ tel que 
 $s\rwmod^* t$. La formule  $\alpha$ dénote le sous-ensemble de transitions de $\Deq$ 
 utilisées pour reconnaître $t$ dans $q$.
 
@@ -390,10 +390,10 @@ utilisées pour reconnaître $t$ dans $q$.
 %%steps, induced by $E$, needed to rewrite $s$ into $t$ using
 %%$\rwmod$.
 \begin{example}
-  On considère le $\RE$-automate $A$ de l'exemple \ref{ex:semantics}, puis la transition
-  $g(b) \xrw{Eq(q_b, q_c) \land Eq (q_c, q_b)} q$: on sait qu'il existe 
-  une séquence de réécriture $\rwmod$ à partir de $f(a)$, l'unique terme
-  de l'ensemble des représentants de  $Rep(q)$, pour produire $g(b)$. 
+  On considère le $\RE$-automate $A$ de l'exemple~\ref{ex:semantics}, puis l'exécution
+  $g(b) \xrw{Eq(q_b, q_c) \land Eq (q_c, q_b)} q_f$ qui permet à $A$ de reconnaître le terme $g(b)$.
+  on sait qu'il existe une séquence de réécriture $\rwmod$ à partir de $f(a)$, l'unique terme
+  de l'ensemble des représentants de $Rep(q)$, pour produire $g(b)$. 
   La formule indique que cette séquence de réécriture utilise 
   la relation d'équivalence  induite par $b = c$ dans les deux sens
   (transitions $q_b \rw q_c$ et $q_c \rw q_b$).
@@ -405,7 +405,7 @@ La relation $\xrw{\alpha}$ correspond à la relation standard de réécriture
 des formules logiques.
 
 \begin{theorem}\label{th:equiv}{\quad\quad
-  $\forall t\in\TFQ,\; q \in \Q,\; t \xrw{\alpha}_\A q \equ t \rw_\A^* q$}
+  $\forall t\in\TFQ,\; q \in \Q,\; (\exists \alpha\; t \xrw{\alpha}_\A q) \equ t \rw_\A^* q$}
 \end{theorem}
 
 \begin{proof}
@@ -422,7 +422,7 @@ non plus, on évite le coût du passage à des classes de langages non régulier
 comme c'est le cas par exemple pour des automates à contraintes~\cite{TATA}.
 
 
-On s'intéresse maintenant aux $\RE$-automates {\em bien-définis}. 
+On s'intéresse maintenant aux $\RE$-automates {\em bien définis}. 
 La propriété de bonne définition permet d'assurer que l'information
 qu'apporte les $\RE$-automates est correcte par rapport à la réécriture
 par $\R$ et $E$. La propriété de bonne définition est nécessaire pour s'assurer 
@@ -430,9 +430,9 @@ lors du raffinement que l'on distinguera correctement les contre-exemples des fa
 
 % \comments{plus précis que la relation de $\RE$-cohérence, et sera simplement admise dans ce chapitre...}
 
-\begin{definition}[Un $\RE$-automate bien-défini]
+\begin{definition}[Un $\RE$-automate bien défini]
   \label{def:well-defined}
-  $\A$ est un $\RE$-automate \emph{bien-défini}, si :
+  $\A$ est un $\RE$-automate \emph{bien défini}, si :
   % The second point of the definition is used to refine the $\RE$-automaton: a rewriting step of $\rwmod$
   % denoted by $q \xrw{\phi} q'$ holds thanks to the subset of transitions of $\Deq$
   % occurring in $\phi$. If we remove the transitions of $\Deq$ such that $\phi$
@@ -440,8 +440,7 @@ lors du raffinement que l'on distinguera correctement les contre-exemples des fa
   % no longer recognized.
   \begin{itemize}
   \item Pour tout état $q$ de $\A$, et tout terme $v$ tel que
-    $v \xrw{\top}_\A q$, il existe $u$ un terme représentatif
-    de $q$ tel que $u \rw^*_\R v$
+    $v \xrw{\top}_\A q$, il existe $u$ un représentant de l'état $q$ tel que $u \rw^*_\R v$
   \item Si $q \xrw{\phi} q'$ est une transition de $\Drw$, alors il existe deux termes
     $s,t\in \TF$ tels que $s\xrw{\phi}_\A q$, $t\xrw{\top}_\A q'$
     et $t \rw_\R s$.
@@ -493,50 +492,74 @@ Cette opération d'``élagage''  est illustrée ci-dessous.
 
 
 Dans cette section, on étend les principes de complétion et d'élargissement
-présentés dans la section~\ref{sec:completion} aux $\RE$-automates. On parlera 
-alors de \textbf{$\RE$-complétion}. Pour cela, on considère dans toute la section,
-un ensemble $\R$ de règles de réécriture et une approximation définie par $E$ l'ensemble d'équations.
-On veut produire un $\RE$-automate $\aapprox$  clos par réécriture à partir de $I$,
-l'ensemble des termes initiaux caractérisé par l'automate $\Lang(\A) = I$.
+présentés dans la section~\ref{sec:completion} aux $\RE$-automates.
+On parlera alors de \textbf{$\RE$-complétion}. Pour cela, on se place dans le cadre
+du TRMC mais toujours restreint aux systèmes de réécriture linéaires à gauches.
+On considère donc le problème d'atteignabilité suivant composé d'un ensemble
+$I$ de termes initiaux caractérisé par l'automate $\Lang(\A) = I$, 
+d'un système $\R$ de règles de réécriture linéaires à gauche, et d'un ensemble
+$Bad$ de termes que le système n'est pas sensé atteindre.
+À cela on ajoute un ensemble $E$ d'équations supposé caractériser une 
+abstraction des termes et destiné à guider la construction de la sur-approximation 
+de $\R^*(I)$.
+
+L'objectif est de fournir la méthode de calcul pour produire un $\RE$-automate $\aapprox$ 
+clos par réécriture à partir de $I$ et de $\R$.
+
 Le $\RE$-automate $\aapprox$ est obtenu à partir de $\aaexeq^0$ en calculant
 successivement les approximations $\aaexeq^i$, jusqu'à obtenir un point fixe
 $\Lang(\aaexeq^{k+1}) \supseteq \Lang(\aaexeq^{k})$. Le $\RE$-automate $\aaexeq^{i+1}=\widen(\compl(\aaexeq^i))$
 est $\aaexeq^i$ après une phase de complétion $\compl$ et suivie d'une phase d'accélération $\widen$.
 
 
-\subsection{Construction de $\aaex^0$}
+\subsection{Construction de $\aaexeq^0$}
 
-On définit le $\RE$-automate $\aaexeq^0 = \la \F, \Q^0, \Q_F, \Delta^0\ra$ tel que
+
+On suppose que l'automate $\A$ qui caractérise l'ensemble des termes initiaux 
+est défini sans $\varepsilon$-transition, sinon on construit un second automate 
+sans $\varepsilon$-transition reconnaissant le même langage pour remplacer $\A$.
+
+On définit le $\RE$-automate $\aaexeq^0 = \la \F, \Q^0, \Q_f, \Delta^0\ra$ tel que
 le langage de $\aaexeq^0$ est exactement l'ensemble $I$. Cela revient à prendre 
 l'automate $\A$ auquel on ajoute les deux ensembles vides pour $\Drw^0$ et $\Deq^0$, ce qui
 est raisonnable puisque les termes de $I$ sont obtenus sans réécriture ni approximation.
-Par construction, $\aaexeq^0$ est bien-défini.
+Par construction, $\aaexeq^0$ est bien défini.
 
-\begin{property}
-  $\aaexeq^0$ est bien-défini.
-\end{property}
+\begin{theorem}
+  Pour tout automate $A$ sans $varepsilon$-transition, tout système de réécriture $\R$
+  linéaire à gauche, et tout ensemble $E$ d'équations, le $\RE$-automate $\aaexeq^0$ est bien défini.
+\end{theorem}
 
 \begin{proof}
-  $\aaexeq^0 = \la \F, \Q^0, \Q_f, \Delta^0 \cup \emptyset \cup \emptyset\ra$
-  respecte de la définition~\ref{def:well-defined}, seulement si les deux points
+  En suivant la construction ci-dessus, on définit le $\RE$-automate
+  $\aaexeq^0 = \la \F, \Q^0, \Q_f, \Delta^0 \cup \emptyset \cup \emptyset\ra$.
+  Celui-ci respecte de la définition~\ref{def:well-defined}, seulement si les deux points
   de la définition~\ref{def:well-defined} sont vérifiés.
   \noindent
-  On sait que $\aaex^0$ ne possède aucune $\varepsilon$-transitions.
-  Tous les termes sont reconnus au seul moyen des transitions de $\Delta^0$.
-  Cela signifie que pour tout état $q$ l'ensemble des termes se définit comme $\{ t \in \TF | t \rw_{\Delta^0} q\}$.
-  qui est égal à $Rep(q)$, l'ensemble des représentants de l'état $q$.
-  On constate aussi que pour tout terme $t$, $t \rw_{\Delta_0} q$ implique $t \xrw{\top}_{\aaexeq^0} q$:
-  le second et le troisième point de la définition~\ref{def:xrw_alpha}, ne sont pas utilisés, puisqu'il
+  On sait que $\aaexeq^0$ ne possède aucune $\varepsilon$-transition.
+  Tous les termes sont reconnus au seul moyen des transitions normalisées de l'ensemble $\Delta^0$.
+  Cela signifie que pour tout état $q$ l'ensemble des termes reconnus par cet état $q$ 
+  se définit comme $\Lang(\aaexeq^0, q) = \{ t \in \TF | t \rw_{\Delta^0} q\}$. Par définition,
+  cet ensemble est égal à $\Rep(q)$, l'ensemble des représentants de l'état $q$. Autrement dit,
+  tous les termes reconnus par l'état $q$ sont des représentants de cet état $q$.
+  De plus, comme le terme $t$ est nécessairement reconnu en $q$ au seul moyen des transitions normalisées de $\Delta^0$,
+  cela implique une exécution de la forme $t \xrw{\top}_{\aaexeq^0} q$. En effet, le deuxième et le troisième point de la
+  définition~\ref{def:xrw_alpha}, ne peuvent pas être utilisés, puisqu'il
   n'y a aucune $\varepsilon$-transition dans $\aaexeq^0$.
   % $\Drw^0$ et $\Deq^0$ sont vides.
+  En partant de ces différents constats, le premier point de la définition~\ref{def:well-defined} est facilement assuré.
+  Pour tout état $q \in \Q^0$, et tout terme $t \in \Lang(\aaexeq^0, q)$, on a $t \xrw{\top}_{\aaexeq^0} q$ et $t \in \Rep(q)$. 
+  Et comme par réflexivité $t \rwR^* t$, le terme $t$ est bien atteignable à partir de lui-même.
   
-  Le premier point de la définition~\ref{def:well-defined} est assuré: 
-  pour tout état $q$, et tout terme $t \xrw{\top} q$, on a $t \in Rep(q)$, 
-  et $t \rwR^* t$ par réflexivité. En particulier, si $q \in \Q_f$ est un 
-  état final, alors le terme $t$ est un terme initial, donc atteignable.
-
-  Quant au second point de la définition~\ref{def:well-defined}, il est assuré par $\aaex^0$ puisque $\Drw^0$ est vide.
+  Quant au second point de la définition~\ref{def:well-defined}, il est assuré par $\aaexeq^0$ puisque $\Drw^0$ est vide.
 \end{proof}
+
+Pour donner une intuition que la bonne définition du $\RE$-automate $\aaexeq^0$ est une notion cohérente, il 
+suffit de considérer un terme $t$ qui soit reconnu par $\aaexeq^0$, ce qui signifie aussi que $t \in I$
+est un terme initial. Si ce terme $t$ est reconnu grâce à l'état final $q_f \in \Q_f$,
+alors on a $t \xrw{\top}_{\aaexeq^0} q_f$ et $t \in \Rep(q)$ en reprenant les arguments donnés dans la preuve ci-dessus.
+Donc chaque terme $t$ initial est le représentant d'un état final de $\aaexeq^0$, qui est atteignable à partir de 
+lui-même.
 
 On s'intéresse maintenant à la construction de $\aaexeq^{i+1}$, soit à la $\RE$-complétion à proprement parler, ce
 qui requiert la redéfinition des fonctions $\compl$ et $\widen$. Cela est dû à la prise en compte des formules
@@ -549,13 +572,14 @@ qui doivent être ajoutées pour chaque transition de $\Drw$ ajoutée au $\RE$-a
 % On considère le $\RE$-automate $\aaexeq^i = \la \F, \Q^i, \Q_f, \Delta^i \cup \Drw^i \cup \Deq^i \ra$ obtenu
 % après $i$ étapes de complétion-approximation.
 
-Une étape de $\RE$-complétion consiste à construire le $\RE$-automate $\compl(\aaexeq^i)$ que l'on obtient à partir de $\aaexeq^i$ et $\R$.
+Une étape de $\RE$-complétion consiste à construire le $\RE$-automate $\compl(\aaexeq^i)$ 
+que l'on obtient à partir de $\aaexeq^i$ et $\R$ linéaire à gauche.
 Toute étape de $\RE$-complétion assure que:
 
 \begin{itemize}
 \item $\Lang(\compl(\aaexeq^i)) \supseteq \Lang(\aaexeq^i)$
-\item $\forall t \in \Lang(\aaexeq^i)$, si $t \rw_\R t'$ alors $t \in \Lang(\compl(\aaexeq^i))$
-\item si $\aaexeq^i$ est bien-défini, $\compl(\aaexeq^i)$ l'est aussi.
+\item $\forall t \in \Lang(\aaexeq^i)$, si $t \rw_\R t'$ alors $t' \in \Lang(\compl(\aaexeq^i))$
+\item si $\aaexeq^i$ est bien défini, $\compl(\aaexeq^i)$ l'est aussi.
 \end{itemize}
 
 
@@ -594,8 +618,8 @@ Plus formellement, on peut définir la résolution d'une paire critique de la ma
   La paire critique $p$ est résolue $p$ dans le $\RE$-automate $\compl(\aaexeq^i)$
   si $\compl(\aaexeq^i) = \la \F, \Q', \Q_f, \Delta'\cup \Drw'\cup \Deq \ra$ avec:
   \begin{itemize}
-  \item $\Delta'\supseteq \Delta \cup \norm(r\sigma,\Delta\setminus \Delta^0)$
-  \item $\Drw'\supseteq \Drw \cup \{q' \xrw{\alpha} q\}$ avec $q'$ un état tel que $r\sigma \rw^*_{\Delta'} q'$
+  \item $\Delta'\supseteq \Delta$% \cup \norm(r\sigma,\Delta\setminus \Delta^0)$
+  \item $\Drw'\supseteq \Drw \cup \{q' \xrw{\alpha} q\}$ si l'état $q'$ est tel que $r\sigma \rw^*_{\Delta'} q'$
   \item $\Q' \supseteq \Q$ contient les nouveaux états de $\Delta'$ produits par la normalisation.
   \end{itemize}
 \end{definition}
@@ -604,12 +628,6 @@ On ajoute alors les transitions telles qu'il existe un état $q'$ avec
 $r\sigma \xrw{\top}_{\compl(\aaexeq^i)} q'$ et $q'\xrw{\alpha} q \in \Drw'$. 
 % $\Q_{new}$ un ensemble de nouveaux états tels que $\Q_{new} \cap \Q^i =\emptyset$.
 
-On remarque que $\Delta^0$, l'ensemble des transitions initiales $\aaex^0$, n'est jamais utilisé
-pour la normalisation de $r\sigma$. Ceci est nécessaire pour que la normalisation construise un ensemble de transitions
-qui préserve la bonne définition du $\RE$-automate.
-En effet, on doit imposer certaines contraintes aux transitions normalisées. Or ses contraintes
-sont trop restrictives pour $\aaexeq^0$, qui ne pourrait plus représenter des ensembles infinis de termes initiaux.
-Donc on exclut les transitions de $\Delta^0$ pour la normalisation.
 % à l'ensemble de transitions utilisées par la normalisation. Mais ces contraintes limites considérablement
 % l'expressivité de l'automate dans le cas il ne possède pas de $\varepsilon$-transitions: il n'est plus possible de
 % reconnaître un langage infini. Pour ne pas limiter l'automate $\aaexeq^0$ aux ensembles finis et tout de même 
@@ -618,14 +636,14 @@ Donc on exclut les transitions de $\Delta^0$ pour la normalisation.
 Le $\RE$-automate $\compl(\aaexeq^i)$ est obtenu en itérant ce
 principe de résolution à toutes les paires critiques $p$ qui existent
 entre $\R$ et $\aaexeq^i$. Cet ensemble de paires critiques peut être découvert
- en résolvant le {\em problème de filtrage} $l \match q$ pour chaque règle de
- réécriture $l \rw r\in \R$ et chaque état $q\in\aaexeq^i$.
+en résolvant le {\em problème de filtrage} $l \match q$ pour chaque règle de
+réécriture $l \rw r\in \R$ linéaire à gauche et chaque état $q\in\aaexeq^i$.
 L'algorithme de filtrage est détaillé plus tard dans la section~\ref{sec:filtrage}.
 
 \section{La normalisation}
 Comme dans le cas de la complétion, il n'est pas possible d'ajouter directement
 la transition $r\sigma \xrw{\top}_{\compl(\aaexeq^{i})} q'$, elle peut ne pas être normalisée.
-Une étape importante du calcul passe par la normalisation, qui assure notamment la bonne-définition
+Une étape importante du calcul passe par la normalisation, qui assure notamment la bonne définition
 du futur $\RE$-automate $\compl(\aaexeq^{i})$. 
 On s'intéresse donc tout d'abord à la normalisation et aux propriétés qu'elle doit assurer.
 % More precisely, we add transitions
@@ -637,9 +655,6 @@ On s'intéresse donc tout d'abord à la normalisation et aux propriétés qu'ell
 % add the transition $q'\xrw{\alpha} q$ to $\Drw^{i}$. The whole process
 % leads to the $\RE-$automaton $\compl(\aaexeq^i)$. This is formally defined as
 % follows.
-
-
-
 %%The transtion $r\sigma
 %%\xrw{\top}_{\aaexeq^{i+1}} q'$ is actually build by adding normalized
 %%transitions to $\Delta^{i+1}$ thanks to the {\em normalisation} of the
@@ -649,23 +664,43 @@ On s'intéresse donc tout d'abord à la normalisation et aux propriétés qu'ell
   \label{def:normalisation}
   La normalisation est réalisée en 2 étapes mutuellement récursives
   paramétrées par la configuration $c$ à reconnaître, et par $\Delta$ un ensemble de
-  transitions à étendre.
-  \[
+  transitions normalisées à étendre. On suppose $\Delta^0$ est l'ensemble des transitions normalisées 
+  du $\RE$-automate initial $\aaexeq^0$.
+  \[\hspace{-.5cm}
   \left\{
     \begin{array}{lr}
-      \norm(c, \Delta) = \slice(d, \Delta) & c \rw^!_\Delta d\textrm{, et }c,\ d \in \TFQ\\
+      \norm(c, \Delta) = \slice(d, \Delta) & c \rw_\Delta d\textrm{, et }c,\ d \in \TFQ\\
       \slice(q,\Delta) = \Delta & q \in Q\\
-      \slice(f(q_1,\dots, q_n), \Delta) = \Delta \cup \{f(q_1,\dots, q_n) \rw q\} & q_i \in \Q\textrm{ et }q \in \Q_{new}\\
+      \slice(f(q_1,\dots, q_n), \Delta) = \Delta \cup \{f(q_1,\dots, q_n) \rw q_\nu\} &\hspace{-1.3cm}
+      {\small q_\nu \textrm{ non utilisé par } \Delta \cup \Delta^0 \textrm{ et } q_i \in \Q}\\
+      %\textrm{ et }q \in \Q_{new}\\
       \slice(f(t_1,\dots, t_n), \Delta) = \norm(f(t_1,\dots, t_n), \slice(t_i, \Delta)) & t_i \in \TFQ \setminus \Q\\
     \end{array}
   \right.
   \]
+
+  On calcule le nouvel ensemble $\Delta'$ de transitions normalisées à partir de l'ensemble $\Delta$ 
+  et la configuration $c$ de la manière suivante:
+  \[ \Delta' = \Delta \cup \norm(c, \Delta \setminus \Delta^0)  \]
+
 \end{definition}
 
 \noindent
-Pour simplifier la définition, on ne manipule pas explicitement la mise à jour de l'ensemble des états $\Q$ de l'automate 
-qui s'agrandit à chaque ajout de transitions. D'autre part, l'ensemble des nouveaux états $\Q_{new}$ est toujours considéré
-comme disjoint de $\Q$, y compris lors de l'accroissement de $\Q$.
+Pour simplifier la définition, on met à jour implicitement l'ensemble
+des états utilisés par le $\RE$-automate $\aaexeq^i$ sur lequel on est
+en train de réaliser l'étape de complétion. À chaque ajout d'une
+nouvelle transition, on prend un état $q_\nu$ qui soit inédit pour
+l'ensemble des transitions normalisées.
+
+
+\noindent
+Dans la définition~\ref{def:normalisation}, on remarque que $\Delta^0$, les transitions du $\RE$-automate 
+$\aaexeq^0$ initial sont systématiquement exclues lors de la normalisation.
+Cette restriction est nécessaire pour que la normalisation construise un ensemble de transitions normalisées
+qui préserve la bonne définition du $\RE$-automate.
+En effet, on doit imposer certaines contraintes aux transitions normalisées. Or ces contraintes
+sont trop restrictives pour $\aaexeq^0$, qui ne pourrait plus représenter des ensembles infinis de termes initiaux.
+Donc on exclut les transitions de $\Delta^0$ pour la normalisation.
 
 La définition de la normalisation est similaire à celle introduite dans la complétion d'automates d'arbres.
 Cependant, les propriétés que l'on en attend sont différentes.
@@ -675,25 +710,26 @@ Cependant, les propriétés que l'on en attend sont différentes.
 Lorsque l'on normalise, on suppose que $\Delta$ -- le second argument de $\norm$ -- est \textbf{déterministe}.
 
 \begin{definition}
-L'ensemble de transitions $\Delta$ est \textbf{déterministe}, si pour 
+Un ensemble $\Delta$ de transitions normalisées est \textbf{déterministe}, si pour 
 toutes transitions normalisées de la forme $f(q_1, \dots, q_n) \rw q$ et
-$f(q_1, \dots, q_n) \rw q'$, alors on a $q = q'$.
+$f(q_1, \dots, q_n) \rw q'$ qui appartiennent à $\Delta$, alors on a $q = q'$.
 \end{definition}
 
-Comme la relation de réécriture induite par $\Delta$ est bien-fondée,
+Comme la relation de réécriture induite par l'ensemble des transitions normalisées $\Delta$ est bien fondée,
 imposer le déterminisme à $\Delta$ permet d'assurer à tout terme $s
 \in \TFQ$ de posséder une \textbf{unique forme normale} $t$ ce que l'on dénotera
-par la relation $s \rw_\Delta^! t$.  Cette propriété requise par la
-première étape de $\norm$ est aussi préservée lors de l'ajout de nouvelles transitions par $\slice$.
+par la relation $s \rw_\Delta^! t$. Cette propriété requise par la
+première étape de $\norm$ pour que la fonction soit correctement définie.
+De plus, cette propriété est préservée lors de l'ajout de nouvelles transitions par $\slice$.
 Lors de la première étape de complétion pour normaliser la première transition ajoutée
 au $\RE$-automate $\aaexeq^0$, on prend $\Delta = \Delta^0 \setminus \Delta^0$ qui est
 égal à l'ensemble vide, et est trivialement déterministe.
 
 \begin{definition}
   On définit $\Delta$ comme \textbf{injectif}, si pour tout état $q$,
-  il existe une seule transition de la forme $f(q_1, \dots, q_n) \rw q$.
+  il existe au plus une transition de la forme $f(q_1, \dots, q_n) \rw q$.
 \end{definition}
-Cette propriété d'injectivité est importante pour assurer le premier point de la bonne-définition
+Cette propriété d'injectivité est importante pour assurer le premier point de la bonne définition
 d'un $\RE$-automate. L'exemple~\ref{ex:inj_contrex} illustre le problème posé
 lorsque cette contrainte n'est pas respectée. Comme pour le déterminisme, l'injectivité
 est une propriété préservée par la fonction $\norm$. De plus, pour $\aaexeq^0$, l'ensemble $\Delta = \emptyset$
@@ -745,9 +781,11 @@ est évidemment injectif.
 
 \begin{property}%[Existence of a representative]
   \label{prop:norm_determinism}
-  On pose  $\A = \la \F, \Q, \Q_f, \Delta \cup \Drw \cup \Deq\ra$, un $\RE$-automate tel que 
-  $\Delta \setminus \Delta^0$ détermine l'ensemble déterministe de ses transitions, et $c \in \TFQ$ une configuration. 
-  Si on a $\Delta' = \norm(c, \Delta \setminus \Delta^0)$,  alors il existe un état $q$ tel que  $c \rw^!_{\Delta'} q$.
+  Puis on pose  $\A = \la \F, \Q, \Q_f, \Delta \cup \Drw \cup \Deq\ra$ un $\RE$-automate,
+  $\Delta^0$ est un sous-ensemble des transitions normalisées de $\A$ tel que 
+  $\Delta \setminus \Delta^0$ soit l'ensemble déterministe des transitions normalisées de $\A$, et enfin $c \in \TFQ$
+  une configuration. 
+  Si on a $\Delta^2 = \norm(c, \Delta \setminus \Delta^0)$,  alors il existe un état $q$ tel que  $c \rw^!_{\Delta^2} q$.
 \end{property}
 
 \begin{proof}
@@ -756,7 +794,7 @@ est évidemment injectif.
   On suppose également que $\Delta^1 = \Delta \setminus \Delta^0$ est déterministe.
 
   La première étape de calcul $\norm(c, \Delta^1)$ consiste à réécrire $c$ par
-  $\Delta^1$ en sa forme normale notée $d$.   
+  $\Delta^1$ en sa forme normale notée $d$.
   La seconde étape $\slice(d, \Delta^1)$ doit retourner $\Delta^2$ sur-ensemble de $\Delta^1$
   tel qu'il existe un unique état $q$ qui soit la forme normale de $d \rw^!_{\Delta^2} q$, et donc 
   par conséquent la nouvelle forme normale de $c$.
@@ -765,15 +803,16 @@ est évidemment injectif.
    
   \begin{enumerate}
   \item $\slice(q, \Delta^1) = \Delta^1$. Cela signifie que $d$ est déjà un état $q$. 
-    Il n'y a rien à faire, $q$ est déjà la forme normale attendue,
-    et $\Delta^2 = \Delta^1$ est déterministe.
-  \item $\slice(f(q_1, \dots, q_n), \Delta^1) = \Delta^1 \cup \{ f(q_1, \dots, q_n) \rw q \sep q \in \Q_{new}\}$. 
+    Il n'y a rien à faire, $q$ est déjà la forme normale attendue, et $\Delta^2 = \Delta^1$ est déterministe.
+
+  \item $\slice(f(q_1, \dots, q_n), \Delta^1) = \Delta^1 \cup \{ f(q_1, \dots, q_n) \rw q_\nu\}$. 
     Chaque $q_i$ est un état. La configuration $f(q_1, \dots, q_n)$ peut être utilisée pour former le membre gauche d'une transition
-    normalisée. On construit la nouvelle transition $f(q_1, \dots, q_n) \rw q$ en utilisant un nouvel état $q \in \Q_{new}$. 
+    normalisée. On construit la nouvelle transition $f(q_1, \dots, q_n) \rw q_\nu$ en utilisant $q_\nu$ un état qui ne soit jamais 
+    utilisé dans $\Delta^1 \cup \Delta^0$ la totalité des transitions existantes à ce point du calcul.
     Le déterminisme est automatiquement préservé par l'ajout de cette transition à $\Delta^1$. On sait en effet
     que $d = f(q_1, \dots, q_n)$ est en forme normale, donc impossible à réécrire davantage par les transitions de 
     $\Delta^1$ : la nouvelle transition $f(q_1, \dots, q_n) \rw q$ est bien l'unique moyen de réécrire le terme $d$. On a donc construit
-    $\Delta^2 = \Delta^1 \cup \{ f(q_1, \dots, q_n) \rw q \sep q \in \Q_{new}\}$ qui est déterministe, et $d \rw^!_{\Delta^2} q$.
+    $\Delta^2 = \Delta^1 \cup \{ f(q_1, \dots, q_n) \rw q_\nu\}$ qui est déterministe, et $d \rw^!_{\Delta^2} q$.
      
    \item $\slice(f(t_1, \dots, t_n), \Delta^1) = \norm(f(t_1,\dots, t_n), \slice(t_i, \Delta^1)\ )$, $t_i \in \TFQ \setminus \Q$.
      Dans ce cas, on a choisi $t_i$ un sous-terme immédiat de $d$ qui n'est pas un état. Il en existe au moins un, sinon on se retrouve dans le cas précédent.
@@ -804,12 +843,17 @@ est évidemment injectif.
 
  \begin{property}[Normalisation et injectivité]
    \label{prop:norm_injectivity}
-   Si $\Delta^1$ est injectif, alors $\norm(c \sep \Delta^1)$ l'est aussi.
+   Soient $\Delta$ un ensemble de transitions normalisées, un $\Delta^0$ un sous-ensemble 
+   de $\Delta$ tel que $\Delta \setminus \Delta^0$ soit injectif, et une configuration $c \in \TFQ$.
+   Alors L'ensemble $\norm(c \sep \Delta \setminus \Delta^0)$ est aussi injectif.
  \end{property}
 
  \begin{proof}
-   On pose le $\RE$-automate $A = \la \F, \Q, \Q_f, \Delta \cup \Drw \cup \Deq\ra$,
-   la configuration $c \in \TFQ$, et l'ensemble de transitions normalisées $\Delta^1 = \Delta \setminus \Delta^0$ qui est injectif.
+   Soient $\Delta$ un ensemble de transitions normalisées, un $\Delta^0$ un sous-ensemble 
+   de $\Delta$, et une configuration $c \in \TFQ$.
+   On pose $\Delta^1 = \Delta \setminus \Delta^0$ le sous-ensemble injectif des transitions normalisées de $\Delta$.
+   % On pose le $\RE$-automate $A = \la \F, \Q, \Q_f, \Delta \cup \Drw \cup \Deq\ra$,
+   %  et l'ensemble de transitions normalisées $\Delta^1 = \Delta \setminus \Delta^0$ qui est injectif.
    
    En fait, d'après la définition de $\norm(c, \Delta^1)$, l'ajout des transitions est 
    uniquement réalisé lorsque l'on se trouve dans le cas $\slice(f(q_1,\dots,q_n), \Delta^1)$.
@@ -818,10 +862,10 @@ est évidemment injectif.
    \begin{enumerate}
    \item $\slice(q, \Delta^1) = \Delta^1$. Cela signifie que $d$ est déjà un état $q$. L'injectivité est préservée.
      
-   \item $\slice(f(q_1, \dots, q_n), \Delta^1) = \Delta^1 \cup \{ f(q_1, \dots, q_n) \rw q \sep q \in \Q_{new}\}$. 
-     On utilise un nouvel état $q' \in \Q_{new}$, ce qui signifie que l'état n'est présent dans aucune transition
-     de $\Delta^1$. La transition $f(q_1, \dots, q_n) \rw q'$ est donc l'unique transition de la forme $c \rw q'$,
-     donc l'ensemble $\Delta^1 \cup \{ c \rw q'\}$ est injectif.
+   \item $\slice(f(q_1, \dots, q_n), \Delta^1) = \Delta^1 \cup \{ f(q_1, \dots, q_n) \rw q_\nu\}$.
+     On utilise un nouvel état $q_\nu$ pour $\Delta^1 \cup \Delta^0$, ce qui signifie que l'état n'est présent dans aucune transition
+     de $\Delta^1$. La transition $f(q_1, \dots, q_n) \rw q_\nu$ est donc l'unique transition de la forme $c \rw q_\nu$,
+     donc l'ensemble $\Delta^1 \cup \{ c \rw q_\nu\}$ est injectif.
 
    \item $\slice(f(t_1, \dots, t_n), \Delta^1) = \norm(f(t_1,\dots, t_n), \slice(t_i, \Delta^1)\ )$, $t_i \in \TFQ \setminus \Q$
      Ici, on utilise l'hypothèse d'induction pour $\slice(t_i, \Delta^1)$ puisque $\mu (t_i) < \mu(f(t_1, \dots, t_n))$.
@@ -829,17 +873,18 @@ est évidemment injectif.
      On regarde ensuite $\norm(f(t_1,\dots, t_n), \Delta')$. On sait d'après la propriété précédente, qu'il existe
      un état $q_i$ tel que $t_i \rw^*_{\Delta'} q_i$. On a alors $\norm(f(t_1,\dots, t_n), \Delta') = \slice(t, \Delta')$
      avec $t$ le terme $f(t_1,\dots, t_n)$ réécrit par $\Delta'$. On a $\mu (t) < \mu(f(t_1, \dots, t_n))$, donc en
-     appliquant à nouveau l'hypothèse d'induction pour $\slice(t, \Delta^1)$ on obtient bien l'ensemble final $\Delta^2$ qui est injectif.
+     appliquant à nouveau l'hypothèse d'induction pour $\slice(t, \Delta^1)$ on obtient bien un ensemble final $\Delta^2$ qui est injectif.
    \end{enumerate}
 
 \end{proof}
 
-De cette propriété, on peut alors en déduire la propriété suivante: 
+De cette propriété, on peut alors en déduire le lemme suivant: 
 \begin{property}
   \label{prop:norm_representant}
-  Si la transition $r\sigma \rw_{\Delta^2} q'$ résulte de la normalisation $\Delta^2=\norm(r\sigma, \Delta^1)$
-  avec $\Delta^1$ injectif, alors tous les représentants de l'état $q'$ sont de la forme $r\tau$, 
-  avec $\tau: \X \rw \TF$.
+  Si la séquence de transitions $r\sigma \rw_{\Delta^2}^* q'$ résulte de la normalisation $\Delta^2=\norm(r\sigma, \Delta \setminus \Delta^0)$
+  où $\Delta^0$ est le sous-ensemble de $\Delta$ tel que  $\Delta \setminus \Delta^0$ est injectif,
+  alors tous les représentants de l'état $q'$ sont de la forme $r\tau$, avec $\tau: \X \rw \TF$ dans le $\RE$-automate 
+  $A' = \la \F, \Q, \Q_f, \Delta' \cup \Drw \cup \Deq\ra$ avec \Delta .
 \end{property}
 
 \begin{proof}
@@ -878,7 +923,7 @@ De cette propriété, on peut alors en déduire la propriété suivante:
 
 
 La dernière propriété concerne les nouveaux états introduits par la normalisation: pour chacun d'eux,
-le premier point de la bonne-définition est respectée.
+le premier point de la bonne définition est respectée.
 \begin{property}
   \label{prop:norm_well_def}
   Si $\Q'$ est l'ensemble des nouveaux états introduits par la normalisation alors pour tout état de $q'\in \Q'$,
@@ -888,7 +933,7 @@ le premier point de la bonne-définition est respectée.
 
 \begin{proof}
   On se place dans le cas d'un $\RE$-automate $A = \la \F, \Q, \Q_f, \Delta \cup \Drw \cup \Deq\ra$, et d'un système de réécriture $\R$,
-  et qui est bien-défini.
+  et qui est bien défini.
   On montre que pour tout nouvel état introduit $q'$  par le calcul de $\norm(c, \Delta^1)$ tel que $\Delta^1 = \Delta \setminus \Delta^0$
   pour tout terme $v \xrw{\top} q'$, il existe un représentant $u \in \Rep(q')$ tel que $u \rw^*_\R v$.
 
@@ -902,7 +947,7 @@ le premier point de la bonne-définition est respectée.
   \item $\slice(q, \Delta^1) = \Delta^1$. Comme $d \in \Q$, la propriété est vérifiée.
 
   \item $\slice(f(q_1, \dots, q_n), \Delta^1) = \Delta^1 \cup \{ f(q_1, \dots, q_n) \rw q \sep q \in \Q_{new}\}$. 
-    Pour chaque état $q_i$, la propriété est vérifiée: si $t_i \xrw{\top}_\A q_i$ alors il existe $u_i \in Rep(q_i)$
+    Pour chaque état $q_i$, la propriété est vérifiée: si $t_i \xrw{\top}_\A q_i$ alors il existe $u_i \in \Rep(q_i)$
     tel que $u_i \rw_\R^* t_i$. Grâce à la nouvelle transition, on obtient le terme $t = f(t_1, \dots, t_n) \xrw{\top}_\A q$ par composition.
     De la même manière, on peut définir le terme $u = f(u_1, \dots, u_n)$ qui est un représentant du nouvel état $q$.
     De plus, et par réécriture successive des différents $u_i$ en $t_i$, on a bien $u \rw^*_\R t$.
@@ -936,7 +981,7 @@ le premier point de la bonne-définition est respectée.
 % \end{itemize}
 % \end{definition}
 
-% On remarque que $\Delta_0$, l'ensemble des transitions initiales $\aaex^0$, n'est jamais
+% On remarque que $\Delta_0$, l'ensemble des transitions initiales $\aaexeq^0$, n'est jamais
 % utilisée pour la normalisation de $r\sigma$. C'est important pour préserver
 % la bonne définition de $\A'$. 
 % \comments{Il faut détailler et donner un contre-exemple}
@@ -971,7 +1016,7 @@ qu'aucun des termes reconnus par $q$ ne peut être réécrit par la règle $l \r
 \begin{definition}[Algorithme de filtrage]
   \label{def:matching-algorithm}
   En posant le problème de filtrage $l \match q$ pour le $\RE$-automate $\aaexeq^i$,
-  $S$ est la solution du problème, si il existe une dérivation pour 
+  $S$ est la solution du problème, si et seulement s'il existe une dérivation pour 
   $l \match q \vdash_{\aaexeq^i} S$ en utilisant les règles suivantes:
   {\footnotesize
     %\vspace{-.2cm}
@@ -1005,7 +1050,7 @@ qu'aucun des termes reconnus par $q$ ne peut être réécrit par la règle $l \r
       \bigcup_{k=1}^n \{(\phi \land \alpha_k, \sigma) \sep (\phi, \sigma) \in S_k\}
     }\left(
       \begin{array}{l}
-        \{(q_k, \alpha_k) \sep q_k \xrw{\alpha_k} q\}_1^n\\% \land q \not= q_k\}_1^n\\
+        \{(q_k, \alpha_k) \sep q_k \xrw{\alpha_k} q\}_{k=1}^n\\% \land q \not= q_k\}_1^n\\
         t \notin \X\\
       \end{array}
     \right)
@@ -1033,18 +1078,19 @@ On observe que, par définition, l'algorithme de filtrage considère possiblemen
 une infinité d'exécution de la forme $l\sigma \xrw{\alpha} q$.
 En effet, les $\varepsilon$-transitions de $\Drw^i \cup \Deq^i$ peuvent former des boucles. 
 Cela sous-entend que l'on exclut les boucles pour que l'algorithme fonctionne.
-En fait, retirer les chemins basés sur des boucles n'enlève pas d'information
-critique, c'est même le contraire. Compte-tenu de l'information sémantique 
-que donnent les $\varepsilon$-transitions, on constate que les boucles ajoutent 
-de la redondance. En effet, si un terme est reconnu dans un certain état $q$
-sans $\varepsilon$-transitions, alors on sait que le terme est immédiatement atteignable 
-du point de vue de $q$. Ajouter une boucle composée de transition de $\Drw$ ou $\Deq$
-indique simplement que le terme est accessible par étape de réécriture ou d'égalité
-à partir de lui-même ! Le principe peut être illustré, à partir du $\RE$-automate~$\A$
+En fait, retirer les chemins qui contiennent des boucles n'enlève pas d'information
+critique. En fait, on peut même considérer que les boucles n'apportent que des
+informations inutiles. Compte-tenu de la sémantique des $\varepsilon$-transitions, 
+on constate que les boucles construisent une information redondante. En effet, si un
+terme est reconnu dans un certain état $q$ sans $\varepsilon$-transitions, alors on sait
+que le terme est immédiatement atteignable du point de vue de $q$. Ajouter une boucle composée
+de transitions de $\Drw$ ou $\Deq$ indique simplement que le terme est accessible par étape de 
+réécriture ou d'égalité à partir de lui-même ! Le principe peut être illustré, à partir du $\RE$-automate~$\A$
 de l'exemple~\ref{ex:semantics}. On peut remarquer que $f(b) \xrw{Eq(q_b, q_c)
   \land Eq(q_c, q_b)}_\A q_f$ utilise la boucle qui correspond à $f(b) =_E f(c) =_E f(b)$. 
-Cette boucle est d'autant plus inutile que l'on préfère déduire que $f(a) \rw_\R^* f(b)$ 
-qui correspond l'exécution $f(b) \xrw{\top}_\A q_f$ sans boucle.
+Cette boucle est d'autant plus inutile que l'on préfère privilégier $f(a) \rw_\R^* f(b)$ 
+dénoté par l'exécution $f(b) \xrw{\top}_\A q_f$ sans boucle, et qui permet de déduire que le terme $f(b)$
+est atteignable par $\R$ à partir de $f(a)$.
 
 \subsection{Propriétés de l'algorithme de Filtrage}
 
@@ -1105,9 +1151,9 @@ correspondant à une paire critique pour le problème $l \match q$ dans l'automa
   Par décomposition suivant la reconnaissance de chaque sous-terme, on obtient la séquence suivante:
   \begin{multline*}
     \label{eq:1}
-    f(t_1,\dots, t_n) \xrw{\alpha_1} f(q_1, t_2, \dots, t_n) \xrw{\bigwedge_1^2 \alpha_i} \\
-    f(q_1, q_2, t_3, \dots, t_n) \xrw{\bigwedge_1^3 \alpha_i} \dots \\
-    \dots \xrw{\bigwedge_1^n\alpha_i} f(q_1,\dots, q_n) \xrw{\bigwedge_1^n \alpha_i \land \top} q'
+    f(t_1,\dots, t_n) \xrw{\alpha_1} f(q_1, t_2, \dots, t_n) \xrw{\alpha_2} \\
+    f(q_1, q_2, t_3, \dots, t_n) \xrw{\alpha_3} \dots \\
+    \dots \xrw{\alpha_n} f(q_1,\dots, q_n) \xrw{\top} q'
   \end{multline*}
 
   % \[
@@ -1116,7 +1162,7 @@ correspondant à une paire critique pour le problème $l \match q$ dans l'automa
   Il y a alors deux cas à prendre en compte : (1) $q=q'$ et (2) $q \not = q'$.
   %
   (1) Si $q=q'$, la décomposition est complète et si $f(t_1\sigma_1,\dots, t_n\sigma_n) \xrw{\alpha}_\A q$ avec $\alpha = \bigwedge_1^n \alpha_i$.
-  \[f(t_1\sigma_1,\dots, t_n\sigma_n) \xrw{\bigwedge_{i = 1}^n \alpha_i} f(q_1,\dots,q_n) \xrw{\bigwedge_{i = 1}^n \alpha_i} q\]
+  \[f(t_1\sigma_1,\dots, t_n\sigma_n) \xrw{\bigwedge_{i = 1}^n \alpha_i} f(q_1,\dots,q_n) \xrw{\top} q\]
   %
   (2) $q \not = q'$: $f(t_1\sigma_1,\dots, t_n\sigma_n) \xrw{\alpha}_\A q$ est vrai seulement si on a une transition $q' \xrw{\alpha'} q$
   telle que $\alpha = \bigwedge_1^n \alpha_i \land \alpha'$.
@@ -1177,14 +1223,14 @@ On a aussi la propriété de correction, permettant de conclure que tous les cou
 
 On commence par montrer grâce aux différentes propriétés que l'on a montrées sur la 
 normalisation et le filtrage que la résolution d'une paire critique préserve la
-bonne-définition.
+bonne définition.
 
 \begin{lemma}[La résolution d'une paire critique préserve la \emph{bonne définition}]
   \label{lemma:C-well-defined}
   Soient $\A$ et $\A'$ deux $\RE-$automates tels que 
   $\A'$ est obtenu à partir de $\A$ en résolvant 
   la paire critique $\la q_c, r\sigma,\alpha \ra$ dans $\A$. 
-  Si $\A$ est bien-défini, alors $\A'$ l'est aussi. 
+  Si $\A$ est bien défini, alors $\A'$ l'est aussi. 
 \end{lemma}
 \begin{proof}
   Soient les $\RE$-automates $\A=\la \F, \Q, \Q_f, \Delta\cup \Drw\cup \Deq\ra$ 
@@ -1218,13 +1264,13 @@ bonne-définition.
   \newcommand{\xrwap}{\xrw{\top}_{\A'}}
 
   On montre la propriété par induction sur la hauteur du terme $t$. 
-  On suppose donc que pour tout terme $t'$ de hauteur inférieure à celle de $t$
-  et pour tout état $q\in \Q'$, on a $t' \xrwap q \spf \exists u\in Rep(q): u \rwR^* t'$.
+  On suppose donc que pour tout terme $t'$ dont la hauteur est inférieure strictement à celle de $t$
+  et pour tout état $q\in \Q'$, on a $t' \xrwap q \spf \exists u\in \Rep(q): u \rwR^* t'$.
   Maintenant, on montre que la propriété est vraie pour $t$, par étude de cas portant sur $q\in\Q$ et $t\xrwa q$.
 
   \begin{itemize}
-  \item Si $q\in\Q$ et $t\xrwa q$ alors comme $\A$ est bien-défini, on sait qu'il 
-    existe un représentant $u\in Rep(q)$ tel que $u\rwR^* t$ puisque $\A$ est bien-défini.
+  \item Si $q\in\Q$ et $t\xrwa q$ alors comme $\A$ est bien défini, on sait qu'il 
+    existe un représentant $u\in \Rep(q)$ tel que $u\rwR^* t$ puisque $\A$ est bien défini.
     Comme toutes les transitions de $\A$ sont présentes dans $\A'$, la propriété est immédiatement transférée
     sur l'automate $\A'$.
 
@@ -1296,7 +1342,7 @@ bonne-définition.
 
 
 \item \label{two}
-  Comme $\A$ est bien-défini, la propriété est vraie pour toutes les transitions $q \rw q'\in \Drw$.
+  Comme $\A$ est bien défini, la propriété est vraie pour toutes les transitions $q \rw q'\in \Drw$.
   On considère la transition $q'_c \xrw{\alpha} q_c$ résultant de la résolution de la paire critique $\la q_c ,r\sigma,\alpha\ra$. 
   C'est l'unique transition ajoutée à $\Drw$ pour former $\Drw'$. Il suffit de montrer que la transition $q'_c \xrw{\alpha} q_c$
   valide le deuxième point de la définition~\ref{def:well-defined}.
@@ -1312,7 +1358,7 @@ bonne-définition.
   on construit la réduction $r\tau \xrw{\top} q'_c$. On peut donc bien conclure à la préservation de la propriété.
   En posant $s=l\tau$ et $t=r\tau$, on a $s\xrw{\alpha}q $, $t\xrw{\alpha}q' $ et $s\rw_\R t $.
 \end{enumerate}
-En conclusion, $\A'$ est bien-défini.
+En conclusion, $\A'$ est bien défini.
 \end{proof}
 
 \begin{theorem}
@@ -1322,7 +1368,7 @@ En conclusion, $\A'$ est bien-défini.
   \begin{itemize}
   \item $\Lang(\compl(\aaexeq^i)) \supseteq \Lang(\aaexeq^i)$
   \item $\forall t \in \Lang(\aaexeq^i)$, si $t \rw_\R t'$ alors $t \in \Lang(\compl(\aaexeq^i))$
-  \item si $\aaexeq^i$ est bien-défini, $\compl(\aaexeq^i)$ l'est aussi.
+  \item si $\aaexeq^i$ est bien défini, $\compl(\aaexeq^i)$ l'est aussi.
   \end{itemize}
 \end{theorem}
 
@@ -1338,7 +1384,7 @@ En conclusion, $\A'$ est bien-défini.
   \item $\Lang(\A_i) \supseteq \Lang(\A_0)$
   \item Pour les $i$ premières paires critiques résolues de la forme $\la q_i, r_i\sigma, \alpha_i\ra$, alors
     pour tout terme $t \in \Lang(\A_i, q_i)$ de la forme $t = l_i\tau$, on a aussi $r_i\tau \in \Lang(\A_i)$
-  \item $\A_i$ est bien-défini.
+  \item $\A_i$ est bien défini.
   \end{itemize}
   \medskip
   \noindent
@@ -1350,7 +1396,7 @@ En conclusion, $\A'$ est bien-défini.
   Sinon la paire critique est résolue en suivant la procédure~\ref{def:resolution_cp}: on a alors
   $r\sigma \rw_{\Delta'} q_c'$ et $q_c'\rw q_c$ où $\Delta' = \Delta \cup \norm(r\sigma,\Delta \setminus\Delta^0)$.
   D'après le théorème~\ref{lemma:C-well-defined} le $\RE$-automate $\A_{i+1}$ obtenu par la résolution de la paire critique
-  est bien-défini. D'autre part, le premier point est trivial puisque la résolution d'une paire critique ne fait qu'ajouter
+  est bien défini. D'autre part, le premier point est trivial puisque la résolution d'une paire critique ne fait qu'ajouter
   des transitions, donc on a $\Lang(\A_{i+1}) \supseteq \Lang(\A_i)$ ce qui implique bien $\Lang(\A_{i+1}) \supseteq \Lang(\A_0)$.
   Enfin pour n'importe laquelle des ${i+1}$ paires critiques $\la q, r\sigma, \alpha\ra$, dans l'automate $\A_{i+1}$ on a
   $l\sigma \xrw{\alpha}_{\A_{i+1}} q$ qui implique $l\sigma \rw_{\A_{i+1}}^* q$. De même et comme la paire est résolue,
@@ -1359,7 +1405,7 @@ En conclusion, $\A'$ est bien-défini.
   définir le terme $r\tau \rw^*_{\A_{i+1}} q$.
 
   
-  Au final, on obtient le $\RE$-automate $\compl(\aaexeq^i)$ qui est bien-défini et tel que $\compl(\aaexeq^i) \supseteq \aaexeq^i$.
+  Au final, on obtient le $\RE$-automate $\compl(\aaexeq^i)$ qui est bien défini et tel que $\compl(\aaexeq^i) \supseteq \aaexeq^i$.
   Par reformulation du deuxième point ci-dessus, on sait que pour tout terme clos de la forme $t \in \Lang(\compl(\aaexeq^i),q)$ si $t$ se réécrit à la position $\epsilon$
   en $t'$ alors on a $t' \in \Lang(\compl(\aaexeq^i),q)$.
 
@@ -1395,7 +1441,7 @@ de la relation de réécriture induite par $\Delta \cup \Deq$.
 }\]
 
 Intuitivement, si on a $u \rw^=_{A} q$, alors on sait qu'il existe
-un terme $t$ de $Rep(q)$ tel que $t =_E u$. Le $\RE$-automate
+un terme $t$ de $\Rep(q)$ tel que $t =_E u$. Le $\RE$-automate
 $\widen(A)$ est défini comme $\la \F, \Q, \Q_f, \Delta \cup \Drw \cup \Deq' \ra$,
 avec $\Deq'$ qui est obtenu à partir de $\A$ en ajoutant les transitions $q \rw q'$ and $q'
 \rw q$ à  l'ensemble $\Deq$, pour chaque paire $(q, q')$. On maintient aussi {\em
@@ -1423,12 +1469,12 @@ des ensembles d'états et de transitions est suffisant : toute exécution de $\A
 \end{proof}
 
 
-\begin{lemma}[$\widen$ préserve la bonne-définition]
-  Soit $\A$ un $\RE$-automate. Si $\A$ est bien-défini, alors $\widen(\A)$ l'est aussi.
+\begin{lemma}[$\widen$ préserve la bonne définition]
+  Soit $\A$ un $\RE$-automate. Si $\A$ est bien défini, alors $\widen(\A)$ l'est aussi.
 \end{lemma}
 
 \begin{proof}
-  On pose $\A = \la \F, \Q, Q_f, \Delta \cup \Drw \cup \Deq\ra$ un $\RE$-automate bien-défini et
+  On pose $\A = \la \F, \Q, Q_f, \Delta \cup \Drw \cup \Deq\ra$ un $\RE$-automate bien défini et
   $E$ un ensemble d'équations qui définit l'abstraction.
   On construit $\widen(\A) = \la \F, \Q, \Q_f, \Delta \cup \Drw \cup \Deq'\ra$, avec $\Drw \supseteq \Drw'$.
   puisque $\widen$ ne fait qu'ajouter des transitions à $\Drw$. On doit prouver que les deux items de la définition~\ref{def:well-defined}
@@ -1438,14 +1484,14 @@ des ensembles d'états et de transitions est suffisant : toute exécution de $\A
     Les transitions de $\Deq'$ ne sont jamais utilisées pour une exécution de $\xrw{\alpha}$ avec $\alpha = \top$,
     d'après le second point de la définition~\ref{def:xrw_alpha}.
     Cela signifie que pour tout terme $t$ et tout état $q$, $t \xrw{\top}_{\widen(\A)} q$ est équivalent à $t \xrw{\top}_\A q$.
-    Comme $\A$ est bien-défini, on sait qu'il existe un représentant $u \in Rep(q)$ tel que $u \rw^*_\R t$.
+    Comme $\A$ est bien défini, on sait qu'il existe un représentant $u \in \Rep(q)$ tel que $u \rw^*_\R t$.
     Ce terme $u$ est aussi un représentant de $\widen(\A)$, et donc on peut en déduire que le $\RE$-automate $\widen(\A)$ 
     respecte le premier point de la définition~\ref{def:well-defined}.
 
   \item
     La fonction $\widen$ ne fait qu'ajouter des transitions à $\Deq'$ et ne supprime aucune transition de $\A$.
     Pour toutes les transitions $q \xrw{\alpha} q' \in \Drw'$ on a donc $q \xrw{\alpha} q' \in \Drw$.
-    Comme $\A$ est bien-défini, on sait qu'il existe deux termes $s,t\in \TF$ tels que
+    Comme $\A$ est bien défini, on sait qu'il existe deux termes $s,t\in \TF$ tels que
     $s\xrw{\phi}_\A q$, $t\xrw{\top}_\A q'$ et $t \rw_\R s$.
     On a donc $s\xrw{\phi}_{\widen(\A)} q$, $t\xrw{\top}_{\widen(\A)} q'$ et $t \rw_\R s$, ce qui montre le second point
     de la définition~\ref{def:well-defined}.
@@ -1456,8 +1502,8 @@ On peut donc conclure que $\widen$ préserve la bonne définition tout en élarg
 
 \begin{property}
   \label{thm:W}
-  Soit $A$ un $\RE$-automate bien-défini, on a $\Lang(A) \supseteq \widen(A)$,
-  et $\widen(A)$ est bien-défini.
+  Soit $A$ un $\RE$-automate bien défini, on a $\Lang(A) \supseteq \widen(A)$,
+  et $\widen(A)$ est bien défini.
 \end{property}
 
 
@@ -1470,13 +1516,13 @@ On peut donc conclure que $\widen$ préserve la bonne définition tout en élarg
 \begin{example}
   \label{ex:W}
   Soit $\R = \{f(x) \rw f(s(s(x)))\}$ et le $\RE$-automate
-  $\aaexeq^0 = \la\F,\Q,\Q_F,\Delta^0\ra$ tel que $\Q_F = \{q_0\}$
+  $\aaexeq^0 = \la\F,\Q,\Q_f,\Delta^0\ra$ tel que $\Q_f = \{q_0\}$
   et $\Delta_0 = \{a \rw q_1,\ f(q_1) \rw q_0\}$.
   D'après la définition~\ref{def:matching-algorithm}, pour $f(x) \match q_0$ on obtient l'ensemble $S = \{(\phi,\sigma)\}$
   avec $\sigma = \{x \rw q_1\}$ et $\phi = \top$. Ensuite,
   $\la q_0, f(s(s(q1))), \top, q_0\ra$ est la seule paire critique à résoudre, puisque 
   $f(s(s(q1))) \not\xrw{\top}_{\aaexeq^0} q_0$. Donc, $\compl(\aaexeq^0))$ est un $\RE$-automate défini comme
-  $\compl(\aaexeq^0) = \la\F,\ \Q_1, \Q_F, \Delta_1 \cup \Drw^1 \cup \Deq^1 \ra$ avec :
+  $\compl(\aaexeq^0) = \la\F,\ \Q_1, \Q_f, \Delta_1 \cup \Drw^1 \cup \Deq^1 \ra$ avec :
   \begin{itemize}
   \item  $\Delta_1 = \norm(f(s(s(q_1))),\emptyset) \cup \Delta^0 =
     \{s(q_1) \rw q_2,\ s(q_2) \rw q_3,\ f(q_3) \rw q_4\} \cup \{a \rw q_1,\ f(q_1) \rw q_0\}$,
@@ -1519,7 +1565,7 @@ Grâce à la $\RE$-complétion définie dans les sections précédentes de ce ch
 on possède une procédure de construction de l'approximation $\desc(I)$, \textit{i.e.}
 par étapes successives de complétion jusqu'à l'obtention d'un $\RE$-automate $\aaexeq^*$
 point-fixe clos par réécriture. Comme les $\RE$-automates produits par complétion
-sont bien-définis~\ref{def:well-defined}, on peut déterminer si un terme de l'approximation
+sont bien définis~\ref{def:well-defined}, on peut déterminer si un terme de l'approximation
 qui viole la propriété est un contre-exemple ou un terme suspicieux.
 La figure~\ref{fig:completion_refinement} illustre l'approche que l'on souhaite mettre en oeuvre.
 Il n'est pas nécessaire d'atteindre le point-fixe pour vérifier que la propriété est violée.
@@ -1527,6 +1573,7 @@ On peut tenter de vérifier la propriété sur le $\RE$-automate obtenu après $
 de $\RE$-complétion. On se place dans le cas où l'intersection est non vide. Si cette dernière 
 contient un terme atteignable alors la propriété est violée, sinon on raffine
 l'approximation en produisant l'automate $\aaexeq^{k+2}$ et en reprenant le processus de $\RE$-complétion.
+
 \input{4_contre_ex/img/refine}
 
 Pour appliquer cette technique, il faut donc être capable de calculer l'intersection entre
@@ -1615,7 +1662,7 @@ de façon à retirer du langage de $\A$, les termes qui sont dans l'intersection
   comme expliqué dans la définition~\ref{def:reachable-states}. 
   Pour tout état final $q$ de $\A$, tout état final $q'$ de $\B$, pour toutes formules $\phi_S\neq\bot$, $\phi\neq \bot$ et
   tout terme $t\in\TF$, on a $t\xrw{\phi}^*_\A q$ et $t \rw_\B^* q'$
-  (\textit{i.e.} $\Lang(\A)\cap \Lang(\B) \neq \emptyset$) si et seulement si il existe un 
+  (\textit{i.e.} $\Lang(\A)\cap \Lang(\B) \neq \emptyset$) si et seulement s'il existe un 
   triplet $(q,q',\phi_S)\in S$ tel que $\phi \models \phi_S$. 
 \end{lemma}
 
@@ -1820,7 +1867,7 @@ pour toute formule $\phi$, il n'existe plus aucune exécution $t
 permet aussi retirer d'autres termes engendrés par $\phi$.
 
 \begin{property}
-   $\prune$ préserve la bonne-définition.
+   $\prune$ préserve la bonne définition.
 \end{property}
 
 \begin{proof}
@@ -1833,7 +1880,7 @@ point de la bonne définition si $\aaexeq^k$ est bien défini.
 Pour le deuxième point, on considère une transition $q' \xrw{\alpha} q \in \Drw^{k+1}$ du $\RE$-automate
 élagué $\aaexeq^{k+1}$.
 Comme pour le point précédent, on sait qu'il existe un terme $t$ tel que $t \xrw{\top}_{\aaexeq^{k+1}} q'$. 
-Comme $\aaexeq^{k}$ est bien-défini, on sait aussi qu'il existe un terme $s$ tel que $s \xrw{\alpha}_{\aaexeq^k} q$.
+Comme $\aaexeq^{k}$ est bien défini, on sait aussi qu'il existe un terme $s$ tel que $s \xrw{\alpha}_{\aaexeq^k} q$.
 D'après la transition $s \xrw{\alpha}_{\aaexeq^k} q$, on peut en déduire que $s$ est réduit en l'état $q$
 au moyen de transitions de $\Drw^k$ et de $\Deq^k$ qui ont pu être supprimées par élagage:
 \begin{itemize}
@@ -1852,7 +1899,7 @@ ce qui est contradictoire avec l'hypothèse.
   $\Drw^{k+1}$: on arrive à la même conclusion que précédemment.
 \end{itemize}
 On en déduit donc que le $s$ est aussi réduit dans le $\RE$-automate $\aaexeq^{k+1}$ tel que $s \xrw{\alpha}_{\aaexeq^k} q$,
-ce qui termine la preuve que $\aaexeq^{k+1}$ est bien-défini.
+ce qui termine la preuve que $\aaexeq^{k+1}$ est bien défini.
 \end{proof}
 
 \begin{remark}
@@ -2057,7 +2104,7 @@ sinon la procédure diverge lorsque la totalité de $Bad$ est considérée.
 % \end{tabular}
 
 % Intuitively, if we have $u \rw^=_{\aaexeq^i} q$, then we know that there exists a term
-% $t$ of $Rep(q)$ such that $t =_E u$.
+% $t$ of $\Rep(q)$ such that $t =_E u$.
 % We obtain $\Deq^{i+1}$ by adding the transitions $q \rw q'$ and $q'
 % \rw q$ to $\Deq^i$, for each pair $(q, q')$. We also keep $\Deq^{i+1}$
 % {\em closed by transitivity}, but only for pair of distinct states.
@@ -2257,8 +2304,8 @@ de le construire? Un tel résultat donnerait une précision supplémentaire sur 
 %%% ispell-local-dictionary: "french"
 %%% End: 
 
-% LocalWords:  injectif bonne-définition injectivité bien-défini semi-décidable
+% LocalWords:  injectif bonne définition injectivité bien défini semi-décidable
 % LocalWords:  sur-approximation non-atteignabilité itérativement Dualement
 % LocalWords:  sur-ensemble modulo l'atteignabilité semi-décision reformulation
-% LocalWords:  non-atteignable sous-terme bien-définis triplets triplet
-% LocalWords:  sous-formule sous-terme sous-termes
+% LocalWords:  non-atteignable sous-terme bien définis triplets triplet TRMC
+% LocalWords:  sous-formule sous-terme sous-termes d'atteignabilité

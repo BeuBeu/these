@@ -13,16 +13,19 @@
   nous indique que le terme $b$ est obtenu à partir du terme $c$ par égalité.
   On peut constater que la transition $q_c \rw q_b$ nous permet 
   de conclure réciproquement que le terme $c$ est obtenu à partir du terme $b$.
-  % The term $g(b)$ is recognized into $q_g$, thanks to $q_b \rw q_c$ too.
-  % Conversely, we have that $c$ is the approximation of $d$ from state $q_d$.
 
-  Les transitions $q_g \rw q_f$ et $q_b \rw q_a$ denotent des étapes de réécriture.
-  En fait, elles nous permettent de déduire $f(a) \rw^*_\RE g(c)$ et, $a \rw^*_\RE b$.
-  En dépliant la relation $f(a) \rw^*_\RE g(c)$, on obtient la chaîne $f(a) \rw_\R f(b) =_E f(c) \rw_\R g(c)$, 
-  qui utilise l'égalité $b = c$ pour passer de $g(b)$ à $g(c)$, relation que l'on peut 
+  Les transitions $q_g \rw q_f$ et $q_b \rw q_a$ dénotent des étapes de réécriture.
+  De la même manière que pour les transitions qui dénotent l'équation $b=c$, du point
+  de vue de l'état $q_a$, la transition $q_b \rw q_a$ permet de déduire que le terme
+  $b$ est un descendant par $\RE$ du terme $a$. La transition $q_g \rw q_f$ indique 
+  aussi à l'état $q_f$ que le $g(c)$ est un descendant de $f(a)$ par $\RE$.
+
+  Les deux transitions $q_g \rw q_f$ et $q_b \rw q_a$ permettent de déduire que l'on a $f(a) \rw^*_\RE g(c)$
+  et $a \rw^*_\RE b$. En revanche, lorsqu'on déplie la relation $f(a) \rw^*_\RE g(c)$, on obtient la chaîne
+  $f(a) \rw_\R f(b) =_E f(c) \rw_\R g(c)$, qui utilise l'égalité $b = c$ pour passer de $g(b)$ à $g(c)$, relation que l'on peut 
   déduire de la transition $q_c \rw q_b$. Ainsi, on étiquette la transition $q_g \rw q_f$
-  avec la formule $Eq(q_c, q_b)$ pour conserver cette information. 
-  En revanche, la transition $q_b \rw q_a$ est étiquetée avec $\top$ ce qui signifie 
+  avec la formule $Eq(q_c, q_b)$ pour reporter cette information. 
+  D'autre part, la transition $q_b \rw q_a$ est étiquetée avec $\top$ ce qui signifie 
   qu'aucune égalité n'est utilisée pour réécrire $a$ en $b$: de cette transition, on déduit $a \rw^*_\R b$.
   \begin{center}
     %\centering
