@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2010.6.2)  18 NOV 2010 22:27
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2010.6.2)  20 NOV 2010 00:03
 entering extended mode
  %&-line parsing enabled.
 **\input main.tex
@@ -1406,7 +1406,7 @@ tex/updmap/pdftex.map}>] [3] [4
 
 ] (./main.toc [1]
 Overfull \hbox (2.03766pt too wide) detected at line 69
- \OT1/cmr/bx/n/12 101
+ \OT1/cmr/bx/n/12 103
  []
 
 ) [2]
@@ -1499,12 +1499,16 @@ File: 2_prerequis/cp1.pdf Graphic file (type pdf)
 <2_prerequis/cp2.pdf, id=477, 300.1588pt x 156.6382pt>
 File: 2_prerequis/cp2.pdf Graphic file (type pdf)
 
-<use 2_prerequis/cp2.pdf> [16 <./2_prerequis/cp1.pdf> <./2_prerequis/cp2.pdf>]
-<xymatrix 2x2 107> [17] [18] [19] <xymatrix 2x2 155>) [20]
+<use 2_prerequis/cp2.pdf> [16 <./2_prerequis/cp1.pdf>] [17 <./2_prerequis/cp2.p
+df>] <xymatrix 2x2 107> [18] [19] <xymatrix 2x2 155> [20]) [21]
 \openout2 = `4_contre_ex/4_contre_ex.aux'.
 
 
-(./4_contre_ex/4_contre_ex.tex
+(./4_contre_ex/4_contre_ex.tex [22
+
+
+
+]
 Underfull \hbox (badness 10000) in paragraph at lines 8--20
 
  []
@@ -1514,19 +1518,15 @@ Underfull \hbox (badness 10000) in paragraph at lines 25--28
 
  []
 
-<4_contre_ex/illustration.pdf, id=553, 493.8344pt x 214.5094pt>
+<4_contre_ex/illustration.pdf, id=561, 493.8344pt x 214.5094pt>
 File: 4_contre_ex/illustration.pdf Graphic file (type pdf)
 
-<use 4_contre_ex/illustration.pdf> [21
-
-
-
-] [22 <./4_contre_ex/illustration.pdf>]
-<4_contre_ex/armc.pdf, id=577, 351.9834pt x 121.69244pt>
+<use 4_contre_ex/illustration.pdf> [23] [24 <./4_contre_ex/illustration.pdf>]
+<4_contre_ex/armc.pdf, id=585, 351.9834pt x 121.69244pt>
 File: 4_contre_ex/armc.pdf Graphic file (type pdf)
 
-<use 4_contre_ex/armc.pdf> [23] [24 <./4_contre_ex/armc.pdf>] <xymatrix 2x2
-155> <xymatrix 2x2 251> [25]
+<use 4_contre_ex/armc.pdf> [25] [26 <./4_contre_ex/armc.pdf>] <xymatrix 2x2
+155> <xymatrix 2x2 251> [27]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 250.
@@ -1539,130 +1539,81 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 250.
 
-(./4_contre_ex/semantics_ex.tex [26]) [27] [28]
+(./4_contre_ex/semantics_ex.tex [28]) [29] [30]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 491.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `subscript' on input line 491.
+(hyperref)                removing `math shift' on input line 496.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 491.
-
-[29] [30]
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 571.
+(hyperref)                removing `subscript' on input line 496.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `subscript' on input line 571.
+(hyperref)                removing `math shift' on input line 496.
+
+[31] [32]
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 576.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 571.
+(hyperref)                removing `subscript' on input line 576.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 571.
+(hyperref)                removing `math shift' on input line 576.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 571.
-
-<xymatrix 3x3 111> <xymatrix 3x3 166> [31]
-
-LaTeX Font Warning: Command \small invalid in math mode on input line 675.
-
-[32] [33] [34] [35]
-! Missing $ inserted.
-<inserted text> 
-                $
-l.888 ...elta' \cup \Drw \cup \Deq\ra$ avec \Delta
-                                                   .
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
+(hyperref)                removing `math shift' on input line 576.
 
 
-! LaTeX Error: Command \end{property} invalid in math mode.
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 576.
 
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.889 \end{property}
-                    
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
+<xymatrix 3x3 111> <xymatrix 3x3 166> [33]
 
+LaTeX Font Warning: Command \small invalid in math mode on input line 680.
 
-! LaTeX Error: Something's wrong--perhaps a missing \item.
+[34] [35] [36] [37] [38] [39]
+Underfull \hbox (badness 3942) in paragraph at lines 1004--1013
+[]\OT1/cmr/m/n/12 Pour la po-si-tion $\OML/cmm/m/it/12 i:p$\OT1/cmr/m/n/12 , le
+ sous-terme $\OML/cmm/m/it/12 t\OT1/cmr/m/n/12 [\OML/cmm/m/it/12 q[]\OT1/cmr/m/
+n/12 ][]$ est d^^Sefini seule-ment si $\OML/cmm/m/it/12 t \OT1/cmr/m/n/12 =
+ []
 
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.889 \end{property}
-                    
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-! LaTeX Error: Something's wrong--perhaps a missing \item.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.889 \end{property}
-                    
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-! Missing $ inserted.
-<inserted text> 
-                $
-l.889 \end{property}
-                    
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-[36] [37] [38]
-Underfull \hbox (badness 2269) in paragraph at lines 1135--1143
+[40] [41]
+Underfull \hbox (badness 2269) in paragraph at lines 1194--1202
 []\OT1/cmr/m/n/12 On va alors d^^Secomposer $\OML/cmm/m/it/12 f\OT1/cmr/m/n/12 
 (\OML/cmm/m/it/12 t[]; [] ; t[]\OT1/cmr/m/n/12 )\OML/cmm/m/it/12 ^^[ [][] q$ \O
 T1/cmr/m/n/12 en s^^Sequence de tran-si-tions.
  []
 
-[39]
-Underfull \hbox (badness 1796) in paragraph at lines 1194--1197
+[42]
+Underfull \hbox (badness 1796) in paragraph at lines 1253--1256
 []\OT1/cmr/m/n/12 Si $\OML/cmm/m/it/12 f\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 q[]; 
 [] ; q[]\OT1/cmr/m/n/12 ) \OMS/cmsy/m/n/12 ! \OML/cmm/m/it/12 q[] \OMS/cmsy/m/n
 /12 2 \OT1/cmr/m/n/12 ^^A$ est la derni^^Rere tran-si-tion uti-lis^^See pour av
 oir
  []
 
-[40]
+[43]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 1223.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `subscript' on input line 1223.
+(hyperref)                removing `math shift' on input line 1282.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 1223.
+(hyperref)                removing `subscript' on input line 1282.
 
 
-Underfull \hbox (badness 2269) in paragraph at lines 1237--1248
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 1282.
+
+
+Underfull \hbox (badness 2269) in paragraph at lines 1296--1307
 []\OT1/cmr/m/n/12 Soient les $[]$-automates $\OT1/cmr/m/it/12 A \OT1/cmr/m/n/12
  = \OMS/cmsy/m/n/12 hF\OML/cmm/m/it/12 ; \OT1/cmr/m/it/12 Q\OML/cmm/m/it/12 ; \
 OT1/cmr/m/it/12 Q[]\OML/cmm/m/it/12 ; \OT1/cmr/m/n/12 ^^A \OMS/cmsy/m/n/12 [ \U
@@ -1670,24 +1621,24 @@ OT1/cmr/m/it/12 Q[]\OML/cmm/m/it/12 ; \OT1/cmr/m/n/12 ^^A \OMS/cmsy/m/n/12 [ \U
 mr/m/it/12 A[] \OT1/cmr/m/n/12 =
  []
 
-[41] [42] [43]
+[44] [45] [46]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 1426.
+(hyperref)                removing `math shift' on input line 1485.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 1426.
+(hyperref)                removing `math shift' on input line 1485.
 
-<xymatrix 2x2 155> [44] [45] <xymatrix 2x2 155> [46]
+<xymatrix 2x2 155> [47] [48] <xymatrix 2x2 155> [49]
 (./4_contre_ex/img/refine.tex
 Overfull \hbox (25.11714pt too wide) in paragraph at lines 31--32
  [][] 
  []
 
-) [47 <./4_contre_ex/img/A0.pdf> <./4_contre_ex/img/A1.pdf> <./4_contre_ex/img/
+) [50 <./4_contre_ex/img/A0.pdf> <./4_contre_ex/img/A1.pdf> <./4_contre_ex/img/
 A2.pdf> <./4_contre_ex/img/A3.pdf> <./4_contre_ex/img/A4.pdf>]
-Underfull \hbox (badness 2582) in paragraph at lines 1671--1680
+Underfull \hbox (badness 2582) in paragraph at lines 1730--1739
 []\OT1/cmr/m/n/12 Soient $\OT1/cmr/m/it/12 A \OT1/cmr/m/n/12 = \OMS/cmsy/m/n/12
  hF\OML/cmm/m/it/12 ; \OT1/cmr/m/it/12 Q[]\OML/cmm/m/it/12 ; \OT1/cmr/m/it/12 Q
 []\OML/cmm/m/it/12 ; \OT1/cmr/m/n/12 ^^A[]\OML/cmm/m/it/12 ; \U/eur/m/n/12 "[]\
@@ -1695,36 +1646,36 @@ OML/cmm/m/it/12 ; \U/eur/m/n/12 "[]\OMS/cmsy/m/n/12 i$ \OT1/cmr/m/n/12 un $[]$-
 automate et $\OT1/cmr/m/it/12 B \OT1/cmr/m/n/12 =
  []
 
-[48]
-Underfull \hbox (badness 2401) in paragraph at lines 1763--1788
+[51]
+Underfull \hbox (badness 2401) in paragraph at lines 1822--1847
 []\OT1/cmr/m/n/12 Si la premi^^Rere r^^Regle est concern^^See, cela si-gni-fie 
 qu'il existe des tri-plets
  []
 
-[49] [50] [51] [52]
+[52] [53] [54] [55]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 2167.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `subscript' on input line 2167.
+(hyperref)                removing `math shift' on input line 2226.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 2167.
+(hyperref)                removing `subscript' on input line 2226.
 
-[53] [54]) [55]
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 2226.
+
+[56] [57]) [58]
 \openout2 = `3_proptemp/3_proptemp.aux'.
 
- (./3_proptemp/3_proptemp.tex [56
+ (./3_proptemp/3_proptemp.tex [59
 
 
 
-] [57]
-<jvm_1.pdf, id=1005, 228.86684pt x 23.63159pt>
+]
+<jvm_1.pdf, id=1017, 228.86684pt x 23.63159pt>
 File: jvm_1.pdf Graphic file (type pdf)
- <use jvm_1.pdf> [58 <./jvm_1.pdf>] [59] [60]
+ <use jvm_1.pdf> [60 <./jvm_1.pdf>] [61] [62]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 284.
@@ -1757,26 +1708,26 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 284.
 
-<xymatrix 3x3 209> <xymatrix 3x3 127> [61] <xymatrix 5x3 336> [62] <xymatrix
-7x4 527> [63] [64]
+<xymatrix 3x3 209> <xymatrix 3x3 127> [63] <xymatrix 5x3 336> [64] <xymatrix
+7x4 527> [65] [66]
 Overfull \hbox (2.61107pt too wide) in paragraph at lines 566--596
 []$[]$ $[]$ 
  []
 
-[65] [66]
+[67] [68]
 Underfull \hbox (badness 10000) in paragraph at lines 721--722
 
  []
 
-[67]
+[69]
 Overfull \hbox (2.61107pt too wide) in paragraph at lines 782--816
 []$[]$ $[]$ 
  []
 
-[68] [69] [70] <xymatrix 2x2 155> [71]) [72]
+[70] [71] [72] <xymatrix 2x2 155> [73]) [74]
 \openout2 = `5_certif/5_certif.aux'.
 
- (./5_certif/5_certif.tex [73
+ (./5_certif/5_certif.tex [75
 
 
 
@@ -1784,11 +1735,11 @@ Overfull \hbox (2.61107pt too wide) in paragraph at lines 782--816
 LaTeX Font Info:    Font shape `OT1/pcr/bx/n' in size <10> not available
 (Font)              Font shape `OT1/pcr/b/n' tried instead on input line 56.
 
-[74] (./5_certif/rewriting.tex [75] [76]
+[76] (./5_certif/rewriting.tex [77] [78]
 LaTeX Font Info:    Font shape `OT1/pcr/m/it' in size <10> not available
 (Font)              Font shape `OT1/pcr/m/sl' tried instead on input line 128.
- [77]) (./5_certif/automata.tex
-[78]
+ [79]) (./5_certif/automata.tex
+[80]
 \myBox1=\box56
 \myScoreStart1=\dimen295
 \myCenter1=\dimen296
@@ -1807,35 +1758,35 @@ Overfull \hbox (1.28346pt too wide) in paragraph at lines 82--84
 ][][][] 
  []
 
-[79]
+[81]
 Underfull \hbox (badness 1043) in paragraph at lines 105--116
 \OT1/cmr/m/n/12 Bien que la for-ma-li-sa-tion soit plus simple que dans la li-b
 rai-rie \OT1/cmss/m/n/12 Coq \OT1/cmr/m/n/12 d'au-to-mates
  []
 
-) [80] [81]
+) [82] [83]
 Overfull \hbox (31.28377pt too wide) in paragraph at lines 341--343
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][] 
  []
 
-[82]
+[84]
 
 LaTeX Font Warning: Command \footnotesize invalid in math mode on input line 39
 9.
 
-[83] [84] [85] [86]
+[85] [86] [87] [88]
 Underfull \hbox (badness 2057) in paragraph at lines 714--723
 []\OT1/cmr/m/n/12 Pour rap-pel, la compl^^Setion d'au-to-mates d'arbres ef-fec-
 tue prin-ci-pa-le-ment deux
  []
 
-[87]
+[89]
 Underfull \hbox (badness 10000) in paragraph at lines 836--837
 
  []
 
-[88] [89] [90] [91] [92]
+[90] [91] [92] [93] [94]
 Overfull \hbox (17.78381pt too wide) in paragraph at lines 1175--1176
 [][][][][][][][][][][][][][][][] 
  []
@@ -1845,13 +1796,13 @@ Overfull \hbox (27.617pt too wide) in paragraph at lines 1198--1200
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[93] [94]
+[95] [96]
 Overfull \hbox (12.12592pt too wide) in paragraph at lines 1307--1308
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][] 
  []
 
-[95]
+[97]
 Underfull \hbox (badness 10000) in paragraph at lines 1328--1329
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][]
@@ -1869,18 +1820,18 @@ Underfull \hbox (badness 1540) in paragraph at lines 1344--1347
  les termes clos,
  []
 
-[96]
+[98]
 Overfull \hbox (1.28346pt too wide) in paragraph at lines 1422--1423
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][] 
  []
 
-[97] [98] [99]) [100] (./main.bbl
+[99] [100] [101]) [102] (./main.bbl
 bibitemlist
-[101
+[103
 
 
-] [102]
+] [104]
 Underfull \hbox (badness 2165) in paragraph at lines 228--232
 []\OT1/cmr/m/n/12 X. Le-roy, D. Do-li-gez, J. Gar-rigue, D. R^^Semy, and J. Vou
 illon.  The Ob-
@@ -1898,13 +1849,13 @@ Underfull \hbox (badness 10000) in paragraph at lines 239--241
 i-fi-ca-tion.
  []
 
-[103]) [104]
+[105]) [106]
 \openout2 = `resume/resume.aux'.
 
- (./resume/resume.tex) [105
+ (./resume/resume.tex) [107
 
 ]
-<LastPage.png, id=1725, 597.432pt x 845.0772pt>
+<LastPage.png, id=1737, 597.432pt x 845.0772pt>
 File: LastPage.png Graphic file (type png)
  <use LastPage.png>
 Overfull \hbox (247.98543pt too wide) in paragraph at lines 127--130
@@ -1914,13 +1865,13 @@ Overfull \hbox (247.98543pt too wide) in paragraph at lines 127--130
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [106
+ [108
 
 ]
 Overfull \vbox (93.29263pt too high) has occurred while \output is active []
 
 
-[107 <./LastPage.png (PNG copy)>]
+[109 <./LastPage.png (PNG copy)>]
 \tf@toc=\write7
 \openout7 = `main.toc'.
 
@@ -1934,9 +1885,9 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 99930689049BC9E7935E6F172D8A83B3;3497.
  ) 
 Here is how much of TeX's memory you used:
- 23982 strings out of 495008
- 384016 string characters out of 3179939
- 657918 words of memory out of 3000000
+ 23985 strings out of 495008
+ 384067 string characters out of 3179939
+ 657971 words of memory out of 3000000
  25970 multiletter control sequences out of 15000+200000
  32096 words of font info for 123 fonts, out of 3000000 for 9000
  36 hyphenation exceptions out of 8191
@@ -1986,9 +1937,9 @@ pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></u
 sr/local/texlive/2009/texmf-dist/fonts/type1/public/xypic/xyatip10.pfb></usr/lo
 cal/texlive/2009/texmf-dist/fonts/type1/public/xypic/xybtip10.pfb></usr/local/t
 exlive/2009/texmf-dist/fonts/type1/public/xypic/xydash10.pfb>
-Output written on main.pdf (113 pages, 2041216 bytes).
+Output written on main.pdf (115 pages, 2050514 bytes).
 PDF statistics:
- 1989 PDF objects out of 2073 (max. 8388607)
- 650 named destinations out of 1000 (max. 500000)
+ 2002 PDF objects out of 2073 (max. 8388607)
+ 653 named destinations out of 1000 (max. 500000)
  424 words of extra memory for PDF output out of 10000 (max. 10000000)
 

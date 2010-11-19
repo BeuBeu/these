@@ -17,6 +17,7 @@
      "prop:norm_injectivity"
      "prop:norm_representant"
      "prop:norm_well_def"
+     "prop:norm_transitions"
      "sec:filtrage"
      "def:matching-algorithm"
      "prop:matching-complete"

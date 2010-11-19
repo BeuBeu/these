@@ -382,7 +382,6 @@ du système;
   \footnote{\footnotesize A l'origine, $Rel$ est modélisée par un transducteur d'arbres.
     Mais comme les automates d'arbres peuvent être vus comme une classe particulière de 
     systèmes règles de réécriture, on choisit ici de généraliser}.
-  On impose à $\R$ d'être linéaire à gauche.
 \end{itemize}
 
 \noindent
@@ -413,6 +412,10 @@ transaction\dots.
 Pour les programmes Java, $Bad$ peut décrire des états où l'on
 s'apprête à accéder à une zone mémoire non définie. Ex: pointeur null,\dots
 
+Dans la suite de cette thèse, on restreint le cadre du TRMC seulement
+aux relations de transition modélisées par des systèmes linéaires de
+réécriture linéaires à gauche.
+
 \section{La complétion d'automates d'arbres}
 \label{sec:completion}
 Dans le cas des systèmes à espace d'états fini (et de taille
@@ -436,13 +439,18 @@ une sur-approximation de l'ensemble des termes atteignables.
 Elle peut être utilisée pour résoudre certaines instances du problème d'atteignabilité:
 la complétion d'automates d'arbres est facilement paramétrable afin de définir 
 la sur-approximation souhaitée~\cite{Genet-RTA98,FeuilladeGVTT-JAR04,Takai-RTA04}
-pour le problème considéré.
+pour le problème considéré. La complétion traite communément les systèmes de 
+réécriture dont les règles de réécriture sont linéaires à gauche. Il est 
+théoriquement possible d'apdater la complétion pour traiter les systèmes 
+de règles de réécriture non linéaires, mais généralement les performances
+des outils s'écroulent très rapidement et empêchent le passage à l'échelle.
 
 \subsection{Principe général}
 
 En utilisant l'algorithme de complétion on peut construire un
 automate d'arbres $\B$ dont le langage $\Lang(\B) \supseteq
-\desc(\Lang(\A))$ contient au moins tous les termes atteignables.  Il
+\desc(\Lang(\A))$ contient au moins tous les termes atteignables, dans le cas
+où $\R$ est un système de réécriture linéaire à gauche.  Il
 est alors suffisant de vérifier que l'automate $\B$ ne reconnaît pas
 de termes de $Bad$ -- \textit{i.e.} $\Lang(\B)\cap Bad = \emptyset$ --
 pour montrer que le système n'atteint jamais aucune des configurations
@@ -475,13 +483,18 @@ de $Bad$ soit $\desc(\Lang(\A))\cap Bad=\emptyset$.
 % }
 
 La complétion d'automates d'arbres termine lorsque le calcule arrive sur un point fixe,
-lorsque l'automate est $\R$-clos.
+lorsque le langage de l'automate est $\R$-clos.
 
 
 \begin{definition}
-  Un automate d'arbres $\B$ est dit $\R$-clos si chaque état $q$ de cet automate et pour tous termes $s,t$ tels que 
+  Le langage d'un automate d'arbres $\B$ est dit \textbf{$\R$-clos} si et seulement si 
+  pour tout terme $s \in \Lang(\B)$ si il existe $t \in \TF$ tel que $s \rw_\R^* t$, 
+  alors $t \in \Lang(\B)$. 
+
+  Le critère suivant est suffisant pour assurer que le langage de $\B$ est $\R$-clos.
+  Si pour tout état $q$ de l'automate $\B$ et pour tous termes $s,t$ tels que 
   $s \rw_\R t$ avec $s$ reconnu par $\B$ dans l'état $q$, alors $t$ est aussi reconnu par $\B$ dans l'état $q$.
-  La propriété de clôture est illustrée par le diagramme de la figure~\ref{fig:R-cloture}.
+  Le critère de clôture est illustrée par le diagramme de la figure~\ref{fig:R-cloture}.
   % The situation is represented with the following graph.
   \begin{figure}[ht!]
     \centering
@@ -491,13 +504,15 @@ lorsque l'automate est $\R$-clos.
       q & %\ar[l]^{\A_{i+1}} q'
     }
     $
-    \caption{\footnotesize Propriété de $\R$-clôture}
+    \caption{\footnotesize $\R$-clôture de $\B$}
     \label{fig:R-cloture}
   \end{figure}
+  On considère toujours implicitement qu'un automate $\R$-clos
+  assure toujours le critère de clôture.
 \end{definition}
 
 Il est évident de constater que l'on a $\Lang(\B) \supseteq \desc(\Lang(\A))$
-si $\B$ est $\R$-clos et si $\Lang(\B)\supseteq \Lang(\A)$~\cite{BoyerGJ-IJCAR08}.
+lorsque le langage de $\B$ est $\R$-clos et si $\Lang(\B)\supseteq \Lang(\A)$~\cite{BoyerGJ-IJCAR08}.
 
 D'un point de vue algorithmique, la construction d'un automate $\R$-clos, que l'on notera
 $\aaex^*$, à partir de l'automate $\A$ consiste à \textit{compléter} l'automate $\A$
@@ -510,7 +525,7 @@ $\aaex^k$ \textit{i.e.} tel que $\Lang(\aaex^{k+1}) \supseteq \Lang(\aaex^k)$.
 \subsection{Étape de complétion : calcul exact des $\R$-descendants}
 
 
-Chaque application du TRS $\R$ est appelée \textbf{étape de complétion} et 
+Chaque application du TRS $\R$  est appelée \textbf{étape de complétion} et 
 consiste à rechercher parmi les termes reconnus par l'automate, ceux qui peuvent être réécrits
 dont les descendants ne sont pas encore reconnus par l'automate.
 Cela revient à rechercher les \textbf{paires critiques} $\langle q, t \rangle$ 
@@ -572,7 +587,7 @@ Ainsi, réécrire $l\sigma$ en $r\sigma$ revient donc à réécrire tous les ter
 
 \begin{definition}
   Pour $\aaex^i$ un automate d'arbres donné et $l \rw r \in \R$ une
-  règle de réécriture, on appelle le \textbf{problème de filtrage}, le
+  règle de réécriture linéaire à gauche, on appelle le \textbf{problème de filtrage}, le
   problème qui consiste à retrouver toutes les paires critiques de $l
   \rw r$ avec $\aaex^i$. On utilise $l \match q$ pour dénoter plus précisément
   le problème de filtrage pour tout état $q$ de $\aaex^i$.
@@ -584,6 +599,16 @@ Cet algorithme produit un ensemble de $\Q$-substitutions $\sigma: \X \mapsto \Q$
 formant des paires critiques $\la q, r\sigma\ra$ telles que $l\sigma \rw_{\aaex^i}^* q$.
 Le problème de filtrage doit être résolu pour toutes les règles $l\rw r$ de $\R$ avec
 chaque état $q$ de l'automate $\aaex^i$.
+
+Si on considère le problème de filtrage pour $l$ qui est non linéaire, la résolution est plus
+délicate. On peut être confronté au cas où deux occurrences d'une même variable $x$
+sont mises en correspondance avec $q$ et $q'$ deux états différents de l'automate $\aaex^i$. 
+Sur un terme $t$, la règle $l\rw r$ ne peut s'appliquer que si $x$ est associé à un unique sous-terme
+de $t$. Pour l'automate $\aaex^i$, cela revient à construire l'ensemble des termes à la fois reconnus
+par l'état $q$ et l'état $q'$. Si cette intersection est vide, alors le filtrage échoue, 
+sinon il faut ajouter un nouvel état $q''$ qui reconnaît l'intersection des langages des états $q$ et $q'$.
+Comme la construction et le test de vacuité des intersections peut se révèle très vite coûteux et ne passe
+pas bien à l'échelle pour cette raison.
 
 \begin{definition}
   Une paire critique $\la q, r\sigma\ra$ est non résolue entre l'automate $\aaex^i$ et $\R$ si $r\sigma \not\rw_{\aaex^i}^* q$.
@@ -653,7 +678,8 @@ En fait, il est possible de définir plus formellement cette relation d'ordre.
 \begin{definition}
   \label{def:representants}
   Soit $\A$ un automate d'arbres. On définit par $\rwne_\A$ la relation induite par les transitions normalisées de $\A$.
-  On appelle \textbf{représentants} de l'état $q$, tous les termes clos de l'ensemble $\Rep(q) = \{t \in \Lang(\A, q)\sep t \rwne_\A q\}$.
+  On note $\rwne^*_\A$ la clôture transitive et réflexive de $\rwne_\A$.
+  On appelle \textbf{représentants} de l'état $q$, tous les termes clos de l'ensemble $\Rep(q) = \{t \in \Lang(\A, q)\sep t \rwne^*_\A q\}$.
 \end{definition}
 
 Par définition l'automate $\aaex^0 = \A$ représente l'ensemble initial et n'a jamais été complété : on impose alors qu'il ne contienne pas 
@@ -721,26 +747,24 @@ L'accélération consiste à définir un nouvel automate $\aaexeq^i$ à partir d
 que le langage de $\aaexeq^i$ soit une sur-approximation du langage de $\aaex^i$.
 L'approximation repose sur la relation $=_E$ induite par les équations $E$. 
 Elle consiste à fusionner les états dont les représentants (\textit{c.f.} définition~\ref{def:representants})
-dans la même classe d'équivalence par $=_E$. La fusion correspond au un renommage des états destinés à la fusion
-par un nouveau nom d'état. Cette étape de renommage est réalisée pour l'intégralité des transitions de l'automate.
+dans la même classe d'équivalence par $=_E$. La fusion correspond au renommage des états destinés à la fusion
+en un nouvel et unique nom d'état. Cette étape de renommage est réalisée pour l'intégralité des transitions de l'automate.
 %Elle repose sur la \textbf{fusion d'états} dirigée par les équations de $E$.
 \begin{definition}
   Deux états distincts $q,\ q'$ de l'automate $\aaex^i$ sont \textbf{fusionnés} si pour une équation $u=v \in E$,
   il existe une $\Q$-substitution $\sigma : \X \rw \Q$ telle qu'on ait le diagramme de la figure~\ref{fig:fusion}.
-
   \begin{figure}[ht!]
     \centering
     $\xymatrix{
-      u\sigma \ar@{=}[r]_{E}\ar[d]_{\aaex^i}^{\not\varepsilon} & v\sigma \ar[d]_{\not\varepsilon}^{\aaex^i}\\
+      u\sigma \ar@{=}[r]_{E}\ar[d]_{\aaex^i}^{\not\varepsilon\; *} & v\sigma \ar[d]_{*\; \not\varepsilon}^{\aaex^i}\\
       q & q'
     } $
     \caption{Fusion d'états par l'équation $u=v$}
     \label{fig:fusion}
   \end{figure}
 
-  Alors on fusionne les états $q$ et $q'$ dans l'automate $\aaexeq^i$. 
-  La fusion consiste alors en un simple renommage de $q$ en $q'$ (ou inversement) dans toutes
-  les transitions de l'automate où l'état $q$ apparaît.
+  La fusion consiste alors en un simple renommage de $q$ en $q'$ (ou inversement) que l'on effectue
+  pour toutes les transitions de l'automate $\aaexeq^i$ où l'état $q$ apparaît.
   % Les ensembles des substitutions $\sigma$ et $sigma'$
   % peuvent être calculées respectivement par résolution des problèmes de filtrage $u \match q$ et $v \match q'$.
   % Il suffit de vérifier si il existe un couple $(\sigma,\sigma')$ tel que pour toute variable $x \in \vars(u) \cap \vars(v)$
