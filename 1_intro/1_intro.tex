@@ -1,3 +1,47 @@
+\section*{Remerciements}
+
+Quatre ans\dots\ quatre années à me supporter au gré d’une valse rythmée par les
+accents d’euphorie ou d’enthousiasme succédées par des mouvements de
+doute ou de déprime\dots Même si ce genre de phénomène est courant chez
+les thésards, cela ne facilite pas l’encadrement pour autant ! C’est
+donc pour cette raison que je tiens à remercier \textit{Thomas Genet} et \textit{Thomas
+Jensen} d’avoir risqué l’aventure d’une thèse avec moi. Un contexte
+scientifique est important, c’est indéniable, mais la qualité humaine
+des relations est aussi un facteur incontournable pour
+l’épanouissement d'un travail de recherche. J’ai trouvé cela dans
+l’équipe-projet Lande, et plus encore dans l’équipe Celtique ! C’est
+pour cette raison que je remercie tous les membres de l’équipe (\textit{David}, 
+\textit{Thomas}, \textit{Frédéric}, \textit{Olivier}, \textit{Sandrine},
+\textit{Laurent}, \textit{Florent}, \textit{Tiphaine}, \textit{Vincent},
+\textit{Clément}, \textit{Pierre-Emmanuel}, \textit{Delphine}, \textit{Arnaud},
+\textit{Najib}, \textit{Mattieu}, \textit{Florence}, et tous les autres !), 
+avec qui nous avons pu échanger
+scientifiquement, culturellement, humainement et passionnément lors de
+nos pauses quotidiennes à la cafet’ de l’IRISA. Un autre point
+marquant pour cette thèse : la collaboration avec \textit{Axel Legay} qui a
+permis de nouvelles ouvertures et idées très intéressantes, et ce
+d’autant plus, puisque cette collaboration perdure. Pour cela, je
+remercie \textit{Axel}. Je porterai une attention toute particulière aux
+rapporteurs de cette thèse, \textit{Jean Goubault-Larrecq} et \textit{Ahmed Bouajjani},
+mais encore plus significativement à \textit{Jean Goubault-Larrecq}, pour la
+patience et la minutie incroyables dont il a fait preuve dans ce
+travail de relecture et de correction pour ce manuscrit. Il est parti
+de loin, et le manuscrit a grandement profité de toutes ces remarques
+: je l’en remercie vivement. Je remercie aussi l’ensemble du jury dont
+\textit{Pierpaolo Degano} qui a accepté de faire le déplacement depuis
+l’Université de Pise, ainsi que \textit{Olivier Ridoux} qui a présidé le
+jury. L’expérience de l’enseignement à ses côtés fut indéniablement
+novatrice et enrichissante et pour cela je l’en remercie ! Je remercie
+ma famille et mes amis, pour la compréhension et le soutient dont ils
+m’ont fait part ces derniers mois. En particulier, dans ces derniers
+mois de rédaction dans l’urgence, où \textit{Manon} a accepté de s’endormir le
+soir sans avoir vu son papa, et \textit{Soline} pour qui la charge de familiale
+a pris plus d’importance et enfin \textit{Constance} qui elle est arrivée alors
+que nous emménagions à Grenoble. À Toutes les trois, merci pour ces
+moments de bonheur !
+
+
+
 \chapter{Introduction}
 
 \section{Pourquoi la vérification et la preuve de programmes?}
@@ -8,23 +52,23 @@ fiabilité dans les domaines où toute défaillance
 opérationnelle peut conduire à des catastrophes. L'étymologie du mot {\em ordinateur}
 est un bel exemple des espoirs que l'on a placés dans le domaine. Introduit par Jacques Perret
 en 1955, il est issu du latin {\em ordinator} qui signifie celui qui met en ordre, qui règle
-\footnote{\footnotesize Extrait de la définition d'{\em ordinator} dans le dictionnaire Gaffiot}.
+\footnote{\footnotesize Extrait de la définition d'{\em ordinator} dans le dictionnaire Gaffiot.}.
 Cette définition omet de préciser que si l'ordinateur sait résoudre des problèmes, c'est 
 grâce à l'ordonnateur (plus communément appelé programmeur ou développeur). %dont il 
 L'ordinateur exécute les directives (le programme) du programmeur susceptibles de résoudre
 les problèmes auxquels la machine est assignée. 
 Si la machine est incontestablement meilleure que toute personne humaine dans la répétition 
-intensive de calcul, l'introduction de l'informatique déplace simplement le problème 
+intensive de calculs, l'introduction de l'informatique déplace simplement le problème 
 de la fiabilité: le programme est-il suffisamment bien conçu pour permettre à l'ordinateur
 de toujours réussir dans sa tâche? 
 
 Si l'on se concentre sur la tâche du programmeur, celle-ci peut se résumer essentiellement
 en deux étapes. Analyser le problème, puis si une méthode de résolution (au sens algorithmique du terme) existe,
 la traduire en une spécification opérationnelle, le programme. Le {\em bug}\footnote{\footnotesize
-  La terminologie française exacte est {\em bogue}} intervient lorsqu'une faute 
+  La terminologie française exacte est {\em bogue}.} intervient lorsqu'une faute 
 de raisonnement conduit à une spécification erronée ou incomplète : conduisant l'ordinateur 
 dans des comportements inattendus qui constituent les manifestations cliniques du bug.
-Plus le problème à résoudre est complexe, plus il y a de chance de commettre une faute 
+Plus le problème à résoudre est complexe, plus il y a de risques de commettre une faute 
 de conception conduisant à un bug lors de l'exécution du programme. 
 De l'analyse du problème on peut aussi aboutir à une spécification dénotationnelle et formalisée à l'aide d'outils mathématiques.
 Cette spécification "haut-niveau" est univoque et constituée de définitions et de propriétés simples:
@@ -131,7 +175,7 @@ L'expressivité des systèmes de réécriture permet de modéliser plus que l'ar
 En particulier tout système calculatoire peut-être modélisé, dont les programmes informatiques
 par exemple. En fait, certains langages de programmation comme \ocaml~\cite{OCAML} ou \tom~\cite{TOM}
 intègrent nativement la réécriture. L'exemple suivant donne un codage de la
-célèbre\footnote{\footnotesize au moins chez les mathématiciens et les cuniculiculteurs} fonction de Fibonacci.
+célèbre\footnote{\footnotesize au moins chez les mathématiciens et les cuniculiculteurs.} fonction de Fibonacci.
 On note par $\fib(n)$ le nombre de Fibonacci de rang $n$. En reprenant et complétant la formalisation des entiers
 naturels précédente, on peut définir la fonction $\fib(n)$ de la manière suivante:
 \[
@@ -176,7 +220,7 @@ c'est à dire l'ensemble des termes atteignables par réécriture des termes ini
   \includegraphics[width=12cm]{1_intro/exact}
 \end{figure}
 
-En supposant que l'on sait calculer $\R^*(I)$, on est alors à même de vérifier que le terme $\fib(\bottom)$
+En supposant que l'on sache calculer $\R^*(I)$, on est alors à même de vérifier que le terme $\fib(\bottom)$
 n'est jamais produit. C'est ce que l'on appelle communément le problème d'atteignabilité.
 
 Mais plusieurs problèmes doivent être résolus pour être capable de
@@ -195,7 +239,7 @@ de calculer (et de représenter) l'ensemble des termes atteignables
 pour un système de réécriture donné.  Par contre, il est possible d'en
 calculer une sur-approximation.  C'est l'objectif de la complétion
 d'automates d'arbres : compléter le langage\footnote{\footnotesize
-  l'ensemble des termes représenté par l'automate} d'un automate
+  l'ensemble des termes représenté par l'automate.} d'un automate
 d'arbres en ajoutant successivement les termes atteignables.  C'est un
 semi-algorithme introduit par Th.~Genet~\cite{Genet-RTA98}, qui
 calcule un automate $\aapprox$ caractérisant une sur-approximation
@@ -233,7 +277,7 @@ correspond exactement à l'exécution du programme Java.
 
 
 
-\section{Présentation des Contributions de cette thèse}
+\section{Présentation des contributions de cette thèse}
 Les contributions de cette thèse trouvent leur place dans le cadre de vérification de programmes Java
 compilés en systèmes de réécriture et dont l'analyse se base sur la complétion d'automates d'arbres.
 La complétion a pour ambition de proposer une technique intermédiaire entre la preuve de programme
@@ -283,7 +327,7 @@ de terminer est faisable même pour les programmes Java. Le problème est de fou
 fine pour vérifier la propriété attendue, tout en assurant la terminaison. Sous ces contraintes, quel que soit
 le niveau d'expertise, il est à peu près impossible de définir à la main la bonne abstraction. Le raffinement automatique
 de l'abstraction permet de simplifier cette tâche: on peut alors définir une abstraction peu précise mais qui assure
-la terminaison du calcul, l'abstraction étant affaiblie automatiquement lorsque c'est nécessaire.
+la terminaison du calcul, l'abstraction étant affaiblie automatiquement lorsque c'est nécessaire en suivant une approche à la "CEGAR".
 La contribution de ce chapitre est double. Tout d'abord, elle offre à la complétion la possibilité de
 construire des contre-exemples. Cette fonctionnalité, bien qu'indispensable, était absente et difficile à mettre
 en place dans le formalisme d'origine. Ensuite, on propose un algorithme de raffinement, non pas basé 

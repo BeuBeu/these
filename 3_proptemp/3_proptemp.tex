@@ -177,19 +177,26 @@ $\arw_{\R_p/E}$ est de caractériser la réécriture uniquement par les
 
 \begin{definition}
   \label{def:arw}
-  Soient $s,\ t \in \TF$ deux termes tels que $s \rw_\RE^* t$.
-  Soit $p \in \pos(s)$ une position de $s$. Alors on a \textbf{$s \arw_{\R_p/E} t$} si et seulement si
-  il existe un terme $w$ qui satisfait les conditions suivantes:
-  \begin{itemize}
-  \item  $s \rw_\RE^* w$
-  \item $w$ doit être obtenu par réécriture uniquement de sous-termes stricts de $s|_p$.
-  \item $t=_E w[r\sigma]_p$ avec $l\rw r \in \R$ et $w|_p = l\sigma$
-  \end{itemize}
+  On considère un ensemble $\R$ de règles de réécriture et un ensemble $E$ d'équations.
+  Soient $s,\ t \in \TF$ deux termes. % tels que $s \rw_\RE^* t$.
+  \begin{description}
+  \item On la relation $s \arw_\RE t$ si et seulement s'il existe une règle de
+    réécriture $l \rw r \in \R$ et substitution $\sigma$ telles que le terme $s$
+    est de la forme $f(u_1, \dots, u_n)$, $t = r\sigma$, et $l\sigma$ est de la forme 
+    $f(v_1,\dots,v_n)$ avec pour tout $i$ de $1$ à $n$, $u_i \rw^*_\RE v_i$.
+    Ce qui correspond à réécrire $s$ en $t$ en utilisant exactement une étape de réécriture au sommet,
+    et cette celle-ci est la dernière de la séquence entre $s$ et $t$.
+  \item
+    On généralise la relation $\arw_\RE$ pour n'importe quelle position $p\in \pos(s)$ du terme $s$.
+    Alors on a \textbf{$s \arw_{\R_p/E} t$} si et seulement si
+    il existe un terme $w \in \TF$ tel que $s|_p \arw_\RE w$ et $t=_E s[w]_p$.
+  \end{description}
 \end{definition}
 
-Dans le cas où l'ensemble des équations est vide, on note par $\arw_{\R_p}$ la relation $\arw_{\R_p/\emptyset}$.
-De la même manière on utilise la notation $\arw_\RE$ pour $p = \epsilon$. Ce qui nous donne au final, la notation
-$\arw_\R$ dans le cas $p = \epsilon$ et $E = \emptyset$.
+Dans le cas où l'ensemble $E$ des équations est vide, on note par $\arw_{\R_p}$ la relation $\arw_{\R_p/\emptyset}$.
+Lorsque $p=\epsilon$, les relations $\arw_{\R_p/E}$ et $\arw_{\RE}$ sont équivalentes. On utilisera la notation $\arw_\R$ 
+lorsque l'on considérera la relation $\arw_{\R_p/E}$ dans le cas $p = \epsilon$ et $E = \emptyset$. 
+
 On voit par l'intermédiaire de l'exemple~\ref{ex:arw}, que la relation $\arw_{\R_p}$ permet 
 d'abstraire la séquence de réécriture: les différents étapes de réécriture nécessaires
 pour arriver à l'étape de réécriture à la position $p$ sont simplement oubliées.
@@ -198,11 +205,11 @@ De ce fait, on ne conserve que les termes qui sont produits par la réécriture 
   \label{ex:arw}
   On considère la séquence de réécriture suivante. A chaque étape, le
   sous-terme réécrit est souligné, et le sous-terme produit est en
-  gras.
+  gras. On utilise le système de réécriture $\R = \{ a \rw b,\ b \rw c,\ g(x) \rw h(x),\ h(x) \rw a,\ f(a, a)\rw g(f(a,a))\}$
   \begin{multline*}
     f(g(\underline{a}), h(b)) \lrw_\R 
     f(\underline{g(\textbf{b})}, h(b)) \lrw_\R 
-    f(\textbf{h(\underline{b})}, h(b)) \lrw_\R
+    f(\underline{\textbf{h(b)}}, h(b)) \lrw_\R
     \\
     \\
     f(\textbf{a}, h(\underline{b})) \lrw_\R 
@@ -212,13 +219,14 @@ De ce fait, on ne conserve que les termes qui sont produits par la réécriture 
     % \textbf{f(a, f(a, \underline{a})}) \rw_\R  %doit remplacer celle du dessus
     % f(a, f(a, \textbf{b}))
   \end{multline*}
-  conformément à la définition~\ref{def:arw} on peut exhiber les relations suivantes:
-  
+  conformément à la définition~\ref{def:arw} on peut exhiber des instances de la relation $\arw_{\R_p/E}$
+  pour $E= \emptyset$ avec le système $\R$ ci-dessus à partir de la séquence. 
+  A titre d'exemple on a~:
   \medskip
   \begin{itemize}
-  \item $f(g(a), h(b)) \arw_{\R_1} f(h(b), h(b))$
-  \item $f(a, h(b)) \arw_{\R_2} f(a, a)$
-  \item $f(g(a), h(b)) \arw_\R g(f(a,a))$
+  \item $f(g(a), h(b)) \arw_{\R_1} f(h(b), h(b))$ pour la position $p = 1$
+  \item $f(a, h(b)) \arw_{\R_2} f(a, a)$ pour $p = 2$ 
+  \item $f(g(a), h(b)) \arw_\R g(f(a,a))$ pour $p = \epsilon$ 
   \end{itemize}
 \end{example}
 
@@ -233,7 +241,7 @@ Si l'on considère $s$ un état conforme à la figure~\ref{fig:etat-terme} aux p
 
 \item La réécriture aux positions $s|_{13}$ et $s|_{14}$ correspond
   aux opérations élémentaires comme la modification de la pile ou des
-  variables locales\dots
+  variables locales. %\dots
   
 \item Plus intéressant, le sous-terme~$s|_{15}$ correspond au tas: les
   règles de réécriture appliquées à cette position concerne la
@@ -242,7 +250,7 @@ Si l'on considère $s$ un état conforme à la figure~\ref{fig:etat-terme} aux p
 
 \item Le sous-terme $s|_\epsilon$, soit $s$ lui-même, est réécrit par les
   règles qui correspondent aux appels et retours de méthodes.
-\item \dots
+%\item \dots
 \end{itemize}
 
 On considère maintenant un état de la machine virtuelle correspondant
@@ -260,20 +268,25 @@ tas) induites par l'exécution de l'instruction $\kw{instr}_i$. Comme
 indiqué ci-dessus, ces étapes de réécriture ont lieu uniquement sur
 les sous-termes de $f_i$: %situés aux positions $1[1..9]^*$:
 
-\[ state(\underline{f_i}, fs, I/O(\dots)) \lrw_\R^* state(\mathbf{f_{i+1}}, fs, I/O(\dots)) \]
-
+\textit{
+\[ state(\underline{f_i}, fs, I/O(\dots)) \lrw_\R^* state(\textbf{f}_\textbf{i+1}, {fs}, I/O(\dots)) \]
+}
 Le point de programme $p_n$ correspond à un appel de la méthode
 $m'$ et va produire un nouvel état de la forme $state(f'_0, fs',
 I/O(\dots))$ où le contexte sera de la forme $f'_0 = \la m', pc_0,
 \epsilon, lv'_0, h_n \ra$ et la pile d'appels sera de la forme $fs' = fstack((m, pc_n, st_n,
 lv_n), fs)$. Au final, on obtient la séquence de réécriture suivante:
-\begin{multline*}
-  state(\underline{f_0}, fs, I/O(\dots)) \lrw_\R^* \underline{state(\mathbf{f_n}, fs, I/O(\dots))} \\
-  \lrw_\R \mathbf{state(f'_0, fstack((m, pc_n, st_n, lv_n), fs), I/O(\dots))}  
-\end{multline*}
 
+\textit{
+  \begin{multline*}
+    state(\underline{f_0}, fs, I/O(\dots)) \lrw_\R^* \underline{state(\textbf{f}_\textbf{n}, {fs}, I/O(\dots))} \\
+    \lrw_\R \textbf{state(f}_\textbf{0}^\textbf{\ ,}\textbf{, fstack((m, pc}_\textbf{n}\textbf{, st}_\textbf{n}\textbf{, lv}_\textbf{n}\textbf{), fs), I/O(\dots))}
+  \end{multline*}
+}
 \noindent qui peut être abstraite:
+\textit{
 \[ state(f_0, fs, I/O(\dots)) \quad \arw_\R \quad state(f'_0, fstack((m, pc_n, st_n, lv_n), fs), I/O(\dots)) \]
+}
 Puisque $f_0$ et $f'_0$ représentent respectivement les états au point d'entrée des méthodes $m$ et $m'$, la relation ci-dessus
 dénote bien à l'appel de la méthode $m'$ par $m$. Ainsi, les traces d'exécutions abstraites par la relation $\arw_\R$
 permettent de construire le graphe d'appels d'un programme Java.
@@ -294,7 +307,7 @@ Ce qui nous donne la propriété suivante~:
   \label{lem:completion_arw}
   Soit $\A = \la \F, \Q, \Q_f, \Delta \cup \Deps\ra$ un automate obtenu 
   par complétion à partir des règles $\R$ et des équations $E$.
-  Alors pour toute transition $q' \lrw q \in \Deps$ de $\A$,
+  Alors pour toute transition $q' \rw q \in \Deps$ de $\A$,
   et tous les représentants de $q$ et $q'$:
   \[
   \xymatrix{
@@ -307,15 +320,19 @@ Ce qui nous donne la propriété suivante~:
   \end{lemma}
 
 \begin{proof}
-  La preuve se base sur la définition~\ref{def:re-coherence} de la $\RE$-cohérence qui est plus forte.
-  Elle assure que pour tout état $q$ d'un automate produit par complétion, si $s \in \Rep (q)$ est un représentant de l'état $q$
+  La preuve repose sur le théroème~\ref{thm:re-coherence}. En effet, on suppose que
+  l'automate $\A \la \F, \Q, \Q_f, \Delta \cup \Deps\ra$ est obtenu par complétion
+  à partir d'un automate initial qui soit $\RE$-cohérent. 
+  L'automate $\A$ est donc lui aussi $\RE$-cohérent. 
+  Conformément à la définition~\ref{def:re-coherence}, la $\RE$-cohérence
+  assure que pour tout état $q$ de l'automate $\A$, si $s \in \Rep (q)$ est un représentant de l'état $q$
   alors~:
   \begin{itemize}
   \item $\forall t \in \Rep(q)$, $s =_E t$
   \item $\forall t \in \Lang(\A, q)$, $s \rw_\RE^* t$.
   \end{itemize}
 
-  On considère la transition $q \rw q' \in \Deps$. Par construction, cette $\varepsilon$-transition est ajoutée
+  On considère la transition $q' \rw q \in \Deps$. Par construction, cette $\varepsilon$-transition est ajoutée
   par la résolution de la paire critique $\la q, r\sigma\ra$ formée par l'automate avec une règle $l\rw r \in \R$.
   On rappelle que la substitution $\sigma$ associe à chaque variable $x$ du membre gauche $l$ un état $\sigma(x) \in \Q$
   telle que:
@@ -327,11 +344,14 @@ Ce qui nous donne la propriété suivante~:
   }
   \]
   Une telle paire critique a été résolue en ajoutant à l'automate les transitions $r\sigma \rwne q'$ et $q' \rw q$.
-  Ensuite on considère la substitution $\sigma' : \X \rw \TF$ de la forme
-  $\{ x \mapsto \sigma'(x) \sep \sigma'(x) \in \Rep(\sigma(x)) \}$. On a automatiquement $l\sigma' \rw_{\A}^* l\sigma$ :
+  Ensuite on considère n'importe quelle substitution $\sigma' : \X \rw \TF$ telle que le terme clos $\sigma(x)$
+  est un représentant de l'état $\sigma(x)$ pour toute variable $x$, c'est à dire $\sigma'(x) \rwne_\A \sigma(x)$.
+  % $\{ x \mapsto \sigma'(x) \sep \sigma'(x) \in \Rep(\sigma(x)) \}$.
+  On a immédiatement $l\sigma' \rw_{\A}^* l\sigma$ :
   l'ensemble des substitutions $\sigma'$ dénotent les termes $l\sigma'$ reconnus en $q$ qui sont réécrits par la règle $l \rw r$ 
   tels que  $r\sigma'$ est un représentant de $q'$ puisque l'on a $r\sigma' \rwne_{\A} r\sigma$.
 
+  On rappelle que l'automate $\A$ est $\RE$-cohérent d'après le théorème~\ref{thm:re-coherence}.
   Grâce au premier point de la définition~\ref{def:re-coherence} et la résolution de la paire critique
   on obtient le diagramme suivant:
   \[
@@ -486,7 +506,7 @@ d'exécution sont infinies.
 
 Dans notre analyse inter-procédurale, ce sont les étapes de réécriture au sommet des termes qui caractérisent
 les appels et retours de méthodes dans les programmes Java. En supposant que l'ensemble des états finals de $\aaexeq^*$ est $\Q_f$,
-on veut donc obtenir un modèle pour la relation de transition induite par la relation $\arw_{\R/E}$, pour les termes $t_0 \in I$ l'ensemble initial. Ce qui implique
+on veut donc obtenir un modèle pour la relation de transition induite par la relation $\arw_\RE$, pour les termes $t_0 \in I$ l'ensemble initial. Ce qui implique
 que l'ensemble des états initiaux $S_0$ correspond simplement à $\Q_f$, l'ensemble des états finals de 
 l'automate. En effet, tout terme initial de $I$ est systématiquement un représentant d'un état final par construction.
 
@@ -505,9 +525,9 @@ La structure de Kripke obtenue modélise la relation de réécriture $\arw_\RE^*
 
 \begin{theorem}
   Soit $\K=(S, S_0, R, L)$ la structure de Kripke extraite à partir de l'automate $\aaexeq^*$.
-  Pour tous les états $s$, $s'$ tels que $R(s, s')$ soit vraie, alors pour tous les termes
-  $u \in \Lang(L(s))$ et $v \in \Lang(L(s'))$ on a  $u \arw_{\RE} v$. De plus, pour tout terme $u,\ v \in \Lang(L(s))$
-  de tout état $s$, on a $u =_E v$.
+  Pour tous les états $q$, $q'$ tels que $R(q, q')$ soit vraie, alors pour tous les termes
+  $u \in \Lang(L(q))$ et $v \in \Lang(L(Q'))$ on a  $u \arw_\RE v$. De plus, pour tout terme $u,\ v \in \Lang(L(q))$
+  de tout état $q$, on a $u =_E v$.
 \end{theorem}
 
 \begin{proof}
@@ -634,16 +654,17 @@ On propose de définir la Regular Linear Temporal Logic (R-LTL). La R-LTL est la
 automates d'arbres. Le langage d'un tel automate d'arbres caractérise l'ensemble des termes qui sont admissibles pour le prédicat.
 
 Ainsi un état $q$ d'une structure de Kripke $\K$ valide le prédicat $P$ caractérisé
-par l'automate d'arbres  $\A_p$ si et seulement si un terme $t$ reconnu par l'automate
+par l'automate d'arbres  $\A_P$ si et seulement si un terme $t$ reconnu par l'automate
 $L(q)$ satisfait le prédicat $P$. Cela implique que le terme $t$ soit lui aussi reconnu
 par l'automate $\A_P$. Ce qui nous donne la nouvelle règle sémantique:
 \[\K,\ q \models P\quad \equ\quad \Lang{}(L(q)) \cap \Lang{}(\A_P) \neq \emptyset\]
 
-L'intuition est que le langage de l'automate $\A_p$ décrit une propriété par un ensemble de termes possibles.
+L'intuition est que le langage de l'automate $\A_P$ décrit une propriété par un ensemble de termes possibles.
 On peut alors reformuler la satisfiabilité du prédicat $P$ pour $t$ par une disjonction de la forme 
 $\bigvee_{u \in \Lang(A_p)} t = u$.
 Cela représente un avantage notable pour exprimer des motifs réguliers sur les termes. En effet, il est facile 
-de construire un automate qui décrit une propriété par tous les termes de la forme $f(a, f(x, y))$.
+de construire un automate qui décrit une propriété par tous les termes de la forme $f(a, f(x, y))$,
+où les variables $x$ et $y$ peuvent être substituées chacune par n'importe quel terme clos.
 Quant à l'automate $L(q)$, il fournit l'ensemble des termes qui sont accessibles par $\arw_\RE$.
 De ce fait, il est alors raisonnable de considérer que l'état $q$ satisfait le prédicat $P$ si l'un des termes reconnus par $L(q)$ est aussi
 dans le langage de $A_p$, ce qui est équivalent à $\Lang{}(L(q)) \cap \Lang{}(\A_P) \neq \emptyset$.
@@ -674,7 +695,7 @@ de~\cite{MC-Book}, on trouve le détail de la sémantique de tous les
 opérateurs, ainsi que les règles de construction des formules en LTL.
 
 
-Les transitions de la structure $K$ dénotent les étapes de réécriture abstraite $\arw_{\RE}$
+Les transitions de la structure $K$ dénotent les étapes de réécriture abstraite $\arw_\RE$
 plutôt que les étapes de la relation de $\rw_\RE$. Comme la sémantique des opérateurs est définie
 sur la relation de transitions de $K$, les propriétés que l'on peut exprimer et vérifier portent bien
 sur la relation $\arw_\RE$.
@@ -705,76 +726,99 @@ sont infinies. La structure des automates de Büchi est équivalente à celle de
   avec
   \begin{itemize}
   \item $\Sigma$, un alphabet
-  \item $\Q$, un ensemble d'états 
+  \item $\Q$, un ensemble fini d'états 
   \item $\Delta \subseteq \Q \times \Sigma \times \Q$, la relation de transition
   \item $\Q_0 \subseteq \Q$ et $\F \subseteq \Q$, les états initiaux et acceptants respectivement.
   \end{itemize}
 \end{definition}
-Un mot infini $w \in \Sigma^\omega$ est un mot qui contient un nombre
-infini de répétitions\footnote{\footnotesize La répétition infinie est
-  caractérisée par l'exposant $\omega$}. Il est accepté par un
-automate de Büchi si et seulement si il existe une exécution infinie à
-partir d'un état initial et qui passe infiniment souvent par un état
-acceptant.
+On va construire des automates de Büchi sur un alphabet $\Sigma$ défini comme l'ensemble des automates 
+d'arbres $\A_{P_1}$, $\A_{\overline{P_1}}$, $\A_{P_2}$ $\A_{\overline{P_2}}$,\dots qui respectivement définissent 
+les prédicats $P_1$, $P_2$, \dots et leur négation $\overline{P_1}$, $\overline{P_2}$, \dots\ 
+On complète également $\Sigma$ par l'ensemble des automates d'arbres qui constituent le codomaine 
+de la fonction de labelling du modèle $k$ à vérifier.
+Ces automates de Büchi reconnaissent des mots infinis de la forme $w = t_0t_1t_2t_3t_3\dots$ avec pour tout 
+$i \in \Nat$, $t_i \in \TF$ est un terme clos. Une différence importante avec la définition standard des automates
+de Büchi est que l'ensemble des transitions peut-être infini.
+En fait, la relation $\Delta$ peut dénoter 
+un ensemble infini de transitions dès lors que $\Delta$ contient un triplet $(q, A_{P_k}, q')$
+où l'automate d'arbres $A_{P_k}$, qui dénote le prédicat $P_k$, reconnaît une infinité de termes 
+pour lequel le prédicat $P_k$ est vrai: en effet si le terme clos $t_0 \in \Lang(A_{P_k})$ est 
+reconnu par $A_{P_k}$, alors l'automate de Büchi peut s'exécuter et passer de la configuration
+$(q,t_0t_1t_2t_3t_3\dots)$ à la configuration $(q',t_1t_2t_3t_3\dots)$. On peut aussi remarquer
+que dans cette représentation, il faut vérifier que l'automate de Büchi est déterministe si
+tout couple de triplets $(q, A_{P_k}, q')$ et $(q, A_{P_l}, q')$ avec $A_{P_k} \not= A_{P_l}$
+vérifie $\Lang(A_{P_k}) \cap \Lang(A_{P_l}) = \emptyset$.
 
-\begin{example}
-  Exemple d'automate de Büchi:\\
 
-%  \begin{tabular}{cp{10cm}}
- %   \begin{minipage}{5cm}
-  \begin{center}
-    \begin{tikzpicture}[scale=.8,thick,initial text=]
-      \tikzstyle{every node}=[font=\tiny]
-      \tikzstyle{every state}=[minimum size=.1cm]
-      \tikzstyle{accepting}=[accepting by double]
-      % 
-      \node [initial,state] (q1) at (0, 0) {$1$}; 
-      \node [accepting, state] (q2) at (4, 0) {$2$};
-      % 
-      \path[->]
-      (q2)  edge [loop right] node {$b$} (q2) 
-      edge [bend left] node [above] {$c$} (q1)
-      (q1)  edge [bend left] node [above] {$a$} (q2);
-    \end{tikzpicture}
-  \end{center}
-    % \end{minipage}
-    % \hspace{1cm}
-    % &
-  L'automate ci-contre reconnaît le langage $\omega$-régulier $a(b^*ca)^\omega$,
-  soit des mots infinis de la forme $acabbbbcabbca\dots$ par exemple.
-  % \end{tabular}
-\end{example}
+% \begin{example}
+%   Exemple d'automate de Büchi:\\
+
+% %  \begin{tabular}{cp{10cm}}
+%  %   \begin{minipage}{5cm}
+%   \begin{center}
+%     \begin{tikzpicture}[scale=.8,thick,initial text=]
+%       \tikzstyle{every node}=[font=\tiny]
+%       \tikzstyle{every state}=[minimum size=.1cm]
+%       \tikzstyle{accepting}=[accepting by double]
+%       % 
+%       \node [initial,state] (q1) at (0, 0) {$1$}; 
+%       \node [accepting, state] (q2) at (4, 0) {$2$};
+%       % 
+%       \path[->]
+%       (q2)  edge [loop right] node {$b$} (q2) 
+%       edge [bend left] node [above] {$c$} (q1)
+%       (q1)  edge [bend left] node [above] {$a$} (q2);
+%     \end{tikzpicture}
+%   \end{center}
+%     % \end{minipage}
+%     % \hspace{1cm}
+%     % &
+%   L'automate ci-contre reconnaît le langage $\omega$-régulier $a(b^*ca)^\omega$,
+%   soit des mots infinis de la forme $acabbbbcabbca\dots$ par exemple.
+%   % \end{tabular}
+% \end{example}
 
 
 
 Pour vérifier que le modèle $\K$ satisfait la propriété $P$ exprimée en R-LTL, 
-il faut construire deux automates de Büchi $\B_\K$ et $\B_P$ qui acceptent respectivement
-tous les comportements du modèle, et tous les comportements spécifiés par $P$.
+il faut construire deux automates de Büchi $\B_\K$ et $\B_{\overline{P}}$
+qui sont construits sur un alphabet $\Sigma$ composé d'automates d'arbres comme 
+détaillé précédemment. L'automate $\B_\K$ accepte tous les comportements
+du modèle $K$ à vérifier, alors que l'automate $\B_{\overline{P}}$ accepte
+tous les comportements qui ne satisfont pas la formule $P$.
 La procédure de vérification revient alors à s'assurer que tous les comportements du modèle
-$K$ sont couverts par la spécification $P$, ce qui se traduit par $\Lang(\B_\K) \subseteq \Lang(\B_P)$.
-La manière standard de vérifier l'inclusion revient à vérifier qu'aucun comportement de
-$\K$ ne viole $P$:
+$K$ sont couverts par la spécification $P$, ce qui revient à montrer qu'aucun comportement
+de $\K$ ne viole $P$:
 \[ \Lang(\B_\K) \cap \overline{\Lang(\B_P)} = \emptyset \]
 
-Bien sûr, la vacuité du langage est décidable pour les automates de
-Büchi, et ils sont clos par intersection et complémentation~\cite{Buchi}.
+On notera que les automates de Büchi avec un ensemble possiblement infini de transitions
+sont clos par intersection et la vacuité du langage reste décidable comme dans le cas des automates
+de Büchi classiques~\cite{Buchi}.
 
-Il suffit de construire l'automate $\B_\K$ et l'automate $\overline{\B_P}$ qui reconnaît le langage $\overline{\Lang(\B_P)}$.
-L'alphabet $\Sigma$ est constitué par les langages réguliers de termes de $\TF$ dénotés par les 
-automates d'arbres.
+% Il suffit de construire l'automate $\B_\K$ et l'automate $\B_\overline{P}$ qui accepte le langage $\overline{\Lang(\B_P)}$.
+% L'alphabet $\Sigma$ est constitué par les langages réguliers de termes de $\TF$ dénotés par les 
+% automates d'arbres qui constituent $K$ et .
+
+AU moyen de la transformation standard du modèle $K$ en automate de Büchi, on obtient
+bien un automate $B_K$ qui reconnaît tous les comportements de $K$.
 
 \begin{definition}
   A partir du modèle $\K = (S, S_0, R, L)$, on définit l'automate de Büchi
   qui reconnaît tous les comportements de $\K$ comme $\B_\K =\la \Sigma, S \cup \{\iota\}, \Delta, \{\iota\}, S \cup \{\iota\}\ra$
-  tel que $\Sigma = 2^\TF$, l'état initial est $\iota \not\in S$, et on a les transitions $(s, L(s'), s') \in \Delta$ si et seulement si $(s, s') \in R$.
-  De plus, on ajoute à $\Delta$ les transitions $(\iota, L(s), s)$ pour tout état $s \in S_0$.
+  tel que $\Sigma = 2^\TF$, l'état initial est $\iota \not\in S$, et on a les transitions $(q, L(q'), q') \in \Delta$ si et seulement si $(q, q') \in R$.
+  De plus, on ajoute à $\Delta$ les transitions $(\iota, L(q), q)$ pour tout état $q \in S_0$.
 \end{definition}
 Par construction tous les états de $\B_\K$ sont finals, pour permettre à tout chemin infini
 de la structure de Kripke d'être un mot reconnu par $\B_\K$.
-Si $\pi=s_0s_1s_2s_3\dots$ est une séquence valide d'états dans la structure de Kripke,
-alors le mot $\pi' = L(s_0)L(s_1)L(s_2)\dots$ est reconnu par $\B_\K$.
-Ce mot $\pi'$ dénote l'ensemble de séquence de réécriture de la forme
-$t_0 \arw_\RE t_1 \arw_\RE t_2 \arw_\RE \dots$ tels que $t_i \in \Lang(L(s_i))$.
+Si $\pi=q_0q_1q_2q_3\dots$ est une séquence valide d'états dans la structure de Kripke,
+alors le mot $w = t_0t_1t_2\dots$ tels que pour tout $i \in \Nat$ $t_i \in L(q_i)$ est reconnu par $\B_\K$.
+En effet, on a le triplet $(\iota, L(q_0), q_0) \in \Delta$ qui permet d'amorcer la reconnaissance à partir de la
+configuration initiale $(\iota,w)$, 
+puis le triplet $(q_i, L(q_i), q_{i+1}) \in \Delta$ permettant d'effectuer chaque transition de 
+la configuration $(q_i, t_it_{i+1}t_{i+2}\dots)$ vers la configuration $(q_i, t_{i+1}t_{i+2}\dots)$
+puisque le terme $t_i$ est reconnu par l'automate d'arbres $L(q_i)$.
+Ce mot $w$ dénote l'ensemble de la séquence de réécriture de la forme
+$t_0 \arw_\RE t_1 \arw_\RE t_2 \arw_\RE \dots$. % tels que $t_i \in \Lang(L(q_i))$.
 
 \begin{example}
   La figure~\ref{fig5} définit l'automate de Büchi pour la figure de Kripke $\K_\epsilon$:
@@ -818,16 +862,23 @@ $t_0 \arw_\RE t_1 \arw_\RE t_2 \arw_\RE \dots$ tels que $t_i \in \Lang(L(s_i))$.
   \end{figure}
 \end{example}
 
-On ne s'étendra pas ici sur les techniques permettant de construire l'automate de Büchi $\overline{\B_P}$ dénotant
-la négation de la formule LTL $P$, mais il est possible de trouver les détails de l'algorithme pour construire ce type
-d'automate dans~\cite{DBLP:conf/pstv/GerthPVW95}.
+On ne s'étendra pas ici sur les techniques permettant de construire l'automate de Büchi $B_{\overline{P}}$ dénotant
+reconnaissant l'ensemble des comportements de la propriété $\overline{P}$, 
+mais il est possible de trouver les détails de l'algorithme
+pour construire ce type d'automate dans~\cite{DBLP:conf/pstv/GerthPVW95}. Simplement, on remplace chaque instance 
+d'un prédicat $P_k$ ou $\overline{P_k}$ utilisé dans la formule $\overline{P}$ par l'automate d'arbres
+$A_{P_k}$ ($A_{\overline{P_k}}$ respectivement) lors de la construction de l'automate de Büchi $B_{\overline{P}}$.
+
+
 \begin{example}
   Soit la formule $P = \gbl(\{f(a)\} \imp \nxt \{g(a)\})$.
-  L'automate $\overline{\B_P}$ (fig.~\ref{fig4}) reconnaît la négation de la formule $P$
+  L'automate $B_{\overline{P}}$ (fig.~\ref{fig4}) reconnaît la négation de la formule $P$
   exprimée par $\fut(\{f(a)\} \land \nxt \neg\{g(a)\})$ et $\B_\K$ (fig.~\ref{fig5}) 
   reconnaît l'ensemble des comportements de la  structure de Kripke
   $\K_\epsilon$~(fig.~\ref{fig5}). La notation $\A_\alpha$ dénote l'automate d'arbres tel que son langage est décrit par $\alpha$
-  ($\A_{\neg g(a)}$ reconnaît le complément du langage $\Lang{}(\A_{g(a)})$ et $\A_*$ reconnaît tout terme de $\TF$).
+  (L'automate d'arbres $\A_{\neg g(a)}$ reconnaît le complément du langage $\Lang{}(\A_{g(a)})$,
+  c'est à dire l'ensemble des termes qui ne satisfont pas le prédicat $P(t)$ défini comme
+  "$t$ est un terme de la forme $g(a)$", et $\A_*$ reconnaît tout terme de $\TF$, soit le prédicat vrai pour tout terme clos).
   \begin{figure}[ht!]
     \centering
     % \bar{\B_L}
@@ -846,7 +897,7 @@ d'automate dans~\cite{DBLP:conf/pstv/GerthPVW95}.
       (q2)  edge node [above] {$\overline{\A_{g(a)}}$} (q3)
       (q3)  edge [loop above] node {$\A_*$} (q3);
     \end{tikzpicture}
-    \caption{\footnotesize L'automate $\overline{\B_P}$}
+    \caption{\footnotesize L'automate $B_{\overline{P}}$}
     \label{fig4}  
   \end{figure}
 \end{example}
@@ -884,33 +935,40 @@ d'automate dans~\cite{DBLP:conf/pstv/GerthPVW95}.
 % utilisés pour construire $\B_\M$ et $\B_\K$ peuvent être trouvés dans~\cite{MC-Book}.
 
 
-L'automate intersection $\B_\cap$ est obtenu en calculant le produit de automates $\B_\K$ et $\overline{\B_P}$.
+L'automate intersection $\B_\cap$ est obtenu en calculant le produit de automates $\B_\K$ et $B_{\overline{P}}$.
 Comme tous les états sont finals dans l'automate $\B_\K$, il est possible d'employer une version plus
 simple du produit général d'automates de Büchi pour ce cas particulier~\cite{MC-Book}. On présente une version
 adaptée de cet algorithme pour les automates de Büchi dont les transitions sont étiquetées par des automates d'arbres.
-
-\begin{definition}[$\B_\K \times \overline{\B_P}$]
+%
+\begin{definition}[$\B_\K \times B_{\overline{P}}$]
   Le produit de $\B_\K = \la \Sigma,\; \Q,\; Q_0,\; \Q,\ \Delta\ra$ par 
-  $\overline{\B_P} = \la\Sigma,\; \Q',\;\Q'_0,\; \F',\ \Delta'\ra$ est défini
+  $B_{\overline{P}} = \la\Sigma,\; \Q',\;\Q'_0,\; \F',\ \Delta'\ra$ est défini
   \[\la \Sigma,\; \Q \times \Q',\; \Q_0 \times \Q'_0,\; \Q \times F',\; \Delta_\times\ra \]
-  où $\Delta_\times$ est un ensemble de transitions $(q_\K, q_P) \xrw{(\A_\K\cap\A_P)} (q'_\K, q'_P)$ tel que $q_\K
-  \xrw{\A_\K} q'_\K$ est une transition
-  de $\B_\K$ et $q_P \xrw{\A_P} q'_P$ est une transition de $\overline{\B_P}$. De plus, la transition 
-  est seulement valide si l'intersection entre les langages de $\A_\K$ et $\A_P$ est non vide.
+  où $\Delta_\times$ est un ensemble de triplets $(q_\K, q_{\overline{P}}), (\A_\K\cap\A_P), (q'_\K, q'_{\overline{P}})$ tel que $(q_\K,
+  {\A_\K}, q'_\K)$ appartient à $\B_\K$ et $(q_{\overline{P}},{\A_P}, q'_{\overline{P}}$ appartient à $B_{\overline{P}}$. De plus, 
+  l'intersection entre les langages de $\A_\K$ et $\A_P$ doit être non vide, sinon il n'existe pas de transitions
+  valides entre les états $(q_\K, q_{\overline{P}})$  et $(q'_\K, q'_{\overline{P}})$.
   %comme attendu par la satisfiabilité d'une formule atomique en R-LTL.
   % as expected by the interpretation of the R-LTL atomic formula.
 \end{definition}
 L'intersection d'automates d'arbres calculée sur chaque transition de
-l'automate intersection se justifie simplement.  Une transition de la forme
-$s, A, s'$ pourrait être vue comme un ensemble de transitions de la
-forme $s, t, s'$ où $t \in \Lang(A)$. Ainsi l'intersection placée sur
-les transitions du produit $\B_\K \times \overline{\B_P}$ correspond
-simplement à l'ensemble des transitions $((s_1, s_2), t, (s_1',s_2'))$
-tel que $t \in \Lang(\B_\K)$ et $t \in \Lang(\B_P)$.
+l'automate intersection se justifie simplement. Un triplet 
+$(q, A, q')$ dénote un ensemble de transitions de la
+forme $q, t, q'$ où $t \in \Lang(A)$. Ainsi l'intersection d'automates d'arbres qui constitue
+les triplets de $\Delta_\times$ dans l'automate produit $\B_\K \times B_{\overline{P}}$ correspond
+simplement à l'ensemble des transitions $((q_\K, q_{\overline{P}}), t, (q_\K',q_{\overline{P}}'))$
+tel que $t \in \Lang(\B_\K)$ et $t \in \Lang(\B_{\overline{P}})$. Donc pour un mot $tw$
+constitué du terme $t$ et d'un mot $w$, l'exécution de la configuration  $((q_\K, q_{\overline{P}}), tw)$ 
+vers la configuration $((q_\K, q_{\overline{P}}), tw)$ est équivalente aux exécutions simultanées 
+$(q_\K, tw)$ vers $(q'_\K, w)$ de l'automate $\B_\K$ et $(q_{\overline{P}}, tw)$ vers $(q_{\overline{P}}, w)$ 
+pour l'automate $\B_{\overline{P}}$.
 
-Enfin, la vacuité du langage $\Lang{}(\B_\cap)$ peut être vérifiée en utilisant l'algorithme
+Enfin, la vacuité du langage des automates de Büchi présentés ici peut être vérifiée en utilisant l'algorithme
 basé sur la recherche en profondeur qui assure que toute composante fortement connexe accessible à partir d'un état initial
-ne contient pas d'états acceptants.
+ne contient pas d'états acceptants. Pour un automate $\B$, une composante fortement connexe $q_0, q_1, \dots, q_n, q_0$ existe
+si et seulement si pour tout $i < n$, il existe $(q_i, \A_i, q_{i+1}) \in \Delta$ et $(q_n, \A_n, q_0) \in \Delta$
+tels que le langage de chaque automate d'arbres $\A_i$ ou $\A_n$ est non vide. Sinon il n'existe pas de terme $t$ permettant une
+une transition de $q_i$ vers $q_{i+1}$ (ou de $q_{i+1}$ vers $q_n$).
 
 
 \begin{example}
@@ -918,7 +976,7 @@ ne contient pas d'états acceptants.
   Pour illustrer l'approche, on propose de vérifier pour la formule $P
   = \gbl(\{f(a)\} \imp \nxt \{g(a)\})$ de l'exemple~\ref{the_example}.
   La figure~\ref{fig6} montre le résultat de l'intersection $\B_\cap$
-  entre $\B_\K$ et $\overline{\B_P}$. Seul les états atteignables
+  entre $\B_\K$ et $B_{\overline{P}}$. Seul les états atteignables
   et les transitions valides (étiquetées par une intersection
   non vide d'automates d'arbres) sont montrées.  Comme aucun état
   atteignable de $\B_\cap$ n'est final, son langage est vide. Cela
@@ -970,7 +1028,7 @@ entre les termes accessibles, grâce aux $\varepsilon$-transitions.
 On a également montré comment utiliser la relation induite par ces transitions pour prouver des 
 formules en logique temporelle linéaire sur le système de réécriture. Le chapitre traite de l'analyse 
 dans le cas où le calcul des termes atteignables est réalisé sans approximation.
-On peut montrer qu'il est possible d'extraire un modèle de Kripke pour la relation $\arw_{\RE}$ 
+On peut montrer qu'il est possible d'extraire un modèle de Kripke pour la relation $\arw_\RE$ 
 dans le cas où la complétion produit un automate d'arbres $\aaexeq^*$ pour un programme java
 donné $\R$ dont l'approximation est donnée par un ensemble d'équations $E$.
 L'adaptation de la preuve est très simple. Cependant, il n'est pas possible de vérifier
@@ -1026,9 +1084,9 @@ sont proposées des pistes à explorer pour apporter une solution.
    C'est une propriété suffisante pour s'assurer que lorsque l'on considère une transition $q' \rw q$
    alors la relation $\arw_{\R}$ dénotée est aussi déterministe.
    Ainsi si on considère la transition $q' \rw q$ dans un automate complet pour $\RE$, on sait
-   qu'on a $u \arw_{\RE} v$ où $u$ et $v$ sont des représentants de $q$ et $q'$ respectivement.
+   qu'on a $u \arw_\RE v$ où $u$ et $v$ sont des représentants de $q$ et $q'$ respectivement.
    D'après la définition~\ref{def:arw} on sait qu'il existe une substitution $\sigma$ et une règle
-   de réécriture telle que $u \rw_{\RE}^* l\sigma \rw_\R r\sigma =_E t$. On peut déjà montrer
+   de réécriture telle que $u \rw_{\R/E}^* l\sigma \rw_\R r\sigma =_E t$. On peut déjà montrer
    qu'il n'y a pas de paire critique pour le terme $l\sigma$. En effet, comme $\R$ est déterministe,
    on sait que la règle $l\rw r$ ne peut que réécrire des termes qui sont irréductibles.
    Ceci est aussi vrai pour chacun des sous-termes de $l\sigma$. Donc en tenant compte de la nouvelle
@@ -1066,5 +1124,5 @@ sont proposées des pistes à explorer pour apporter une solution.
 
 % LocalWords:  ByteCode séquencement Copster non-déterminisme sous-termes Kripke
 % LocalWords:  séquentialité sous-terme inter-procédural sur-approximation LTL
-% LocalWords:  d'optimalité labelling quadruplet satisfiabilité Büchi
+% LocalWords:  d'optimalité labelling quadruplet satisfiabilité Büchi d'arité
 % LocalWords:  quintuplet

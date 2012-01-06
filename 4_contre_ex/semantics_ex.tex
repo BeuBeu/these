@@ -1,12 +1,14 @@
 \begin{example}
   \label{ex:semantics}
-  Soit $\A$ un $\RE$-automate reconnaissant dans l'état final $\mathbf{q_f}$
-  le système $(\F, I, \R)$ défini par $I = f(a)$, $\R = \{f(c) \rw g(c),\ a \rw b\}$, et un ensemble d'équations $E = \{ b = c\}$.
+  Soit $\A$ un $\RE$-automate reconnaissant dans l'état final
+  $\mathbf{q_f}$ le système $(\F, I, \R)$ défini par $I = f(a)$, $\R =
+  \{f(c) \rw g(c),\ a \rw b\}$, et un ensemble d'équations $E = \{ b =
+  c\}$.
 
   Dans $\A$, l'égalité $b = c$ est symbolisée par les 2 transitions $q_c
   \rw q_b$ et $q_b \rw q_c$ de $\Deq$, en tenant compte que $b$ et $c$
   sont respectivement reconnus dans les états $q_b$ et $q_c$.
-  
+
   Ainsi du point de vue de l'état $q_c$, la transition $q_b \rw q_c$
   nous indique que le terme $b$ est obtenu à partir du terme $c$ par égalité.
   On peut constater que la transition $q_c \rw q_b$ nous permet 

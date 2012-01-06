@@ -3,7 +3,7 @@
 
 Ce chapitre a pour ambition de rappeler les bases nécessaires pour la théorie de la réécriture,
 des automates d'arbres, et présente le cadre de la vérification de modèles symboliques auquel
-nous nous intéressons dans cette thèse. Pour plus détails, le lecteur pourra trouver plus d'informations
+nous nous intéressons dans cette thèse. Pour plus de détails, le lecteur pourra trouver plus d'informations
 sur la réécriture dans~\cite{BaaderN-book98} et dans~\cite{TATA} pour les automates d'arbres.
 
 
@@ -17,13 +17,13 @@ sur la réécriture dans~\cite{BaaderN-book98} et dans~\cite{TATA} pour les auto
 
 
 \begin{definition}
-  Soit $\F = \{ f_2, g_1, h_2, \dots\}$ une signature\footnote{\footnotesize Pour définir rapidement $\F$, Chaque symbole est indicé par son arité}.
+  Soit $\F = \{ f_2, g_1, h_2, \dots\}$ une signature\footnote{\footnotesize Pour définir rapidement $\F$, chaque symbole est indicé par son arité.}.
   Soit $\X$ un ensemble de \textbf{variables} tel que $\X \cap \F = \emptyset$.
   L'ensemble $\TFX$ dénote l'\textbf{algèbre de termes} engendrée par la signature $\F$ à partir de $\X$. On définit $\TFX$ comme le plus petit ensemble
   tel que:
   \begin{itemize}
   \item $\X \subseteq \TFX$ 
-  \item pour tout $n \in \N$ et $f \in \F_n$, si $t_1, \dots, t_n \in \TFX$ alors $f(t_1, \dots, t_n) \in \TFX$
+  \item pour tout $n \in \N$ et $f \in \F_n$, si $t_1, \dots, t_n \in \TFX$ alors $f(t_1, \dots, t_n) \in \TFX$.
   \end{itemize}
 \end{definition}
 Les éléments de $\TFX$ sont appelés des \textbf{termes}. On note $\TF$, l'algèbre des \textbf{termes clos} -- \textit{i.e.} 
@@ -85,7 +85,7 @@ qui le contient. Une \textbf{position} $p$ est définie comme un \textbf{mot de 
   \begin{itemize}
   \item $\pos(t)= \{ \epsilon\} $ si $t \in \X$
   \item $\pos(f(t_1,\dots,t_n)) = \{ \epsilon \} \cup \{i.p \mid 1 \leq i \leq n
-    \et p \in \pos(t_i) \}$
+    \et p \in \pos(t_i) \}$.
   \end{itemize}
 \end{definition}
 
@@ -105,9 +105,9 @@ et
 
 \begin{definition}
   L'ensemble des variables d'un terme $t \in \TFX$ est dénoté par $\vars(t)$ et se définit simplement
-  comme $\vars(t) = \{ x \in \X \sep \exists p \in \pos(t) \st x = t|_p\}$
+  comme $\vars(t) = \{ x \in \X \sep \exists p \in \pos(t) \st x = t|_p\}$.
 \end{definition}
-On remarque pour tout terme $t \in \TFX$, $\vars(t) = \emptyset$ alors $t$ est un terme clos, ce qui est équivalent à $t \in \TF$.
+On remarque pour tout terme $t \in \TFX$, si $\vars(t) = \emptyset$ alors $t$ est un terme clos, ce qui est équivalent à $t \in \TF$.
 
 \begin{definition}
   Une \textbf{substitution} est une fonction $\sigma$ de $\X$ vers $\TFX$, telle que 
@@ -128,7 +128,7 @@ On dit qu'un terme $t$ est une \textbf{instance} d'un terme $s$ lorsqu'il existe
 $\sigma$ telle que $t = s\sigma$.
 
 Un système de règles de réécriture -- TRS en abrégé
-\footnote{\footnotesize abréviation issue de la formulation anglaise équivalente {\em term rewriting system}} -- 
+\footnote{\footnotesize abréviation issue de la formulation anglaise équivalente {\em term rewriting system}.} -- 
 $\R$ est un ensemble de règles de réécriture. 
 
 \begin{definition}
@@ -136,12 +136,12 @@ $\R$ est un ensemble de règles de réécriture.
   telle que $l \not \in \X$, et $\var(l) \supseteq \var(r)$. 
   On appelle $l$ et $r$ respectivement le membre gauche et le membre droit de la règle.
   Une règle de réécriture est \textbf{linéaire à gauche} (ou à droite) si chaque variable de $\X$ 
-  n'apparaît pas plus d'une fois dans son membre gauche (droit {\textit resp.}).
+  n'apparaît pas plus d'une fois dans son membre gauche (droit \textit{resp.}).
   %Une règle est \textbf{linéaire} si elle est à la fois linéaire à gauche et à droite.
 \end{definition}
 
 Un système de règles de réécriture est linéaire à gauche (ou à droite) si chacune 
-de ses règles est linéaire à gauche (à droite {\textit resp.}). De même, le système est 
+de ses règles est linéaire à gauche (à droite \textit{resp.}). De même, le système est 
 linéaire si il est linéaire à gauche et à droite.
 
 \begin{definition}
@@ -152,7 +152,7 @@ linéaire si il est linéaire à gauche et à droite.
   \noindent $s \rw_\R t \equ$
   \begin{flushright}
     $\exists\ l \rw r \in \R,\ p \in Pos(s),\ \sigma: \X \rw \TFX \textrm{ tels que }\quad \quad \quad$
-    $s|_p = l\sigma \quad \et \quad  t = s[r\sigma]_p$
+    $s|_p = l\sigma \quad \et \quad  t = s[r\sigma]_p$.
   \end{flushright}
 \end{definition}
 Ainsi, la règle $g(x, y) \rw y$ permet de réécrire le terme $h(g(x, g(y, z)))$ 
@@ -197,8 +197,8 @@ On définit $\TFQ$ l'algèbre engendrée par $\F$ et $\Q$, que l'on appelle l'en
   \textit{i.e.} $c \in \TFQ$ et $q \in \Q$ est un état. On distingue deux sortes de transitions dans un automate d'arbres:
   \begin{itemize}
   \item Une \textbf{transition normalisée} est une transition de la forme $f(q_1, \dots, q_n) \rw q$
-    avec $f \in \F_n$, et $q_1, \ldots, q_n, q \in \Q$ sont des états
-  \item Une \textbf{$\varepsilon$-transition} est une transition de la forme $q' \rw q$ où $q', q \in \Q$ sont des états
+    avec $f \in \F_n$, et $q_1, \ldots, q_n, q \in \Q$ sont des états.
+  \item Une \textbf{$\varepsilon$-transition} est une transition de la forme $q' \rw q$ où $q', q \in \Q$ sont des états.
   \end{itemize}
 \end{definition}
 
@@ -229,7 +229,7 @@ est final (\textit i.e. $q \in \Q_f$), alors $t$ est reconnu ou accepté par l'a
   Le langage reconnu par $\A$ est $\Lang(\A) = \bigcup_{q_f\in \Q_f} \Lang(\A, q_f)$. 
 \end{definition}
 Sans perte de généralité, on considérera dans la suite que \textbf{tout automate $\A$ est toujours nettoyé}
-c'est à dire que $\A$ ne possède pas d'état dont le langage est vide: $\forall q \in \Q, \Lang(\A, q) \not= \emptyset$.
+c'est-à-dire que $\A$ ne possède pas d'état dont le langage est vide: $\forall q \in \Q, \Lang(\A, q) \not= \emptyset$.
 
 \begin{example}
   Soit l'automate d'arbres $\A = \langle \F, \Q, \Q_F, \Delta \rangle$ avec
@@ -362,7 +362,7 @@ pour exprimer et manipuler des ensembles potentiellement infinis
 d'états. C'est une question récurrente en vérification qui est malheureusement
 indécidable, et pour laquelle il n'existe que des solutions partielles.
 Ici, l'angle d'attaque retenu est celui de la vérification de modèles
-à base de langage régulier de termes plus communément appelée {\em Tree Regular Model Checking
+à base de langage régulier de termes, plus communément appelée {\em Tree Regular Model Checking
   (TRMC)}\,\cite{ALRd05}. Cette approche est une extension de l'approche qui fut initialement introduite
 pour calculer l'ensemble des états atteignables en utilisant les langages réguliers de mots~\cite{BJNT00,BLW03}.
 
@@ -371,7 +371,7 @@ En TRMC, on modélise un système de transitions (tel qu'un programme ou un prot
 avec
 \begin{itemize}
 \item
-$\F$ une signature permettant de construire $\TF$ l'ensemble des termes représentants les différentes configurations ou états
+$\F$ une signature permettant de construire $\TF$ l'ensemble des termes représentant les différentes configurations ou états
 du système;
 
 \item
@@ -381,14 +381,14 @@ du système;
 \item $Rel$ est une relation de transition représentée par un ensemble de règles de réécriture
   \footnote{\footnotesize A l'origine, $Rel$ est modélisée par un transducteur d'arbres.
     Mais comme les automates d'arbres peuvent être vus comme une classe particulière de 
-    systèmes règles de réécriture, on choisit ici de généraliser}.
+    systèmes règles de réécriture, on choisit ici de généraliser.}.
 \end{itemize}
 
 \noindent
 Dans ce contexte, un programme sera alors représenté par un triplet $(\F,\A,\R)$.
 Ce type de modélisation est très expressif, d'une part parce que les systèmes de réécriture
-linéaires à gauche sont Turing-complet~\cite{HUET-78}, et d'autre part parce qu'il est facile de 
-modéliser les protocoles cryptographiques~\cite{GenetK-CADE00}, ainsi qu'un
+linéaires à gauche sont Turing-complets~\cite{HUET-78}, et d'autre part parce qu'il est facile de 
+modéliser certains protocoles cryptographiques~\cite{GenetK-CADE00}, ainsi qu'un
 important sous-ensemble du ByteCode Java~\cite{BoichutGJL-RTA07}.
 On considère le problème d'atteignabilité pour ce modèle.
 
@@ -405,12 +405,13 @@ pour le système considéré. L'ensemble $Bad$ décrit des configurations invali
 qui ne doivent pas être atteignables pour le système.
 
 Dans le cas d'un protocole cryptographique, $Bad$ peut décrire des
-configurations résultant d'une attaque du protocole. Ex: le message
+configurations résultant d'une attaque du protocole. Par exemple, le message
 chiffré est révélé en clair à un protagoniste externe à la
-transaction\dots.
+transaction.
 
 Pour les programmes Java, $Bad$ peut décrire des états où l'on
-s'apprête à accéder à une zone mémoire non définie. Ex: pointeur null,\dots
+s'apprête à accéder à une zone mémoire non définie comme par exemple 
+le déréférencement du pointeur null.
 
 Dans la suite de cette thèse, on restreint le cadre du TRMC seulement
 aux relations de transition modélisées par des systèmes linéaires de
@@ -528,7 +529,7 @@ $\aaex^k$ \textit{i.e.} tel que $\Lang(\aaex^{k+1}) \supseteq \Lang(\aaex^k)$.
 Chaque application du TRS $\R$  est appelée \textbf{étape de complétion} et 
 consiste à rechercher parmi les termes reconnus par l'automate, ceux qui peuvent être réécrits
 dont les descendants ne sont pas encore reconnus par l'automate.
-Cela revient à rechercher les \textbf{paires critiques} $\langle q, t \rangle$ 
+Pour tout état $q$, cela revient à rechercher les \textbf{paires critiques} $\langle q, t \rangle$ 
 pour lesquelles le diagramme de la figure~\ref{fig:R-cloture} n'est pas clos, \textit{i.e.}
 on a $s \rw_\R t$ et $s \rw_{\A}^* q$ mais pas $t \not\rw_{\A}^* q$.
 
@@ -580,7 +581,8 @@ On peut construire l'ensemble des termes dénotés par $l\sigma$ par un ensemble
 un terme $\eta(q)$ reconnu par l'automate $\A$ en l'état $q$. % (on sait que $\Lang(\A, q) \not= \emptyset$).
 Ce qui donne 
 \[\forall \eta \in \{ \eta : \Q \rw \TF \sep \eta(q) \rw_\A^* q\},\quad l\sigma.\eta \rw^*_\A  l\sigma\]
-Ainsi, réécrire $l\sigma$ en $r\sigma$ revient donc à réécrire tous les termes $l\sigma.\eta$ en $r\sigma.\eta$ du point de vue de l'automate.
+Ainsi, réécrire $l\sigma$ en $r\sigma$ revient donc à réécrire tous les termes $l\sigma.\eta$ en $r\sigma.\eta$ du point de vue de l'automate
+lorsque le système de réécriture est linéaire à gauche.
 
 \paragraph{Recherche des paires critiques}
 \label{sec:recherche-des-paires}
@@ -644,7 +646,7 @@ et doivent être normalisées avant d'être ajoutées à l'automate.
   transition en un ensemble $\Pi$ de transitions normalisées~\ref{def:transitions}
   telles que $r\sigma \rw_\Pi^* q'$. Les transitions sont ensuite ajoutées aux transitions de $\aaex^i$.
 \end{definition}
-On notera que la définition normalisation~\cite{Genet-RTA98} nécessite 
+On notera que la définition de la normalisation~\cite{Genet-RTA98} nécessite 
 souvent l'utilisation de nouveaux états dans l'automate pour construire 
 les nouvelles transitions. C'est d'ailleurs le critère le plus important
 à considérer du point de vue de la terminaison. Il est important de limiter le
@@ -668,7 +670,7 @@ plus possible la création de nouveaux états, pour limiter la divergence.
 
 
 \paragraph{Sémantique liée aux $\varepsilon$-transitions}
-Lors de la résolution d'une paire critique, la transition $r\sigma \rw q'$ reliée à l'état $q$ par le biais de la transition
+Lors de la résolution d'une paire critique, la transition $r\sigma \rw q'$ est reliée à l'état $q$ par le biais de la transition
 $q' \rw q$. Cette $\varepsilon$-transition permet de créer une relation d'ordre entre les termes dans l'automate.
 En effet, si l'on se place du point de vue de l'état $q$, on a bien étendu le langage en lui ajoutant $r\sigma.\eta$
 les termes représentés par la configuration $r\sigma$. Or si l'on se place du point de vue de l'état $q'$, on ne verra dans $\Lang(\A,q')$
@@ -813,6 +815,12 @@ par réécriture de $\R$ modulo $E$.
   \end{itemize}
 \end{definition}
 
+\begin{theorem}
+  \label{thm:re-coherence}
+  Soient $\R$ un système de règles de réécriture et $E$ un ensemble d'équations.
+  Si $\aaexeq^k$ est l'automate obtenu après $k$ étapes de complétion à partir de
+  $\aaexeq^0$ un automate $\RE$-cohérent, alors $\aaexeq^k$ est $\RE$-cohérent.
+\end{theorem}
 Cette technique d'approximation et cette méthodologie sont comparables à celle employée 
 par les abstractions équationnelles définies dans~\cite{MeseguerPM-TCS08}.
 
